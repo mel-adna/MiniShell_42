@@ -1,6 +1,4 @@
 .DS_Store
-srcs/*/*.o
-libft/*.o
-srcs/*.o
+*.o
 libft/libft.a
 minishell
