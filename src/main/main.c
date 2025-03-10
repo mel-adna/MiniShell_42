@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 void	handle_signals(int sig)
 {
@@ -12,7 +12,7 @@ void	handle_signals(int sig)
 int	main(void)
 {
 	char	*input;
-
+	printf("%d\n", (int)ft_atoi("-42"));
 	signal(SIGINT, handle_signals);
 	signal(SIGQUIT, handle_signals);
 	while (1)
