@@ -9,12 +9,17 @@ void	handle_signals(int sig)
 	rl_redisplay();
 }
 
-int	main(void)
+int	main(int argc, char **argv, char **envp)
 {
+	(void)argc;
+	(void)argv;
 	char	*input;
-	printf("%d\n", (int)ft_atoi("-42"));
+	t_minsh minsh;
+
 	signal(SIGINT, handle_signals);
 	signal(SIGQUIT, handle_signals);
+	env_init(&minsh, envp);
+	increment_shell_lvl(&minsh);
 	while (1)
 	{
 		input = readline("minishell> ");

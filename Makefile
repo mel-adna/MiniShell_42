@@ -5,7 +5,7 @@ LDFLAGS = -lreadline
 INCLUDES = -Iincludes -Ilibft
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
-SRC = src/main/main.c
+SRC = src/main/minishell.c src/env/env.c src/env/shell_lvl.c
 OBJ = $(SRC:.c=.o)
 
 all: $(LIBFT) $(NAME)
