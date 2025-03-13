@@ -6,7 +6,7 @@
 /*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 17:58:43 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/13 20:15:26 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/03/13 21:33:10 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ int	is_special_char(char *line, int i)
 
 static void	ft_increment(int *open, int *i, int n)
 {
-	i++;
-	open = &n;
+	(*i)++;
+	*open = n;
 }
 
 int	is_open_quotes(char *line)
