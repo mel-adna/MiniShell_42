@@ -1,35 +1,68 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   list_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/13 17:59:13 by mel-adna          #+#    #+#             */
+/*   Updated: 2025/03/13 17:59:14 by mel-adna         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
-t_env	*ft_lstnew(char *value)
+t_token	*create_node(char *value, t_token_type type)
 {
-	t_env	*elem;
+	t_token	*node;
 
-	elem = (t_env *)malloc(sizeof(t_env));
-	if (!elem)
+	node = malloc(sizeof(t_token));
+	if (!node)
 		return (NULL);
-	elem->value = value;
-	elem->next = NULL;
-	return (elem);
+	node->value = value;
+	node->next = NULL;
+	node->prev = NULL;
+	node->type = type;
+	return (node);
 }
 
-void	push_back(t_env **lst, char *value)
+void	push_back(t_token **head, char *value, t_token_type type)
 {
-	t_env	*temp;
-	t_env	*new;
+	t_token	*tmp;
+	t_token	*new;
 
-	new = malloc(sizeof(t_env));
-	if (!new)
+	if (!value)
 		return ;
-	new = ft_lstnew(value);
-	if (!new || !lst)
+	new = create_node(value, type);
+	if (!new || !head)
 		return ;
-	if (*lst == NULL)
-		*lst = new;
+	if (*head == NULL)
+		*head = new;
 	else
 	{
-		temp = lst;
-		while (temp)
-			temp = temp->next;
-		temp->next = new;
+		tmp = *head;
+		while (tmp->next)
+			tmp = tmp->next;
+		tmp->next = new;
+		new->prev = tmp;
 	}
+}
+
+void	free_token_list(t_token **token_list)
+{
+	t_token	*current;
+	t_token	*next;
+
+	if (!token_list || !(*token_list))
+		return ;
+	current = *token_list;
+	while (current)
+	{
+		next = current->next;
+		if (current->value)
+			free(current->value);
+		free(current);
+		current = next;
+	}
+	*token_list = NULL;
 }

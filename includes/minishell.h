@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/13 18:00:38 by mel-adna          #+#    #+#             */
+/*   Updated: 2025/03/13 19:30:22 by mel-adna         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -20,11 +32,39 @@ typedef struct s_minsh
 	t_env			*env;
 }					t_minsh;
 
-// Parssing
-char				**parse_arg(char *str);
+typedef enum e_token_type
+{
+	TOKEN_WORD,
+	TOKEN_PIPE,
+	TOKEN_END,
+	TOKEN_REDIR_IN,
+	TOKEN_REDIR_OUT,
+	TOKEN_REDIR_APPEND,
+	TOKEN_HEREDOC,
+	TOKEN_AND,
+	TOKEN_OR,
+}					t_token_type;
 
-// env
+typedef struct s_token
+{
+	t_token_type	type;
+	char			*value;
+	struct s_token	*next;
+	struct s_token	*prev;
+}					t_token;
+
+// ====================== Parsing ======================
+int					parse(char *input);
+void				tokenize_line(char *line);
+int					is_special_char(char *line, int i);
+t_token_type		get_token_type(char *line, int *i);
+
+// ====================== env ======================
 int					env_init(t_minsh *minsh, char **envp);
 void				increment_shell_lvl(t_minsh *minish);
+
+// ====================== utils ======================
+void				push_back(t_token **head, char *value, t_token_type type);
+void				free_token_list(t_token **token_list);
 
 #endif

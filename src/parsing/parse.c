@@ -1,64 +1,89 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/13 17:58:43 by mel-adna          #+#    #+#             */
+/*   Updated: 2025/03/13 20:15:26 by mel-adna         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
-int	is_empty_or_spaces(char *str)
+t_token_type	get_token_type(char *line, int *i)
+{
+	t_token_type	type;
+
+	if (line[*i] == '&' && line[*i + 1] == '&')
+		return ((*i) += 2, type = TOKEN_AND);
+	else if (line[*i] == '|' && line[*i + 1] == '|')
+		return ((*i) += 2, type = TOKEN_OR);
+	else if (line[*i] == '>' && line[*i + 1] == '>')
+		return ((*i) += 2, type = TOKEN_REDIR_APPEND);
+	else if (line[*i] == '<' && line[*i + 1] == '<')
+		return ((*i) += 2, type = TOKEN_HEREDOC);
+	else if (line[*i] == '<')
+		return ((*i)++, type = TOKEN_REDIR_IN);
+	else if (line[*i] == '>')
+		return ((*i)++, type = TOKEN_REDIR_OUT);
+	else if (line[*i] == '|')
+		return ((*i)++, type = TOKEN_PIPE);
+	else if (line[*i] == ';')
+		return ((*i)++, type = TOKEN_END);
+	else
+		return (type = TOKEN_WORD);
+}
+
+int	is_special_char(char *line, int i)
+{
+	return ((line[i] == '&' && line[i + 1] == '&') 
+		|| (line[i] == '|' && line[i + 1] == '|') 
+		|| (line[i] == '>' && line[i + 1] == '>')
+		|| (line[i] == '<' && line[i + 1] == '<') 
+		|| line[i] == '|' || line[i] == '<' 
+		|| line[i] == '>' || line[i] == ';');
+}
+
+static void	ft_increment(int *open, int *i, int n)
+{
+	i++;
+	open = &n;
+}
+
+int	is_open_quotes(char *line)
 {
 	int	i;
+	int	open;
 
 	i = 0;
-	while (str[i] && str[i] == ' ')
-		i++;
-	return (!str[i]);
-}
-
-char	*check_quote(char *str, int *i)
-{
-	int		start;
-	char	*word;
-
-	if (str[*i] == '\'')
+	open = 0;
+	while (line[i])
 	{
-		(*i)++;
-		start = *i;
-		while (str[*i] && str[*i] != '\'')
-			(*i)++;
-		word = ft_substr(str, start, *i - start);
-		if (str[*i])
-			(*i)++;
-	}
-	else
-	{
-		start = *i;
-		while (str[*i] && str[*i] != ' ')
-			(*i)++;
-		word = ft_substr(str, start, *i - start);
-	}
-	return (word);
-}
-
-char	**parse_arg(char *str)
-{
-	char	**args;
-	int		i;
-	int		count;
-
-	if (!str || is_empty_or_spaces(str))
-		return (ft_putstr_fd("Error: empty command\n", 2), NULL);
-	args = malloc(sizeof(char *) * 50);
-	if (!args)
-		return (NULL);
-	i = 0;
-	count = 0;
-	while (str[i])
-	{
-		while (str[i] == ' ')
+		if (i > 0 && line[i - 1] == '\\')
 			i++;
-		if (!str[i])
-			break ;
-		args[count] = check_quote(str, &i);
-		if (!args[count])
-			return (free_arr(args), NULL);
-		count++;
+		else if (open == 0 && line[i] == '\"')
+			ft_increment(&open, &i, 1);
+		else if (open == 0 && line[i] == '\'')
+			ft_increment(&open, &i, 2);
+		else if ((open == 1 && line[i] == '\"') || (open == 2
+				&& line[i] == '\''))
+			ft_increment(&open, &i, 0);
+		else
+			i++;
 	}
-	args[count] = NULL;
-	return (args);
+	return (open);
+}
+
+int	parse(char *input)
+{
+	if (is_open_quotes(input))
+	{
+		ft_putendl_fd("Error: syntax error with open quotes!", 1);
+		free(input);
+		return (1);
+	}
+	tokenize_line(input);
+	return (1);
 }
