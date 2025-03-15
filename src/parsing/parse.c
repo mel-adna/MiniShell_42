@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 00:44:50 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/15 00:44:51 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/03/15 16:33:06 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,14 +90,16 @@ static int	check_pipe_errors(char *input)
 	return (0);
 }
 
-int	parse(char *input)
+t_command	*parse(char *input)
 {
+	t_command *cmds;
+	
 	if (is_open_quotes(input))
-		return (ft_putendl_fd("Error: Open quotes!", 1), 1);
+		return (ft_putendl_fd("Error: Open quotes!", 1), NULL);
 	if (check_redirect_errors(input))
-		return (1);
+		return (NULL);
 	if (check_pipe_errors(input))
-		return (1);
-	tokenize_line(input);
-	return (1);
+		return (NULL);
+	cmds = tokenize_line(input);
+	return (cmds);
 }

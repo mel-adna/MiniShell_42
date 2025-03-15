@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 17:59:36 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/14 23:45:31 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/03/15 15:26:39 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	handle_signals(int sig)
 	(void)sig;
 	printf("\n");
 	rl_on_new_line();
-	rl_replace_line("", 0);
+	// rl_replace_line("", 0);
 	rl_redisplay();
 }
 
@@ -25,6 +25,7 @@ int	main(int argc, char **argv, char **envp)
 {
 	char	*input;
 	t_minsh	minsh;
+	t_command *cmds;
 
 	(void)argc;
 	(void)argv;
@@ -42,10 +43,13 @@ int	main(int argc, char **argv, char **envp)
 		}
 		if (*input)
 			add_history(input);
-		if (parse(input))
+		cmds = parse(input);
+		if(!cmds)
 		{
 			free(input);
 			continue ;
 		}
+		exec(cmds, envp);
+		free_command_list(&cmds);
 	}
 }

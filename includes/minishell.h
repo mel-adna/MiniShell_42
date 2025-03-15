@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 18:00:38 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/15 00:39:55 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/03/15 15:26:53 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,18 +58,26 @@ typedef struct s_token
 typedef struct s_command
 {
 	char				**args;
-	t_token_type		type;
 	char				*outfile;
 	char				*infile;
 	char				*heredoc;
+	char				*cmd_path;
+	pid_t				pid;
 	int					pipe;
 	int					append;
 	struct s_command	*next;
 }						t_command;
 
+typedef struct s_fd
+{
+	int pipefd[2];
+	int fdin;
+	int fdout;
+}	t_fd;
+
 // ====================== Parsing ======================
-int						parse(char *input);
-void					tokenize_line(char *line);
+t_command				*parse(char *input);
+t_command				*tokenize_line(char *line);
 int						is_special_char(char *line, int i);
 t_token_type			get_token_type(char *line, int *i);
 void					handle_signals(int sig);
@@ -90,5 +98,10 @@ void					push_back(t_token **head, char *value,
 // ====================== Free Memo ======================
 void					free_command_list(t_command **cmd_list);
 void					free_token_list(t_token **token_list);
+
+// ====================== Excution ======================
+void 					exec(t_command *cmds, char **anvp);
+int						resolve_cmd_paths(char **envp, t_command *cmds);
+
 
 #endif
