@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/13 17:58:43 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/13 21:33:10 by mel-adna         ###   ########.fr       */
+/*   Created: 2025/03/15 00:44:50 by mel-adna          #+#    #+#             */
+/*   Updated: 2025/03/15 00:44:51 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,36 +14,24 @@
 
 t_token_type	get_token_type(char *line, int *i)
 {
-	t_token_type	type;
-
 	if (line[*i] == '&' && line[*i + 1] == '&')
-		return ((*i) += 2, type = TOKEN_AND);
+		return ((*i) += 2, TOKEN_AND);
 	else if (line[*i] == '|' && line[*i + 1] == '|')
-		return ((*i) += 2, type = TOKEN_OR);
+		return ((*i) += 2, TOKEN_OR);
 	else if (line[*i] == '>' && line[*i + 1] == '>')
-		return ((*i) += 2, type = TOKEN_REDIR_APPEND);
+		return ((*i) += 2, TOKEN_REDIR_APPEND);
 	else if (line[*i] == '<' && line[*i + 1] == '<')
-		return ((*i) += 2, type = TOKEN_HEREDOC);
+		return ((*i) += 2, TOKEN_HEREDOC);
 	else if (line[*i] == '<')
-		return ((*i)++, type = TOKEN_REDIR_IN);
+		return ((*i)++, TOKEN_REDIR_IN);
 	else if (line[*i] == '>')
-		return ((*i)++, type = TOKEN_REDIR_OUT);
+		return ((*i)++, TOKEN_REDIR_OUT);
 	else if (line[*i] == '|')
-		return ((*i)++, type = TOKEN_PIPE);
+		return ((*i)++, TOKEN_PIPE);
 	else if (line[*i] == ';')
-		return ((*i)++, type = TOKEN_END);
+		return ((*i)++, TOKEN_END);
 	else
-		return (type = TOKEN_WORD);
-}
-
-int	is_special_char(char *line, int i)
-{
-	return ((line[i] == '&' && line[i + 1] == '&') 
-		|| (line[i] == '|' && line[i + 1] == '|') 
-		|| (line[i] == '>' && line[i + 1] == '>')
-		|| (line[i] == '<' && line[i + 1] == '<') 
-		|| line[i] == '|' || line[i] == '<' 
-		|| line[i] == '>' || line[i] == ';');
+		return (TOKEN_WORD);
 }
 
 static void	ft_increment(int *open, int *i, int n)
@@ -76,14 +64,40 @@ int	is_open_quotes(char *line)
 	return (open);
 }
 
+static int	check_pipe_errors(char *input)
+{
+	int	i;
+
+	i = 0;
+	while (input[i] == ' ')
+		i++;
+	if (input[i] == '|')
+		return (ft_putendl_fd("Syntax error: `|` at start", 1), 1);
+	while (input[i])
+	{
+		if (input[i] == '|')
+		{
+			i++;
+			while (input[i] == ' ')
+				i++;
+			if (input[i] == '|')
+				return (ft_putendl_fd("Syntax error: `|`", 1), 1);
+			if (input[i] == '\0')
+				return (ft_putendl_fd("Syntax error: `|` at end", 1), 1);
+		}
+		i++;
+	}
+	return (0);
+}
+
 int	parse(char *input)
 {
 	if (is_open_quotes(input))
-	{
-		ft_putendl_fd("Error: syntax error with open quotes!", 1);
-		free(input);
+		return (ft_putendl_fd("Error: Open quotes!", 1), 1);
+	if (check_redirect_errors(input))
 		return (1);
-	}
+	if (check_pipe_errors(input))
+		return (1);
 	tokenize_line(input);
 	return (1);
 }

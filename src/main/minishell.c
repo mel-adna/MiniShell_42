@@ -6,7 +6,7 @@
 /*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 17:59:36 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/13 17:59:37 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/03/14 23:45:31 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,10 @@ int	main(int argc, char **argv, char **envp)
 		}
 		if (*input)
 			add_history(input);
-		if (parse(input) == 0)
-			break ;
+		if (parse(input))
+		{
+			free(input);
+			continue ;
+		}
 	}
-	return (0);
 }

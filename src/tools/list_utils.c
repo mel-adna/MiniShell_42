@@ -6,7 +6,7 @@
 /*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 17:59:13 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/13 17:59:14 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/03/15 00:44:19 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,23 +46,4 @@ void	push_back(t_token **head, char *value, t_token_type type)
 		tmp->next = new;
 		new->prev = tmp;
 	}
-}
-
-void	free_token_list(t_token **token_list)
-{
-	t_token	*current;
-	t_token	*next;
-
-	if (!token_list || !(*token_list))
-		return ;
-	current = *token_list;
-	while (current)
-	{
-		next = current->next;
-		if (current->value)
-			free(current->value);
-		free(current);
-		current = next;
-	}
-	*token_list = NULL;
 }

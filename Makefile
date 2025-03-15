@@ -6,7 +6,8 @@ INCLUDES = -Iincludes -Ilibft
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
 SRC = src/main/minishell.c src/env/env.c src/env/shell_lvl.c src/parsing/parse.c src/tools/list_utils.c \
-	src/parsing/tokens.c 
+	src/parsing/tokenizer.c src/parsing/p_errors.c src/tools/free_mem.c src/parsing/redirection.c \
+	src/parsing/utils.c src/parsing/ft_addstr.c 
 OBJ = $(SRC:.c=.o)
 
 all: $(LIBFT) $(NAME)
