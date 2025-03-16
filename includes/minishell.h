@@ -1,19 +1,6 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/13 18:00:38 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/16 16:31:06 by szemmour         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include <../libft/libft.h>
 # include <fcntl.h>
 # include <limits.h>
 # include <signal.h>
@@ -21,11 +8,13 @@
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
+# include <../libft/libft.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
 typedef struct s_env
 {
+	char				*name;
 	char				*value;
 	struct s_env		*next;
 }						t_env;
@@ -34,7 +23,6 @@ typedef enum e_token_type
 {
 	TOKEN_WORD,
 	TOKEN_PIPE,
-	TOKEN_END,
 	TOKEN_REDIR_IN,
 	TOKEN_REDIR_OUT,
 	TOKEN_REDIR_APPEND,

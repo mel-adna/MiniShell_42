@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 00:44:50 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/15 16:33:06 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/03/16 22:03:36 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@ t_token_type	get_token_type(char *line, int *i)
 		return ((*i)++, TOKEN_REDIR_OUT);
 	else if (line[*i] == '|')
 		return ((*i)++, TOKEN_PIPE);
-	else if (line[*i] == ';')
-		return ((*i)++, TOKEN_END);
 	else
 		return (TOKEN_WORD);
 }
@@ -72,18 +70,18 @@ static int	check_pipe_errors(char *input)
 	while (input[i] == ' ')
 		i++;
 	if (input[i] == '|')
-		return (ft_putendl_fd("Syntax error: `|` at start", 1), 1);
+		return (ft_putendl_fd("Syntax error!!", 1), 1);
 	while (input[i])
 	{
-		if (input[i] == '|')
+		if (input[i] == '|' && input[i + 1] != '|')
 		{
 			i++;
 			while (input[i] == ' ')
 				i++;
 			if (input[i] == '|')
-				return (ft_putendl_fd("Syntax error: `|`", 1), 1);
+				return (ft_putendl_fd("Syntax error!!", 1), 1);
 			if (input[i] == '\0')
-				return (ft_putendl_fd("Syntax error: `|` at end", 1), 1);
+				return (ft_putendl_fd("Syntax error!!", 1), 1);
 		}
 		i++;
 	}
@@ -92,10 +90,12 @@ static int	check_pipe_errors(char *input)
 
 t_command	*parse(char *input)
 {
-	t_command *cmds;
+	t_command *cmds = NULL;
 	
+	if (!input || !*input)
+		return (NULL);
 	if (is_open_quotes(input))
-		return (ft_putendl_fd("Error: Open quotes!", 1), NULL);
+		return (ft_putendl_fd("Syntax error!!", 1), NULL);
 	if (check_redirect_errors(input))
 		return (NULL);
 	if (check_pipe_errors(input))
