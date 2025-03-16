@@ -5,11 +5,12 @@ LDFLAGS = -lreadline
 INCLUDES = -Iincludes -Ilibft
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
-SRC = src/main/minishell.c src/env/env.c src/env/shell_lvl.c src/parsing/parse.c src/tools/list_utils.c \
-	src/parsing/tokenizer.c src/parsing/p_errors.c src/tools/free_mem.c src/parsing/redirection.c \
-	src/parsing/utils.c src/parsing/ft_addstr.c \
-	src/excution/cmd_path.c src/excution/exec.c
 
+SRC = src/main/minishell.c src/env/env.c src/env/shell_lvl.c src/parsing/parse.c \
+ 	  src/tools/list_utils.c src/parsing/redirection.c \
+	  src/parsing/tokenizer.c src/parsing/p_errors.c src/tools/free_mem.c \
+	  src/parsing/utils.c src/parsing/ft_addstr.c \
+	  src/excution/cmd_path.c src/excution/exec.c src/excution/exec_utils.c
 
 OBJ = $(SRC:.c=.o)
 

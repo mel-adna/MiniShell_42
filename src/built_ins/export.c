@@ -1,40 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   shell_lvl.c                                        :+:      :+:    :+:   */
+/*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/13 17:58:09 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/16 15:55:02 by szemmour         ###   ########.fr       */
+/*   Created: 2025/03/16 15:39:54 by szemmour          #+#    #+#             */
+/*   Updated: 2025/03/16 16:19:09 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	increment_shell_lvl(t_env *env)
+int	nbr_args(char **args)
 {
-	int		shlvl;
-	char	*new_value;
-	char	*shlvl_str;
+	int	i;
 
-	shlvl = 0;
-	while (env)
+	i = 0;
+	while (args[i])
+		i++;
+	return (i);
+}
+
+int	ft_export(char **args, t_env **env)
+{
+	t_env *tmp = *env;
+
+	if (nbr_args(args) == 1)
 	{
-		if (ft_strncmp(env->value, "SHLVL=", 6) == 0)
-		{
-			shlvl = ft_atoi(env->value + 6) + 1;
-			break ;
-		}
-		env = env->next;
+		if (ft_env(tmp))
+			return (1);
 	}
-	shlvl_str = ft_itoa(shlvl);
-	if (!shlvl_str)
-		return ;
-	new_value = ft_strjoin("SHLVL=", shlvl_str);
-	free(shlvl_str);
-	if (!new_value)
-		return ;
-	free(env->value);
-	env->value = new_value;
+	push_env_back(env, args[1]);
+	return (1);
 }

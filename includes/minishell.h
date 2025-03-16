@@ -6,20 +6,21 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 18:00:38 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/15 15:26:53 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/03/16 16:31:06 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include <../libft/libft.h>
 # include <fcntl.h>
+# include <limits.h>
 # include <signal.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
-# include <../libft/libft.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
@@ -28,11 +29,6 @@ typedef struct s_env
 	char				*value;
 	struct s_env		*next;
 }						t_env;
-
-typedef struct s_minsh
-{
-	t_env				*env;
-}						t_minsh;
 
 typedef enum e_token_type
 {
@@ -70,10 +66,10 @@ typedef struct s_command
 
 typedef struct s_fd
 {
-	int pipefd[2];
-	int fdin;
-	int fdout;
-}	t_fd;
+	int					pipefd[2];
+	int					fdin;
+	int					fdout;
+}						t_fd;
 
 // ====================== Parsing ======================
 t_command				*parse(char *input);
@@ -88,8 +84,8 @@ void					process_and_add_token(t_token **token_list, char *line,
 t_command				*parse_tokens(t_token *tokens);
 
 // ====================== env ======================
-int						env_init(t_minsh *minsh, char **envp);
-void					increment_shell_lvl(t_minsh *minish);
+int						env_init(t_env **env, char **envp);
+void					increment_shell_lvl(t_env *env);
 
 // ====================== utils ======================
 void					push_back(t_token **head, char *value,
@@ -100,8 +96,13 @@ void					free_command_list(t_command **cmd_list);
 void					free_token_list(t_token **token_list);
 
 // ====================== Excution ======================
-void 					exec(t_command *cmds, char **anvp);
+int						exec(t_command *cmds, char **anvp);
 int						resolve_cmd_paths(char **envp, t_command *cmds);
-
+void					push_env_back(t_env **head, char *value);
+// ====================== Excution Utils ======================
+void					wait_children(t_command *cmds);
+int						open_file(t_fd *fd, t_command *cmd, int n);
+void					close_fds(t_fd fd);
+void					dup_file(t_fd fd, int newfd);
 
 #endif

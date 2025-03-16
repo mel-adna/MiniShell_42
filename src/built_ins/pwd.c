@@ -1,40 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   shell_lvl.c                                        :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/13 17:58:09 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/16 15:55:02 by szemmour         ###   ########.fr       */
+/*   Created: 2025/03/16 15:18:16 by szemmour          #+#    #+#             */
+/*   Updated: 2025/03/16 15:31:54 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	increment_shell_lvl(t_env *env)
+int	ft_pwd(void)
 {
-	int		shlvl;
-	char	*new_value;
-	char	*shlvl_str;
-
-	shlvl = 0;
-	while (env)
+	char cwd[PATH_MAX];
+	if (getcwd(cwd, sizeof(cwd)))
 	{
-		if (ft_strncmp(env->value, "SHLVL=", 6) == 0)
-		{
-			shlvl = ft_atoi(env->value + 6) + 1;
-			break ;
-		}
-		env = env->next;
+		ft_putendl_fd(cwd, 1);
+		return (1);
 	}
-	shlvl_str = ft_itoa(shlvl);
-	if (!shlvl_str)
-		return ;
-	new_value = ft_strjoin("SHLVL=", shlvl_str);
-	free(shlvl_str);
-	if (!new_value)
-		return ;
-	free(env->value);
-	env->value = new_value;
+	else
+		return (0);
 }

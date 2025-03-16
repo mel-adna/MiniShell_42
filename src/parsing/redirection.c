@@ -6,38 +6,27 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 00:44:46 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/15 15:01:31 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/03/16 14:14:37 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-static void	update_redirection(char **field, t_token *current)
-{
-	if (*field)
-		free(*field);
-	*field = ft_strdup(current->next->value);
-}
 
 static void	process_redirection(t_command *cmd, t_token *current)
 {
 	if (current->next)
 	{
 		if (current->type == TOKEN_REDIR_IN)
-		{
-			update_redirection(&cmd->infile, current);
-		}
+			cmd->infile = ft_strdup(current->next->value);
 		else if (current->type == TOKEN_REDIR_OUT
 			|| current->type == TOKEN_REDIR_APPEND)
 		{
-			update_redirection(&cmd->outfile, current);
+			cmd->outfile = ft_strdup(current->next->value);
 			if (current->type == TOKEN_REDIR_APPEND)
 				cmd->append = 1;
 		}
 		else if (current->type == TOKEN_HEREDOC)
-		{
-			update_redirection(&cmd->heredoc, current);
-		}
+			cmd->heredoc = ft_strdup(current->next->value);
 	}
 }
 
@@ -102,7 +91,7 @@ t_command	*parse_tokens(t_token *tokens)
 		{
 			process_redirection(cmd, current);
 			if (current->next)
-				current = current->next; // we don't need filename to be in **args
+				current = current->next;
 			else
 				break;
 		}
