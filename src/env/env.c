@@ -87,10 +87,18 @@ void	push_env_back(t_env **head, char *value)
 	t_env	*tmp;
 	t_env	*node;
 
+	if (!head)
+		return ;
 	node = malloc(sizeof(t_env));
-	if (!node || !head)
+	if (!node)
 		return ;
 	node->value = ft_strdup(value);
+	if (!node->value)
+	{
+		free(node);
+		return ;
+	}
+	node->next = NULL;
 	if (*head == NULL)
 		*head = node;
 	else
@@ -101,6 +109,7 @@ void	push_env_back(t_env **head, char *value)
 		tmp->next = node;
 	}
 }
+
 
 int	env_init(t_env **env, char **envp)
 {

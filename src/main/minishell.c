@@ -17,15 +17,15 @@ void	handle_signals(int sig)
 	(void)sig;
 	printf("\n");
 	rl_on_new_line();
-	// rl_replace_line("", 0);
+	rl_replace_line("", 0);
 	rl_redisplay();
 }
 
 int	main(int argc, char **argv, char **envp)
 {
+	t_command *cmds = NULL;
 	char	*input;
 	t_env 	*env;
-	t_command *cmds;
 
 	(void)argc;
 	(void)argv;
