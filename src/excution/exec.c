@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 13:02:32 by szemmour          #+#    #+#             */
-/*   Updated: 2025/03/16 16:26:22 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/03/18 14:43:20 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,11 +66,13 @@ void	ft_exec_cmd(t_fd *fd, t_command *cmds, char **envp)
 	}
 }
 
-int	exec(t_command *cmds, char **envp)
+int	exec(t_command *cmds, t_env **env)
 {
 	t_fd		fd;
 	t_command	*current;
+	char		**envp;
 
+	envp = env_to_str(*env);
 	if (!resolve_cmd_paths(envp, cmds))
 		ft_putendl_fd("minishell: command error!", 2);
 	fd.fdin = -1;
@@ -79,16 +81,19 @@ int	exec(t_command *cmds, char **envp)
 	current = cmds;
 	while (current)
 	{
-		if (cmds->pipe)
-			if (pipe(fd.pipefd) == -1)
-				return (perror("minishell: pipe"), 0);
 		if (current->infile)
 			if (open_file(&fd, current, 1) == 0)
 				return (0);
 		if (current->outfile)
 			if (open_file(&fd, current, 0) == 0)
 				return (0);
-		ft_exec_cmd(&fd, current, envp);
+		if (cmds->pipe)
+			if (pipe(fd.pipefd) == -1)
+				return (perror("minishell: pipe"), 0);
+		if (is_builtin(current->args[0]))
+			exec_builtin(current->args, env);
+		else
+			ft_exec_cmd(&fd, current, envp);
 		current = current->next;
 	}
 	wait_children(cmds);

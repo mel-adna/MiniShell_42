@@ -1,6 +1,7 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include <../libft/libft.h>
 # include <fcntl.h>
 # include <limits.h>
 # include <signal.h>
@@ -8,13 +9,11 @@
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
-# include <../libft/libft.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
 typedef struct s_env
 {
-	char				*name;
 	char				*value;
 	struct s_env		*next;
 }						t_env;
@@ -84,7 +83,7 @@ void					free_command_list(t_command **cmd_list);
 void					free_token_list(t_token **token_list);
 
 // ====================== Excution ======================
-int						exec(t_command *cmds, char **anvp);
+int						exec(t_command *cmds, t_env **env);
 int						resolve_cmd_paths(char **envp, t_command *cmds);
 void					push_env_back(t_env **head, char *value);
 // ====================== Excution Utils ======================
@@ -92,5 +91,19 @@ void					wait_children(t_command *cmds);
 int						open_file(t_fd *fd, t_command *cmd, int n);
 void					close_fds(t_fd fd);
 void					dup_file(t_fd fd, int newfd);
+// ====================== Builtins ======================
+int						env_size(t_env *env);
+int						is_builtin(char *command);
+int						exec_builtin(char **args, t_env **env);
+int						ft_cd(char **args, t_env **env);
+int						ft_echo(char **args);
+int						ft_env(t_env *env);
+int						ft_export(char **args, t_env **env);
+int						ft_pwd(void);
+int						ft_unset(char **args, t_env **env);
+int						print_sorted_env(t_env *env);
+char					*get_var_name(char *var);
+char					**env_to_str(t_env *env);
+char					*get_env_value(t_env *env, const char *key);
 
 #endif

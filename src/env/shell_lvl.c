@@ -6,11 +6,24 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 17:58:09 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/16 15:55:02 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/03/17 16:48:13 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+int	env_size(t_env *env)
+{
+	int	size;
+
+	size = 0;
+	while (env)
+	{
+		size++;
+		env = env->next;
+	}
+	return size;
+}
 
 void	increment_shell_lvl(t_env *env)
 {

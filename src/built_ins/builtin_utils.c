@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 14:50:54 by szemmour          #+#    #+#             */
-/*   Updated: 2025/03/16 15:57:40 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/03/18 16:45:11 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,14 @@ int	exec_builtin(char **args, t_env **env)
 	if (ft_strcmp(args[0], "echo") == 0)
 		result = ft_echo(args);
 	if (ft_strcmp(args[0], "cd") == 0)
-		result = ft_cd(args);
+		result = ft_cd(args, env);
 	if (ft_strcmp(args[0], "pwd") == 0)
 		result = ft_pwd();
 	if (ft_strcmp(args[0], "env") == 0)
-		ft_env(*env);
+		result = ft_env(*env);
 	if (ft_strcmp(args[0], "export") == 0)
-		ft_export(args, env);
+		result = ft_export(args, env);
 	if (ft_strcmp(args[0], "unset") == 0)
-		ft_unset(args, env);
+		result = ft_unset(args, env);
 	return (result);
 }
