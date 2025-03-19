@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 15:47:22 by szemmour          #+#    #+#             */
-/*   Updated: 2025/03/18 16:36:21 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/03/19 17:52:56 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void	push_env_back(t_env **head, char *value)
 	t_env	*tmp;
 	t_env	*node;
 
-	if (!head)
+	if (!head || !value)
 		return ;
 	node = malloc(sizeof(t_env));
 	if (!node)
@@ -99,7 +99,7 @@ void	push_env_back(t_env **head, char *value)
 		return ;
 	}
 	node->next = NULL;
-	if (*head == NULL)
+	if (!*head)
 		*head = node;
 	else
 	{
@@ -118,10 +118,8 @@ int	env_init(t_env **env, char **envp)
 	i = 0;
 	if (!env || !envp)
 		return (0);
+	*env = NULL;
 	while (envp[i])
-	{
-		push_env_back(env, envp[i]);
-		i++;
-	}
+		push_env_back(env, envp[i++]);
 	return (1);
 }
