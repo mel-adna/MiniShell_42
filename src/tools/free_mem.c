@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_mem.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 00:45:07 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/15 00:45:08 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/03/19 16:32:46 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,4 +66,37 @@ void	free_token_list(t_token **token_list)
 		current = next;
 	}
 	*token_list = NULL;
+}
+
+void	free_env(t_env **env)
+{
+	t_env	*tmp;
+
+	if (!env || !*env)
+		return ;
+	while (*env)
+	{
+		tmp = *env;
+		*env = (*env)->next;
+		free(tmp);
+		tmp = NULL;
+	}
+	env = NULL;
+}
+
+void	free_array(char **arr)
+{
+	int	i;
+
+	i = 0;
+	if (!arr)
+		return ;
+	while (arr[i])
+	{
+		free(arr[i]);
+		arr[i] = NULL;
+		i++;
+	}
+	free(arr);
+	arr = NULL;
 }

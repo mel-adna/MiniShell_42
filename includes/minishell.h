@@ -84,7 +84,8 @@ void					push_back(t_token **head, char *value,
 // ====================== Free Memo ======================
 void					free_command_list(t_command **cmd_list);
 void					free_token_list(t_token **token_list);
-
+void 					free_env(t_env **env);
+void 					free_array(char **arr);
 // ====================== Excution ======================
 int						exec(t_command *cmds, t_env **env);
 int						resolve_cmd_paths(char **envp, t_command *cmds);
@@ -92,18 +93,19 @@ void					push_env_back(t_env **head, char *value);
 // ====================== Excution Utils ======================
 void					wait_children(t_command *cmds);
 int						open_file(t_fd *fd, t_command *cmd, int n);
-void					close_fds(t_fd fd);
-void					dup_file(t_fd fd, int newfd);
+void					close_fds(t_fd *fd);
+void					dup_file(t_fd *fd, int newfd);
 // ====================== Builtins ======================
 int						env_size(t_env *env);
 int						is_builtin(char *command);
-int						exec_builtin(char **args, t_env **env);
+int						exec_builtin(char **args, t_env **env, t_command **cmds, t_fd fd);
 int						ft_cd(char **args, t_env **env);
 int						ft_echo(char **args);
 int						ft_env(t_env *env);
 int						ft_export(char **args, t_env **env);
 int						ft_pwd(void);
 int						ft_unset(char **args, t_env **env);
+void					ft_exit(char **args, t_command **cmds, t_env **env, t_fd fd);
 int						print_sorted_env(t_env *env);
 char					*get_var_name(char *var);
 char					**env_to_str(t_env *env);

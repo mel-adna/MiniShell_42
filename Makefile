@@ -12,7 +12,8 @@ SRC = src/main/minishell.c src/env/env.c src/env/shell_lvl.c src/parsing/parse.c
 	  src/parsing/ft_addstr.c \
 	  src/excution/cmd_path.c src/excution/exec.c src/excution/exec_utils.c \
 	  src/built_ins/builtin_utils.c src/built_ins/cd.c src/built_ins/echo.c \
-	  src/built_ins/env.c src/built_ins/export.c src/built_ins/pwd.c src/built_ins/unset.c
+	  src/built_ins/env.c src/built_ins/export.c src/built_ins/pwd.c src/built_ins/unset.c \
+	  src/built_ins/exit.c
 
 OBJ = $(SRC:.c=.o)
 

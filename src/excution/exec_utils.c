@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 16:23:52 by szemmour          #+#    #+#             */
-/*   Updated: 2025/03/16 16:24:22 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/03/19 16:53:55 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,19 +58,31 @@ int	open_file(t_fd *fd, t_command *cmd, int n)
 	return (1);
 }
 
-void	close_fds(t_fd fd)
+void	close_fds(t_fd *fd)
 {
-	if (fd.fdin > 0)
-		close(fd.fdin);
-	if (fd.fdout > 0)
-		close(fd.fdout);
-	if (fd.pipefd[0] > 0)
-		close(fd.pipefd[0]);
-	if (fd.pipefd[1] > 0)
-		close(fd.pipefd[1]);
+	if (fd->fdin > 0)
+	{
+		close(fd->fdin);
+		fd->fdin = -1;
+	}
+	if (fd->fdout > 0)
+	{
+		close(fd->fdout);
+		fd->fdout = -1;
+	}
+	if (fd->pipefd[0] > 0)
+	{
+		close(fd->pipefd[0]);
+		fd->pipefd[0] = -1;
+	}
+	if (fd->pipefd[1] > 0)
+	{
+		close(fd->pipefd[1]);
+		fd->pipefd[1] = -1;
+	}
 }
 
-void	dup_file(t_fd fd, int newfd)
+void	dup_file(t_fd *fd, int newfd)
 {
 	if (dup2(newfd, STDOUT_FILENO) == -1)
 	{

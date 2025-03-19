@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 17:59:36 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/18 16:30:15 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/03/19 16:26:13 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	handle_signals(int sig)
 	(void)sig;
 	printf("\n");
 	rl_on_new_line();
-	rl_replace_line("", 0);
+	// rl_replace_line("", 0);
 	rl_redisplay();
 }
 

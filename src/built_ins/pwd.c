@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 15:18:16 by szemmour          #+#    #+#             */
-/*   Updated: 2025/03/16 15:31:54 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/03/19 13:58:56 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,5 @@ int	ft_pwd(void)
 		ft_putendl_fd(cwd, 1);
 		return (1);
 	}
-	else
-		return (0);
+	return (0);
 }
