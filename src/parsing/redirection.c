@@ -6,7 +6,7 @@
 /*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 00:44:46 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/15 22:48:19 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/03/19 22:09:03 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,13 +77,11 @@ static void	push_cmd_back(t_command **head, t_command *node)
 	*last = node;
 }
 
-t_command	*parse_tokens(t_token *tokens)
+t_command	*parse_tokens(t_token *tokens, t_command	*cmds)
 {
-	t_command	*cmds;
 	t_command	*cmd;
 	t_token		*current;
 
-	cmds = NULL;
 	cmd = init_command();
 	current = tokens;
 	if (!cmd)
@@ -91,23 +89,18 @@ t_command	*parse_tokens(t_token *tokens)
 	while (current)
 	{
 		if (current->type == TOKEN_WORD)
-			ft_addstr(&cmd->args, current->value);
+			cmd->args = ft_addstr(cmd->args, current->value);
 		else if (current->type == TOKEN_PIPE)
 		{
 			cmd->pipe = 1;
 			push_cmd_back(&cmds, cmd);
-			if (!(cmd = init_command()))
+			cmd = init_command();
+			if (!cmd)
 				break ;
 		}
 		else
-		{
 			process_redirection(cmd, current);
-			if (!current->next)
-				break ;
-			current = current->next;
-		}
 		current = current->next;
 	}
-	push_cmd_back(&cmds, cmd);
-	return (cmds);
+	return (push_cmd_back(&cmds, cmd), cmds);
 }

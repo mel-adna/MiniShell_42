@@ -6,7 +6,7 @@
 /*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 15:47:22 by szemmour          #+#    #+#             */
-/*   Updated: 2025/03/19 17:52:56 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/03/19 22:51:45 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,10 +75,7 @@ int	print_sorted_env(t_env *env)
 		return (0);
 	sort_env(env_arr);
 	while (env_arr[i])
-	{
-		ft_putendl_fd(env_arr[i], 1);
-		i++;
-	}
+		ft_putendl_fd(env_arr[i++], 1);
 	return (1);
 }
 

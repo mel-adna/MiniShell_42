@@ -6,7 +6,7 @@
 /*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 00:44:50 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/16 22:03:36 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/03/19 20:43:39 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ static int	check_pipe_errors(char *input)
 	return (0);
 }
 
-t_command	*parse(char *input)
+t_command	*parse(char *input, t_env **env)
 {
 	t_command *cmds = NULL;
 	
@@ -100,6 +100,6 @@ t_command	*parse(char *input)
 		return (NULL);
 	if (check_pipe_errors(input))
 		return (NULL);
-	cmds = tokenize_line(input);
+	cmds = tokenize_line(input, env);
 	return (cmds);
 }

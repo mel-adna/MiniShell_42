@@ -62,16 +62,16 @@ typedef struct s_fd
 }						t_fd;
 
 // ====================== Parsing ======================
-t_command				*parse(char *input);
-t_command				*tokenize_line(char *line);
+t_command				*parse(char *input, t_env **env);
+t_command				*tokenize_line(char *line, t_env **env);
 int						is_special_char(char *line, int i);
 t_token_type			get_token_type(char *line, int *i);
 void					handle_signals(int sig);
 int						check_redirect_errors(char *input);
-char					**ft_addstr(char ***arr, char *new_str);
+char					**ft_addstr(char **arr, char *new_str);
 void					process_and_add_token(t_token **token_list, char *line,
-							int *i);
-t_command				*parse_tokens(t_token *tokens);
+							int *i, t_env **env);
+t_command				*parse_tokens(t_token *tokens, t_command *cmds);
 
 // ====================== env ======================
 int						env_init(t_env **env, char **envp);

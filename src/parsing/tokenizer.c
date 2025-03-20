@@ -6,11 +6,44 @@
 /*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 00:44:44 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/15 00:44:45 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/03/20 00:16:07 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+char	*get_value(char *name, t_env **env)
+{
+	t_env	*current;
+
+	current = *env;
+	while (current)
+	{
+		if (!ft_strcmp(current->name, name))
+			return (ft_strdup(current->value + ft_strlen(name) + 1));
+		current = current->next;
+	}
+	return (NULL);
+}
+
+char	*extract_env_value(char *line, int *i, t_env **env)
+{
+	char	*value;
+	int		start;
+	char	*name;
+
+	start = ++(*i);
+	while (line[*i] && (ft_isalnum(line[*i]) || line[*i] == '_'))
+		(*i)++;
+	name = ft_substr(line, start, *i - start);
+	if (!name)
+		return (ft_strdup(""));
+	value = get_value(name, env);
+	if (!value)
+		value = ft_strdup("");
+	free(name);
+	return (value);
+}
 
 char	*extract_quoted_value(char *line, int *i)
 {
@@ -62,11 +95,13 @@ char	*extract_word_value(char *line, int *i)
 	return (value);
 }
 
-void	process_and_add_token(t_token **token_list, char *line, int *i)
+void	process_and_add_token(t_token **token_list, char *line, int *i,
+		t_env **env)
 {
 	t_token_type	type;
 	char			*value;
 
+	(void)env;
 	if (is_special_char(line, *i))
 	{
 		type = get_token_type(line, i);
@@ -75,7 +110,9 @@ void	process_and_add_token(t_token **token_list, char *line, int *i)
 	else
 	{
 		type = TOKEN_WORD;
-		if (line[*i] == '\'' || line[*i] == '\"')
+		if (line[*i] == '$')
+			value = extract_env_value(line, i, env);
+		else if (line[*i] == '\'' || line[*i] == '\"')
 			value = extract_quoted_value(line, i);
 		else
 			value = extract_word_value(line, i);

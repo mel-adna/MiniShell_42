@@ -6,7 +6,7 @@
 /*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 00:44:41 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/16 20:50:33 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/03/20 00:00:00 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void	skip_spaces(char *line, int *i)
 		(*i)++;
 }
 
-t_command	*tokenize_line(char *line)
+t_command	*tokenize_line(char *line, t_env **env)
 {
 	t_token		*token_list;
 	t_command	*cmds;
@@ -31,9 +31,9 @@ t_command	*tokenize_line(char *line)
 		skip_spaces(line, &i);
 		if (!line[i])
 			break ;
-		process_and_add_token(&token_list, line, &i);
+		process_and_add_token(&token_list, line, &i, env);
 	}
-	cmds = parse_tokens(token_list);
+	cmds = parse_tokens(token_list, NULL);
 	free_token_list(&token_list);
 	return cmds;
 }

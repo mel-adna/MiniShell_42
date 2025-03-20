@@ -6,7 +6,7 @@
 /*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 17:58:09 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/19 17:43:33 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/03/20 00:13:30 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,25 @@ int	env_size(t_env *env)
 	return size;
 }
 
+void	init_name(t_env *env)
+{
+	t_env	*current;
+	char	*name;
+
+	current = env;
+	while (current)
+	{
+		name = ft_strchr(current->value, '=') - 1;
+		if (name)
+		{
+			current->name = ft_substr(current->value, 0, name - current->value + 1);
+			if (!current->name)
+				return ;
+		}
+		current = current->next;
+	}
+}
+
 void increment_shell_lvl(t_env *env)
 {
     int     shlvl;
@@ -34,6 +53,7 @@ void increment_shell_lvl(t_env *env)
 
     shlvl = 1;
     current = env;
+	init_name(env);
     while (current && ft_strncmp(current->value, "SHLVL=", 6) != 0)
         current = current->next;
     if (!current)
