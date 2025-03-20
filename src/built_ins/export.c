@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/16 15:39:54 by szemmour          #+#    #+#             */
-/*   Updated: 2025/03/18 12:24:12 by szemmour         ###   ########.fr       */
+/*   Created: 2025/03/20 14:19:36 by szemmour          #+#    #+#             */
+/*   Updated: 2025/03/20 15:21:49 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../../includes/minishell.h"
 
@@ -33,10 +34,39 @@ char	*get_var_name(char *var)
 	return (var_name);
 }
 
-int	print_env_error(int errorn, char *var)
+char	*get_var_value(char *var)
+{
+	int		start;
+	char	quote;
+	int		i;
+
+	i = 0;
+	while (var[i] && var[i] != '=')
+		i++;
+	if (!var[i] || !var[++i])
+		return (NULL);
+	if (var[i] == '\'' || var[i] == '\"')
+	{
+		quote = var[i++], start = i;
+		while (var[i] && var[i] != quote)
+			i++;
+		if (!var[i])
+			return (NULL);
+	}
+	else
+	{
+		start = i;
+		while (var[i] && var[i] != ' ')
+			i++;
+	}
+	return (ft_substr(var, start, i - start));
+}
+
+void	print_env_error(int errorn, char *var)
 {
 	int	i;
 
+	i = 0;
 	if (errorn == 3)
 		ft_putstr_fd("export: not valid in this context: ", 2);
 	else if (errorn == 2 || errorn == 0)
@@ -48,7 +78,28 @@ int	print_env_error(int errorn, char *var)
 		i++;
 	}
 	ft_putchar_fd('\n', 2);
-	return (1);
+}
+
+char	*get_var(char *var)
+{
+	char	*var_name;
+	char	*var_value;
+	char	*val;
+
+	var_name = get_var_name(var);
+	if (!var_name)
+		return (NULL);
+	var_value = get_var_value(var);
+	if (!var_value)
+		return (NULL);
+	val = var_name;
+	var_name = ft_strjoin(val, "=");
+	free(val);
+	if (!var_name)
+		return (NULL);
+	val = ft_strjoin(var_name, var_value);
+	free(var_name);
+	return (val);
 }
 
 int	is_var_in_env(char *var, t_env *env)
@@ -67,7 +118,7 @@ int	is_var_in_env(char *var, t_env *env)
 			if (strchr(var, '='))
 			{
 				free(env->value);
-				env->value = ft_strdup(var);
+				env->value = get_var(var);
 			}
 			return (free(env_var_name), free(var_name), 1);
 		}
@@ -98,9 +149,10 @@ int	is_valid_env_var(char *var)
 
 int	ft_export(char **args, t_env **env)
 {
-	int	i;
-	int	errorn;
-	int	ret;
+	int		i;
+	int		errorn;
+	int		ret;
+	char	*var;
 
 	i = 1;
 	ret = 0;
@@ -110,12 +162,14 @@ int	ft_export(char **args, t_env **env)
 	{
 		errorn = is_valid_env_var(args[i]);
 		if (errorn != 1)
-		{
 			print_env_error(errorn, args[i]);
-			ret = 1;
-		}
 		else if (!is_var_in_env(args[i], *env))
-			push_env_back(env, args[i]);
+		{
+			ret = 1;
+			var = get_var(args[i]);
+			push_env_back(env, var);
+			free(var);
+		}
 		i++;
 	}
 	return (ret);

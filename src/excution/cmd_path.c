@@ -6,28 +6,11 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 15:09:32 by szemmour          #+#    #+#             */
-/*   Updated: 2025/03/15 15:41:33 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/03/20 16:35:34 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-void	free_dstr(char **cmds)
-{
-	int	i;
-
-	i = 0;
-	if (!cmds)
-		return ;
-	while (cmds[i])
-	{
-		free(cmds[i]);
-		cmds[i] = NULL;
-		i++;
-	}
-	free(cmds);
-	cmds = NULL;
-}
 
 static char	*get_current_dir(char **envp)
 {
@@ -120,6 +103,6 @@ int	resolve_cmd_paths(char **envp, t_command *cmds)
 			cmds->cmd_path = get_cmd_path(paths, cmds->args[0]);
 		cmds = cmds->next;
 	}
-	free_dstr(paths);
+	free_array(paths);
 	return (1);
 }

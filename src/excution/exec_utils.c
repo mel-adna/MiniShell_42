@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 16:23:52 by szemmour          #+#    #+#             */
-/*   Updated: 2025/03/19 16:53:55 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/03/20 16:33:45 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,16 @@ void	wait_children(t_command *cmds)
 	current = cmds;
 	while (current)
 	{
-		if (waitpid(current->pid, &status, 0) == -1)
+		if (current->pid != -1)
 		{
-			perror("minishell: waitpid");
-			return ;
+			if (waitpid(current->pid, &status, 0) == -1)
+			{
+				perror("minishell: waitpid");
+				return ;
+			}
+			if (WIFEXITED(status) && WEXITSTATUS(status) == 127)
+				return ;
 		}
-		if (WIFEXITED(status) && WEXITSTATUS(status) == 127)
-			return ;
 		current = current->next;
 	}
 }
@@ -55,6 +58,20 @@ int	open_file(t_fd *fd, t_command *cmd, int n)
 			return (0);
 		}
 	}
+	return (1);
+}
+
+int	open_redir(t_command *current, t_fd *fd)
+{
+	if (current->infile)
+		if (open_file(fd, current, 1) == 0)
+			return (0);
+	if (current->outfile)
+		if (open_file(fd, current, 0) == 0)
+			return (0);
+	if (current->pipe)
+		if (pipe(fd->pipefd) == -1)
+			return (perror("minishell: pipe"), 0);
 	return (1);
 }
 

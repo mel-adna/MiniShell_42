@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 00:44:46 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/19 22:09:03 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/03/20 14:35:30 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ static t_command	*init_command(void)
 	cmd->heredoc = NULL;
 	cmd->pipe = 0;
 	cmd->next = NULL;
+	cmd->pid = -1;
+	cmd->cmd_path = NULL;
 	return (cmd);
 }
 
@@ -77,30 +79,38 @@ static void	push_cmd_back(t_command **head, t_command *node)
 	*last = node;
 }
 
-t_command	*parse_tokens(t_token *tokens, t_command	*cmds)
+t_command	*parse_tokens(t_token *tokens)
 {
 	t_command	*cmd;
-	t_token		*current;
+	t_command	*cmds;
+	t_token		*token;
 
+	cmds = NULL;
 	cmd = init_command();
-	current = tokens;
+	token = tokens;
 	if (!cmd)
 		return (NULL);
-	while (current)
+	while (token)
 	{
-		if (current->type == TOKEN_WORD)
-			cmd->args = ft_addstr(cmd->args, current->value);
-		else if (current->type == TOKEN_PIPE)
+		if (token->type == TOKEN_WORD)
+			cmd->args = ft_addstr(cmd->args, token->value);
+		else if (token->type == TOKEN_PIPE)
 		{
 			cmd->pipe = 1;
 			push_cmd_back(&cmds, cmd);
 			cmd = init_command();
 			if (!cmd)
-				break ;
+				return (cmds);
 		}
 		else
-			process_redirection(cmd, current);
-		current = current->next;
+		{
+			process_redirection(cmd, token);
+			if(token->next)
+				token = token->next;
+			else
+				break;
+		}
+		token = token->next;
 	}
 	return (push_cmd_back(&cmds, cmd), cmds);
 }

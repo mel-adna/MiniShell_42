@@ -6,15 +6,15 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 16:38:13 by szemmour          #+#    #+#             */
-/*   Updated: 2025/03/19 16:40:06 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/03/20 16:37:30 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void ft_herdoc(char *limiter)
+void	ft_herdoc(char *limiter)
 {
-    char	*line;
+	char	*line;
 	int		fd;
 
 	if (!limiter)

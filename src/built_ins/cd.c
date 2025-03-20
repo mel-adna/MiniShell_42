@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 15:25:58 by szemmour          #+#    #+#             */
-/*   Updated: 2025/03/19 13:51:03 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/03/20 15:52:30 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,17 +114,6 @@ int	cd_oldpwd(t_env *env)
 
 int	ft_cd(char **args, t_env **env)
 {
-	char	*pwd;
-	char	*oldpwd;
-
-	if (!update_oldpwd(*env))
-	{
-		printf("Enter this co.....\n");
-		pwd = get_env_value(*env, "PWD");
-		oldpwd = ft_strjoin("OLDPWD=", pwd);
-		push_env_back(env, oldpwd);
-		free(oldpwd);
-	}
 	if (!args[1] || ft_strcmp(args[1], "~") == 0)
 		return (cd_home(*env));
 	if (ft_strcmp(args[1], "-") == 0)
@@ -135,6 +124,3 @@ int	ft_cd(char **args, t_env **env)
 	ft_putendl_fd(args[1], 2);
 	return (0);
 }
-
-
-// fix the cd - it not work correctly!

@@ -16,7 +16,6 @@
 
 typedef struct s_env
 {
-	char				*name;
 	char				*value;
 	struct s_env		*next;
 }						t_env;
@@ -71,7 +70,7 @@ int						check_redirect_errors(char *input);
 char					**ft_addstr(char **arr, char *new_str);
 void					process_and_add_token(t_token **token_list, char *line,
 							int *i, t_env **env);
-t_command				*parse_tokens(t_token *tokens, t_command *cmds);
+t_command				*parse_tokens(t_token *tokens);
 
 // ====================== env ======================
 int						env_init(t_env **env, char **envp);
@@ -93,6 +92,7 @@ void					push_env_back(t_env **head, char *value);
 // ====================== Excution Utils ======================
 void					wait_children(t_command *cmds);
 int						open_file(t_fd *fd, t_command *cmd, int n);
+int						open_redir(t_command *current, t_fd *fd);
 void					close_fds(t_fd *fd);
 void					dup_file(t_fd *fd, int newfd);
 // ====================== Builtins ======================

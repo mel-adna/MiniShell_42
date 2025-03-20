@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 00:44:41 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/20 00:00:00 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/03/20 14:24:59 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ t_command	*tokenize_line(char *line, t_env **env)
 			break ;
 		process_and_add_token(&token_list, line, &i, env);
 	}
-	cmds = parse_tokens(token_list, NULL);
+	cmds = parse_tokens(token_list);
 	free_token_list(&token_list);
 	return cmds;
 }
