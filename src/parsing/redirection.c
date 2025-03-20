@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 00:44:46 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/20 14:35:30 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/03/20 18:12:28 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,10 +105,10 @@ t_command	*parse_tokens(t_token *tokens)
 		else
 		{
 			process_redirection(cmd, token);
-			if(token->next)
+			if (token->next)
 				token = token->next;
 			else
-				break;
+				break ;
 		}
 		token = token->next;
 	}

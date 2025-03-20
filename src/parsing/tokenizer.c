@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 00:44:44 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/20 15:39:34 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/03/20 17:49:40 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,12 @@
 char	*get_value(char *name, t_env **env)
 {
 	t_env	*current;
-	char	*cur_name;
 
 	current = *env;
 	while (current)
 	{
-		cur_name = get_var_name(current->value);
-		if (!ft_strcmp(cur_name, name))
+		if (!ft_strcmp(current->name, name))
 			return (ft_strdup(current->value + ft_strlen(name) + 1));
-		free(cur_name);
 		current = current->next;
 	}
 	return (NULL);

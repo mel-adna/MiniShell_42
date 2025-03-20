@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 14:58:58 by szemmour          #+#    #+#             */
-/*   Updated: 2025/03/18 14:17:32 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/03/20 18:07:26 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,6 @@ int	ft_echo(char **args)
 	}
 	if (!n_option)
 		ft_putchar_fd('\n', 1);
-	ft_putchar_fd('n', 1);
+	// ft_putchar_fd('n', 1);
 	return (1);
 }
