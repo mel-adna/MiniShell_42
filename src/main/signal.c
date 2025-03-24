@@ -6,7 +6,7 @@
 /*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 19:08:26 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/20 19:08:27 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/03/24 17:59:46 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,13 @@ void	handle_signals(int sig)
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
+		g_exit_status = 130;
 	}
 	else if (sig == SIGQUIT)
+	{
 		rl_redisplay();
+		g_exit_status = 131;
+	}
 }
 
 void	setup_signals(void)

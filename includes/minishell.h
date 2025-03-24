@@ -15,6 +15,8 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
+extern int				g_exit_status;
+
 typedef struct s_env
 {
 	char				*name;

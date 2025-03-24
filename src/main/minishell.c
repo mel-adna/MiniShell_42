@@ -6,11 +6,32 @@
 /*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 17:59:36 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/20 17:29:09 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/03/24 22:59:17 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+int	g_exit_status = 0;
+
+// void	print_command_list(t_command *cmds)
+// {
+// 	t_command	*current;
+// 	int			i;
+
+// 	current = cmds;
+// 	while (current)
+// 	{
+// 		i = 0;
+// 		printf("Command: %s\n", current->args[0]);
+// 		while (current->args[i])
+// 		{
+// 			printf("Arg %d: %s\n", i, current->args[i]);
+// 			i++;
+// 		}
+// 		current = current->next;
+// 	}
+// }
 
 void	process_input(t_command **cmds, char *input, t_env **env)
 {
@@ -23,6 +44,8 @@ void	process_input(t_command **cmds, char *input, t_env **env)
 		return ;
 	}
 	exec(*cmds, env);
+	// print_command_list(*cmds);
+	// exit(0);
 	free_command_list(cmds);
 }
 
@@ -47,7 +70,8 @@ int	main(int argc, char **argv, char **envp)
 			break ;
 		}
 		process_input(&cmds, input, &env);
+		free(input);
 	}
 	reset_terminal();
-	return (0);
+	return (g_exit_status);
 }
