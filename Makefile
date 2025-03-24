@@ -17,7 +17,7 @@ SRC = src/main/minishell.c src/env/env.c src/env/shell_lvl.c src/parsing/parse.c
 
 OBJ = $(SRC:.c=.o)
 
-all: $(LIBFT) $(NAME)
+all: $(LIBFT) $(NAME) clean
 
 $(NAME): $(OBJ) $(LIBFT)
 	@$(CC) $(CFLAGS) $(OBJ) -o $(NAME) $(LIBFT) $(LDFLAGS)

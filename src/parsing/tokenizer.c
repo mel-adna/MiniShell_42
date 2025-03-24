@@ -6,7 +6,7 @@
 /*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 00:44:44 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/20 17:49:40 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/03/24 17:09:29 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ char	*extract_env_value(char *line, int *i, t_env **env)
 	char	*name;
 
 	start = ++(*i);
+	if (line[0] == '$')
+		return (ft_strdup(""));
 	while (line[*i] && (ft_isalnum(line[*i]) || line[*i] == '_'))
 		(*i)++;
 	name = ft_substr(line, start, *i - start);
@@ -110,8 +112,11 @@ void	process_and_add_token(t_token **token_list, char *line, int *i,
 	else
 	{
 		type = TOKEN_WORD;
-		if (line[*i] == '$')
+		if (line[*i] == '$' && line[*i + 1] != '!')
+		{
 			value = extract_env_value(line, i, env);
+			printf("value: %s\n", value);
+		}
 		else if (line[*i] == '\'' || line[*i] == '\"')
 			value = extract_quoted_value(line, i);
 		else
