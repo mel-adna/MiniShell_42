@@ -1,21 +1,38 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/26 16:36:26 by szemmour          #+#    #+#             */
+/*   Updated: 2025/03/26 16:36:42 by szemmour         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include "./gnl/get_next_line.h"
+# include "./libft/libft.h"
 # include <fcntl.h>
 # include <limits.h>
 # include <signal.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
-# include <unistd.h>
-# include <termios.h>
 # include <sys/types.h>
 # include <sys/wait.h>
-# include <../libft/libft.h>
+# include <termios.h>
+# include <unistd.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
-extern int				g_exit_status;
+# define FAILURE 1
+# define SUCCESS 0
+# define NOTFOUND 127
+
+extern int				g_exit_code;
 
 typedef struct s_env
 {
@@ -54,6 +71,7 @@ typedef struct s_command
 	pid_t				pid;
 	int					pipe;
 	int					append;
+	int					exit_status;
 	struct s_command	*next;
 }						t_command;
 
@@ -90,20 +108,21 @@ void					free_token_list(t_token **token_list);
 void					free_env(t_env **env);
 void					free_array(char **arr);
 // ====================== Excution ======================
-int						exec(t_command *cmds, t_env **env);
+void					exec(t_command **cmds, t_env **env, char **envp);
 int						resolve_cmd_paths(char **envp, t_command *cmds);
 void					push_env_back(t_env **head, char *value);
+void					init_fds(t_fd *fd);
 // ====================== Excution Utils ======================
 void					wait_children(t_command *cmds);
 int						open_file(t_fd *fd, t_command *cmd, int n);
 int						open_redir(t_command *current, t_fd *fd);
 void					close_fds(t_fd *fd);
-void					dup_file(t_fd *fd, int newfd);
+int						dup_stdout(t_fd *fd, int newfd);
+int						dup_stdin(t_fd *fd, int newfd);
 // ====================== Builtins ======================
 int						env_size(t_env *env);
 int						is_builtin(char *command);
-int						exec_builtin(char **args, t_env **env, t_command **cmds,
-							t_fd fd);
+void					exec_builtin(char **args, t_env **env);
 int						ft_cd(char **args, t_env **env);
 int						ft_echo(char **args);
 int						ft_env(t_env *env);
@@ -111,16 +130,20 @@ int						ft_export(char **args, t_env **env);
 int						ft_pwd(void);
 int						ft_unset(char **args, t_env **env);
 void					ft_exit(char **args, t_command **cmds, t_env **env,
-							t_fd fd);
+							t_fd *fd);
 int						print_sorted_env(t_env *env);
 char					*get_var_name(char *var);
-char					**env_to_str(t_env *env);
 char					*get_env_value(t_env *env, const char *key);
+char					*get_var_value(char *var);
+char					**env_to_str(t_env *env);
+int						is_valid_env_var(char *var);
+// ====================== here doc ======================
+int						ft_heredoc(char *limiter, t_env *env);
+void					handel_nul_args(t_command *current, char **envp);
 
 // ====================== Signals Handling ======================
 
 void					handle_signals(int sig);
 void					setup_signals(void);
 void					reset_terminal(void);
-
 #endif

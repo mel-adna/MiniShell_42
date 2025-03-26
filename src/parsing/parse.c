@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 00:44:50 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/19 20:43:39 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/03/26 12:33:28 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static int	check_pipe_errors(char *input)
 	while (input[i] == ' ')
 		i++;
 	if (input[i] == '|')
-		return (ft_putendl_fd("Syntax error!!", 1), 1);
+		return (ft_putendl_fd("Syntax error!!", 2), 1);
 	while (input[i])
 	{
 		if (input[i] == '|' && input[i + 1] != '|')
@@ -79,9 +79,9 @@ static int	check_pipe_errors(char *input)
 			while (input[i] == ' ')
 				i++;
 			if (input[i] == '|')
-				return (ft_putendl_fd("Syntax error!!", 1), 1);
+				return (ft_putendl_fd("Syntax error!!", 2), 1);
 			if (input[i] == '\0')
-				return (ft_putendl_fd("Syntax error!!", 1), 1);
+				return (ft_putendl_fd("Syntax error!!", 2), 1);
 		}
 		i++;
 	}
@@ -95,7 +95,7 @@ t_command	*parse(char *input, t_env **env)
 	if (!input || !*input)
 		return (NULL);
 	if (is_open_quotes(input))
-		return (ft_putendl_fd("Syntax error!!", 1), NULL);
+		return (ft_putendl_fd("Syntax error!!", 2), NULL);
 	if (check_redirect_errors(input))
 		return (NULL);
 	if (check_pipe_errors(input))

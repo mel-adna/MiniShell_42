@@ -6,11 +6,19 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 15:09:32 by szemmour          #+#    #+#             */
-/*   Updated: 2025/03/20 16:35:34 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/03/24 16:44:44 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+void	init_fds(t_fd *fd)
+{
+	fd->fdin = -1;
+	fd->fdout = -1;
+	fd->pipefd[0] = -1;
+	fd->pipefd[1] = -1;
+}
 
 static char	*get_current_dir(char **envp)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 00:44:46 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/20 18:12:28 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/03/26 11:56:40 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,5 +112,6 @@ t_command	*parse_tokens(t_token *tokens)
 		}
 		token = token->next;
 	}
-	return (push_cmd_back(&cmds, cmd), cmds);
+	push_cmd_back(&cmds, cmd);
+	return (cmds);
 }

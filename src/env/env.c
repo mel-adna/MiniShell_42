@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 15:47:22 by szemmour          #+#    #+#             */
-/*   Updated: 2025/03/19 22:51:45 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/03/26 16:38:23 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,11 +72,12 @@ int	print_sorted_env(t_env *env)
 	env_arr = env_to_str(env);
 	i = 0;
 	if (!env_arr)
-		return (0);
+		return (FAILURE);
 	sort_env(env_arr);
 	while (env_arr[i])
 		ft_putendl_fd(env_arr[i++], 1);
-	return (1);
+	free_array(env_arr);
+	return (SUCCESS);
 }
 
 void	push_env_back(t_env **head, char *value)
@@ -106,7 +107,6 @@ void	push_env_back(t_env **head, char *value)
 		tmp->next = node;
 	}
 }
-
 
 int	env_init(t_env **env, char **envp)
 {

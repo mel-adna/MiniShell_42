@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 14:03:17 by szemmour          #+#    #+#             */
-/*   Updated: 2025/03/19 16:53:14 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/03/25 13:25:48 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,8 @@ int	args_count(char **args)
 	return (count);
 }
 
-void	ft_exit(char **args, t_command **cmds, t_env **env, t_fd fd)
+void	ft_exit(char **args, t_command **cmds, t_env **env, t_fd *fd)
 {
-	int	exit_code;
-
-	exit_code = 0;
 	ft_putendl_fd("exit", 1);
 	if (args_count(args) > 1)
 	{
@@ -51,17 +48,19 @@ void	ft_exit(char **args, t_command **cmds, t_env **env, t_fd fd)
 			ft_putstr_fd("minishell: exit: ", 2);
 			ft_putstr_fd(args[1], 2);
 			ft_putendl_fd(": numeric argument required", 2);
+			g_exit_code = 255;
 			free_command_list(cmds);
 			free_env(env);
-			close_fds(&fd);
-			exit(255);
+			close_fds(fd);
+			exit(g_exit_code);
 		}
-		exit_code = ft_atoi(args[1]);
 		if (args_count(args) > 2)
-			return(ft_putendl_fd("minishell: exit: too many arguments", 2));
+			return (g_exit_code = 1,
+				ft_putendl_fd("minishell: exit: too many arguments", 2));
+		g_exit_code = ft_atoi(args[1]) % 256;
 	}
 	free_command_list(cmds);
 	free_env(env);
-	close_fds(&fd);
-	exit(exit_code);
+	close_fds(fd);
+	exit(g_exit_code);
 }

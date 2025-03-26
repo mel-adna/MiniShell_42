@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 00:44:44 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/24 22:57:20 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/03/26 11:57:35 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ void	process_and_add_token(t_token **token_list, char *line, int *i,
 	else
 	{
 		type = TOKEN_WORD;
-		if (line[*i] == '$' && line[*i + 1] != '!')
+		if (line[*i] == '$' && line[*i + 1] && line[*i + 1] != '?')
 			value = extract_env_value(line, i, env);
 		else if (line[*i] == '\'' || line[*i] == '\"')
 			value = extract_quoted_value(line, i);

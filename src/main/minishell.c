@@ -3,37 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 17:59:36 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/24 22:59:17 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/03/26 15:56:13 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	g_exit_status = 0;
+int		g_exit_code;
 
-// void	print_command_list(t_command *cmds)
-// {
-// 	t_command	*current;
-// 	int			i;
-
-// 	current = cmds;
-// 	while (current)
-// 	{
-// 		i = 0;
-// 		printf("Command: %s\n", current->args[0]);
-// 		while (current->args[i])
-// 		{
-// 			printf("Arg %d: %s\n", i, current->args[i]);
-// 			i++;
-// 		}
-// 		current = current->next;
-// 	}
-// }
-
-void	process_input(t_command **cmds, char *input, t_env **env)
+void	process_input(t_command **cmds, char *input, t_env **env, char **envp)
 {
 	if (*input)
 		add_history(input);
@@ -43,10 +24,14 @@ void	process_input(t_command **cmds, char *input, t_env **env)
 		free(input);
 		return ;
 	}
-	exec(*cmds, env);
-	// print_command_list(*cmds);
-	// exit(0);
+	exec(cmds, env, envp);
 	free_command_list(cmds);
+	free(input);
+}
+
+void ll()
+{
+	system("leaks -q minishell");
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -55,6 +40,7 @@ int	main(int argc, char **argv, char **envp)
 	char		*input;
 	t_env		*env;
 
+	// atexit(ll);
 	cmds = NULL;
 	(void)argc;
 	(void)argv;
@@ -69,9 +55,9 @@ int	main(int argc, char **argv, char **envp)
 			printf("Exiting...\n");
 			break ;
 		}
-		process_input(&cmds, input, &env);
-		free(input);
+		process_input(&cmds, input, &env, envp);
+		// system("leaks -q minishell");
 	}
 	reset_terminal();
-	return (g_exit_status);
+	return (g_exit_code);
 }

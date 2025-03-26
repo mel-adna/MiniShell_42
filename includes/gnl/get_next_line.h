@@ -1,27 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/16 15:18:16 by szemmour          #+#    #+#             */
-/*   Updated: 2025/03/25 13:26:51 by szemmour         ###   ########.fr       */
+/*   Created: 2024/11/27 16:19:47 by szemmour          #+#    #+#             */
+/*   Updated: 2024/12/08 09:12:18 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
 
-int	ft_pwd(void)
-{
-	char	cwd[PATH_MAX];
+# include <stdlib.h>
+# include <unistd.h>
 
-	if (getcwd(cwd, sizeof(cwd)))
-	{
-		ft_putendl_fd(cwd, STDOUT_FILENO);
-		return (SUCCESS);
-	}
-	else
-		perror("getcwd");
-	return (FAILURE);
-}
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 10
+# endif
+
+char	*get_next_line(int fd);
+char	*ft_strchr(const char *s, int c);
+char	*ft_strdup(const char *s1);
+size_t	ft_strlen(const char *s);
+char	*ft_strjoin(const char *s1, const char *s2);
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
+#endif

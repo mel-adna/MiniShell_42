@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 00:45:07 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/19 16:32:46 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/03/25 11:43:59 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ void	free_command_fields(t_command *cmd)
 		free(cmd->outfile);
 	if (cmd->heredoc)
 		free(cmd->heredoc);
+	if (cmd->cmd_path)
+		free(cmd->cmd_path);
 }
 
 void	free_command_list(t_command **cmd_list)
@@ -78,10 +80,11 @@ void	free_env(t_env **env)
 	{
 		tmp = *env;
 		*env = (*env)->next;
+		free(tmp->value);
+		free(tmp->name);
 		free(tmp);
-		tmp = NULL;
 	}
-	env = NULL;
+	*env = NULL;
 }
 
 void	free_array(char **arr)

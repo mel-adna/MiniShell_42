@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 14:50:54 by szemmour          #+#    #+#             */
-/*   Updated: 2025/03/20 15:15:44 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/03/26 16:37:44 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,28 +16,75 @@ int	is_builtin(char *command)
 {
 	return (!ft_strcmp(command, "cd") || !ft_strcmp(command, "echo")
 		|| !ft_strcmp(command, "pwd") || !ft_strcmp(command, "env")
-		|| !ft_strcmp(command, "export") || !ft_strcmp(command, "unset")
-		|| !ft_strcmp(command, "exit"));
+		|| !ft_strcmp(command, "export") || !ft_strcmp(command, "unset"));
 }
 
-int	exec_builtin(char **args, t_env **env, t_command **cmds, t_fd fd)
+void	exec_builtin(char **args, t_env **env)
 {
-	int	result;
-
-	result = 0;
 	if (ft_strcmp(args[0], "echo") == 0)
-		result = ft_echo(args);
+		g_exit_code = ft_echo(args);
 	if (ft_strcmp(args[0], "cd") == 0)
-		result = ft_cd(args, env);
+		g_exit_code = ft_cd(args, env);
 	if (ft_strcmp(args[0], "pwd") == 0)
-		result = ft_pwd();
+		g_exit_code = ft_pwd();
 	if (ft_strcmp(args[0], "env") == 0)
-		result = ft_env(*env);
+		g_exit_code = ft_env(*env);
 	if (ft_strcmp(args[0], "export") == 0)
-		result = ft_export(args, env);
+		g_exit_code = ft_export(args, env);
 	if (ft_strcmp(args[0], "unset") == 0)
-		result = ft_unset(args, env);
-	if (ft_strcmp(args[0], "exit") == 0)
-		ft_exit(args, cmds, env, fd);
-	return (result);
+		g_exit_code = ft_unset(args, env);
+}
+
+char	*get_var_name(char *var)
+{
+	int		i;
+	char	*var_name;
+
+	if (!var)
+		return (NULL);
+	i = 0;
+	while (var[i] && var[i] != '=')
+		i++;
+	if (!var[i])
+		return (NULL);
+	var_name = (char *)malloc(sizeof(char) * (i + 1));
+	if (!var_name)
+		return (NULL);
+	i = 0;
+	while (var[i] && var[i] != '=')
+	{
+		var_name[i] = var[i];
+		i++;
+	}
+	var_name[i] = '\0';
+	return (var_name);
+}
+
+char	*get_var_value(char *var)
+{
+	char (quote);
+	int start, (i);
+	if (!var)
+		return (NULL);
+	i = 0;
+	while (var[i] && var[i] != '=')
+		i++;
+	if (!var[i] || !var[++i])
+		return (NULL);
+	if (var[i] == '\'' || var[i] == '\"')
+	{
+		quote = var[i++];
+		start = i;
+		while (var[i] && var[i] != quote)
+			i++;
+		if (!var[i])
+			return (NULL);
+	}
+	else
+	{
+		start = i;
+		while (var[i] && var[i] != ' ')
+			i++;
+	}
+	return (ft_substr(var, start, i - start));
 }

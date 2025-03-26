@@ -3,50 +3,51 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 14:58:58 by szemmour          #+#    #+#             */
-/*   Updated: 2025/03/20 18:07:26 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/03/26 16:35:10 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	nbr_args(char **args)
+int	print_exit_code(void)
 {
-	int	count;
+	char	*str;
 
-	count = 0;
-	while (args[count])
-		count++;
-	return (count);
+	str = ft_itoa(g_exit_code);
+	if (!str)
+		return (FAILURE);
+	ft_putstr_fd(str, 1);
+	free(str);
+	return (SUCCESS);
 }
 
 int	ft_echo(char **args)
 {
-	int	n_option;
-	int	i;
-
+	int n_option, (i);
 	n_option = 0;
 	i = 1;
-	if (nbr_args(args) == 1)
-		return (ft_putchar_fd('\n', 1), 1);
-	if (nbr_args(args) > 1)
+	while (args[i] && !ft_strncmp(args[i], "-n", 2))
 	{
-		while (args[i] && !ft_strncmp(args[i], "-n", ft_strlen(args[i])))
-		{
-			n_option++;
-			i++;
-		}
-		while (args[i])
-		{
-			ft_putstr_fd(args[i], 1);
+		n_option = 1;
+		i++;
+	}
+	if (args[i] && !ft_strcmp(args[i], "$?"))
+	{
+		if (print_exit_code() == FAILURE)
+			return (FAILURE);
+		i++;
+	}
+	while (args[i])
+	{
+		ft_putstr_fd(args[i], 1);
+		if (args[i + 1])
 			ft_putchar_fd(' ', 1);
-			i++;
-		}
+		i++;
 	}
 	if (!n_option)
 		ft_putchar_fd('\n', 1);
-	// ft_putchar_fd('n', 1);
-	return (1);
+	return (SUCCESS);
 }

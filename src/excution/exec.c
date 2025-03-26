@@ -3,56 +3,50 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 13:02:32 by szemmour          #+#    #+#             */
-/*   Updated: 2025/03/24 22:15:28 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/03/26 16:38:43 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	is_in_file(t_fd *fd)
+void	exit_func(t_fd *fd, int status)
+{
+	close_fds(fd);
+	g_exit_code = status;
+	exit(g_exit_code);
+}
+
+static void	child_process(t_command *cmds, t_fd *fd, char **envp)
 {
 	if (fd->fdin >= 0)
 	{
 		if (fd->fdin == -1)
-		{
-			close_fds(fd);
-			return (0);
-		}
-		if (dup2(fd->fdin, STDIN_FILENO) == -1)
-		{
-			perror("minishell: dup2");
-			close_fds(fd);
-			return (0);
-		}
+			exit_func(fd, FAILURE);
+		if (dup_stdin(fd, fd->fdin) == FAILURE)
+			exit_func(fd, FAILURE);
 	}
-	return (1);
-}
-
-void	child_process(t_command *cmds, t_fd *fd, char **envp)
-{
-	if (!is_in_file(fd))
-		exit(EXIT_FAILURE);
 	if (cmds->pipe)
-		dup_file(fd, fd->pipefd[1]);
-	else if (cmds->outfile)
-		dup_file(fd, fd->fdout);
+		if (dup_stdout(fd, fd->pipefd[1]) == FAILURE)
+			exit_func(fd, FAILURE);
+	if (cmds->outfile)
+		if (dup_stdout(fd, fd->fdout) == FAILURE)
+			exit_func(fd, FAILURE);
 	if (!cmds->cmd_path)
 	{
 		ft_putstr_fd("minishell: command not found: ", 2);
 		ft_putendl_fd(cmds->args[0], 2);
-		close_fds(fd);
-		exit(127);
+		exit_func(fd, NOTFOUND);
 	}
 	close(fd->pipefd[1]);
 	execve(cmds->cmd_path, cmds->args, envp);
 	perror("minishell: execve");
-	exit(EXIT_FAILURE);
+	exit_func(fd, FAILURE);
 }
 
-void	ft_exec_cmd(t_fd *fd, t_command *cmds, char **envp)
+static void	ft_exec_cmd(t_fd *fd, t_command *cmds, char **envp)
 {
 	cmds->pid = fork();
 	if (cmds->pid < 0)
@@ -73,58 +67,63 @@ void	ft_exec_cmd(t_fd *fd, t_command *cmds, char **envp)
 	}
 }
 
-void	exec_bltin(t_command *current, t_env **env, t_command **cmds, t_fd fd)
+static int	exec_bltin(t_command *current, t_env **env, t_fd *fd)
 {
 	int	stdin_copy;
 	int	stdout_copy;
 
 	stdin_copy = dup(STDIN_FILENO);
 	stdout_copy = dup(STDOUT_FILENO);
-	if (fd.fdin != STDIN_FILENO)
-		dup2(fd.fdin, STDIN_FILENO);
 	if (current->pipe)
-		dup_file(&fd, fd.pipefd[1]);
-	else if (current->outfile)
-		dup_file(&fd, fd.fdout);
-	exec_builtin(current->args, env, cmds, fd);
-	dup2(stdin_copy, STDIN_FILENO);
-	dup2(stdout_copy, STDOUT_FILENO);
+		if (dup_stdout(fd, fd->pipefd[1]) == FAILURE)
+			return (FAILURE);
+	if (current->outfile)
+		if (dup_stdout(fd, fd->fdout) == FAILURE)
+			return (FAILURE);
+	exec_builtin(current->args, env);
+	if (dup_stdin(fd, stdin_copy) == FAILURE)
+		return (FAILURE);
+	if (dup_stdout(fd, stdout_copy) == FAILURE)
+		return (FAILURE);
 	close(stdin_copy);
 	close(stdout_copy);
-	if (fd.fdin != STDIN_FILENO)
-		close(fd.fdin);
-	if (fd.fdout != STDOUT_FILENO)
-		close(fd.fdout);
+	if (fd->fdin != STDIN_FILENO)
+		close(fd->fdin);
+	if (fd->fdout != STDOUT_FILENO)
+		close(fd->fdout);
 	if (current->pipe)
 	{
-		close(fd.pipefd[1]);
-		fd.fdin = fd.pipefd[0];
+		close(fd->pipefd[1]);
+		fd->fdin = fd->pipefd[0];
 	}
+	return (SUCCESS);
 }
 
-int	exec(t_command *cmds, t_env **env)
+void	exec(t_command **cmds, t_env **env, char **envp)
 {
 	t_fd		fd;
 	t_command	*current;
-	char		**envp;
 
-	envp = env_to_str(*env);
-	if (!resolve_cmd_paths(envp, cmds))
+	init_fds(&fd);
+	if (!resolve_cmd_paths(envp, *cmds))
 		ft_putendl_fd("minishell: command error!", 2);
-	fd.fdin = -1;
-	fd.pipefd[0] = -1;
-	fd.pipefd[1] = -1;
-	current = cmds;
+	current = *cmds;
 	while (current)
 	{
-		if (!open_redir(current, &fd))
-			return (0);
-		if (is_builtin(current->args[0]))
-			exec_bltin(current, env, &cmds, fd);
-		else
+		if (open_redir(current, &fd) == FAILURE)
+			return ;
+		if (current->heredoc)
+			fd.fdin = ft_heredoc(current->heredoc, *env);
+		if (current->args && is_builtin(current->args[0]))
+			g_exit_code = exec_bltin(current, env, &fd);
+		else if (current->args && !ft_strcmp(current->args[0], "exit"))
+		{
+			if (!current->pipe)
+				ft_exit(current->args, cmds, env, &fd);
+		}
+		else if (current->args && current->args[0] && current->args[0][0])
 			ft_exec_cmd(&fd, current, envp);
 		current = current->next;
 	}
-	wait_children(cmds);
-	return (1);
+	wait_children(*cmds);
 }

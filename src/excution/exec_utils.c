@@ -6,33 +6,11 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 16:23:52 by szemmour          #+#    #+#             */
-/*   Updated: 2025/03/20 16:33:45 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/03/26 12:14:32 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-void	wait_children(t_command *cmds)
-{
-	t_command	*current;
-	int			status;
-
-	current = cmds;
-	while (current)
-	{
-		if (current->pid != -1)
-		{
-			if (waitpid(current->pid, &status, 0) == -1)
-			{
-				perror("minishell: waitpid");
-				return ;
-			}
-			if (WIFEXITED(status) && WEXITSTATUS(status) == 127)
-				return ;
-		}
-		current = current->next;
-	}
-}
 
 int	open_file(t_fd *fd, t_command *cmd, int n)
 {
@@ -42,7 +20,7 @@ int	open_file(t_fd *fd, t_command *cmd, int n)
 		if (fd->fdin < 0)
 		{
 			perror("minishell: open");
-			return (0);
+			return (g_exit_code = FAILURE, FAILURE);
 		}
 	}
 	else if (!n && cmd->outfile)
@@ -55,24 +33,23 @@ int	open_file(t_fd *fd, t_command *cmd, int n)
 		{
 			perror("minishell: open");
 			close(fd->fdin);
-			return (0);
+			return (g_exit_code = FAILURE, FAILURE);
 		}
 	}
-	return (1);
+	return (g_exit_code = SUCCESS, SUCCESS);
 }
 
 int	open_redir(t_command *current, t_fd *fd)
 {
 	if (current->infile)
-		if (open_file(fd, current, 1) == 0)
-			return (0);
+		open_file(fd, current, 1);
 	if (current->outfile)
-		if (open_file(fd, current, 0) == 0)
-			return (0);
+		if (open_file(fd, current, 0) == FAILURE)
+			return (FAILURE);
 	if (current->pipe)
 		if (pipe(fd->pipefd) == -1)
-			return (perror("minishell: pipe"), 0);
-	return (1);
+			return (perror("minishell: pipe"), g_exit_code = FAILURE, FAILURE);
+	return (SUCCESS);
 }
 
 void	close_fds(t_fd *fd)
@@ -99,12 +76,24 @@ void	close_fds(t_fd *fd)
 	}
 }
 
-void	dup_file(t_fd *fd, int newfd)
+int	dup_stdout(t_fd *fd, int newfd)
 {
 	if (dup2(newfd, STDOUT_FILENO) == -1)
 	{
 		perror("minishell: dup2");
 		close_fds(fd);
-		exit(EXIT_FAILURE);
+		return (FAILURE);
 	}
+	return (SUCCESS);
+}
+
+int	dup_stdin(t_fd *fd, int newfd)
+{
+	if (dup2(newfd, STDIN_FILENO) == -1)
+	{
+		perror("minishell: dup2");
+		close_fds(fd);
+		return (FAILURE);
+	}
+	return (SUCCESS);
 }
