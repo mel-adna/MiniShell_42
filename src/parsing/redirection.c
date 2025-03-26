@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 00:44:46 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/26 11:56:40 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/03/26 20:03:46 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,68 +48,34 @@ static void	process_redirection(t_command *cmd, t_token *current)
 	}
 }
 
-static t_command	*init_command(void)
+static void	handle_pipe(t_command **cmd, t_command **cmds)
 {
-	t_command	*cmd;
-
-	cmd = malloc(sizeof(t_command));
-	if (!cmd)
-		return (NULL);
-	cmd->args = NULL;
-	cmd->infile = NULL;
-	cmd->outfile = NULL;
-	cmd->append = 0;
-	cmd->heredoc = NULL;
-	cmd->pipe = 0;
-	cmd->next = NULL;
-	cmd->pid = -1;
-	cmd->cmd_path = NULL;
-	return (cmd);
+	(*cmd)->pipe = 1;
+	push_cmd_back(cmds, *cmd);
+	*cmd = init_command();
 }
 
-static void	push_cmd_back(t_command **head, t_command *node)
-{
-	t_command	**last;
-
-	last = head;
-	if (!node || !head)
-		return ;
-	while (*last)
-		last = &(*last)->next;
-	*last = node;
-}
-
-t_command	*parse_tokens(t_token *tokens)
+t_command	*parse_tokens(t_token *tokens, t_command *cmds)
 {
 	t_command	*cmd;
-	t_command	*cmds;
 	t_token		*token;
 
-	cmds = NULL;
 	cmd = init_command();
-	token = tokens;
-	if (!cmd)
+	if (cmd == NULL)
 		return (NULL);
+	token = tokens;
 	while (token)
 	{
 		if (token->type == TOKEN_WORD)
 			cmd->args = ft_addstr(cmd->args, token->value);
 		else if (token->type == TOKEN_PIPE)
 		{
-			cmd->pipe = 1;
-			push_cmd_back(&cmds, cmd);
-			cmd = init_command();
 			if (!cmd)
 				return (cmds);
+			handle_pipe(&cmd, &cmds);
 		}
 		else
-		{
 			process_redirection(cmd, token);
-			if (token->next)
-				token = token->next;
-			else
-				break ;
-		}
 		token = token->next;
 	}
 	push_cmd_back(&cmds, cmd);

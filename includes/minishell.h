@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 16:36:26 by szemmour          #+#    #+#             */
-/*   Updated: 2025/03/26 16:36:42 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/03/26 20:07:14 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,11 +88,14 @@ t_command				*tokenize_line(char *line, t_env **env);
 int						is_special_char(char *line, int i);
 t_token_type			get_token_type(char *line, int *i);
 void					handle_signals(int sig);
-int						check_redirect_errors(char *input);
+int						check_redirect_errors(char *input, int i);
 char					**ft_addstr(char **arr, char *new_str);
 void					process_and_add_token(t_token **token_list, char *line,
 							int *i, t_env **env);
-t_command				*parse_tokens(t_token *tokens);
+t_command				*parse_tokens(t_token *tokens, t_command	*cmds);
+t_command				*init_command(void);
+void					push_cmd_back(t_command **head, t_command *node);
+char					*get_value(char *name, t_env **env);
 
 // ====================== env ======================
 int						env_init(t_env **env, char **envp);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   list_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 17:59:13 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/24 16:44:44 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/03/26 19:44:48 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,4 +46,16 @@ void	push_back(t_token **head, char *value, t_token_type type)
 		tmp->next = new;
 		new->prev = tmp;
 	}
+}
+
+void	push_cmd_back(t_command **head, t_command *node)
+{
+	t_command	**last;
+
+	last = head;
+	if (!node || !head)
+		return ;
+	while (*last)
+		last = &(*last)->next;
+	*last = node;
 }

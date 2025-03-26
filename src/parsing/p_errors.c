@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_errors.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 00:44:52 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/26 12:32:54 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/03/26 19:42:38 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,16 +55,14 @@ char	*extract_filename(char *input)
 	return (filename);
 }
 
-int	check_redirect_errors(char *input)
+int	check_redirect_errors(char *input, int i)
 {
-	int		i;
 	char	*filename;
 
-	i = 0;
 	while (input[i])
 	{
 		if (check_semicolon(input))
-			return (ft_putendl_fd("Syntax error!!", 2), 1);
+			return (g_exit_code = 2, ft_putendl_fd("Syntax error!!", 1), 1);
 		if ((input[i] == '>' && input[i + 1] != '>') || (input[i] == '<'
 				&& input[i + 1] != '<'))
 		{
@@ -73,11 +71,12 @@ int	check_redirect_errors(char *input)
 				i++;
 			if (!input[i] || input[i] == '>' || input[i] == '<'
 				|| input[i] == '|')
-				return (ft_putendl_fd("Syntax error!!", 2), 1);
+				return (g_exit_code = 2, ft_putendl_fd("Syntax error!!", 1), 1);
 			filename = extract_filename(&input[i]);
-			if (access(filename, F_OK) == -1 && (input[i] == '>' && input[i
-					- 1] != '>') && !(input[i] == '<' && input[i - 1] != '<'))
-				return (perror(filename), free(filename), 1);
+			if (access(filename, F_OK) == -1 && (input[i] == '>' 
+					&& input[i - 1] != '>') && !(input[i] == '<' 
+					&& input[i - 1] != '<'))
+				return (g_exit_code = 2, perror(filename), free(filename), 1);
 			free(filename);
 		}
 		i++;
@@ -90,6 +89,6 @@ int	is_special_char(char *line, int i)
 	return ((line[i] == '&' && line[i + 1] == '&') 
 		|| (line[i] == '|' && line[i + 1] == '|') 
 		|| (line[i] == '>' && line[i + 1] == '>')
-		|| (line[i] == '<' && line[i + 1] == '<') 
-		|| line[i] == '|' || line[i] == '<' || line[i] == '>');
+		|| (line[i] == '<' && line[i + 1] == '<') || line[i] == '|'
+		|| line[i] == '<' || line[i] == '>');
 }

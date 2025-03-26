@@ -3,28 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 00:44:44 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/26 11:57:35 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/03/26 20:06:43 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-char	*get_value(char *name, t_env **env)
-{
-	t_env	*current;
-
-	current = *env;
-	while (current)
-	{
-		if (!ft_strcmp(current->name, name))
-			return (ft_strdup(current->value + ft_strlen(name) + 1));
-		current = current->next;
-	}
-	return (NULL);
-}
 
 char	*extract_env_value(char *line, int *i, t_env **env)
 {
@@ -101,8 +87,8 @@ char	*extract_word_value(char *line, int *i)
 	return (value);
 }
 
-void	process_and_add_token(t_token **token_list, char *line, int *i,
-		t_env **env)
+void	process_and_add_token(t_token **token_list, char *line, 
+		int *i, t_env **env)
 {
 	t_token_type	type;
 	char			*value;
@@ -116,7 +102,7 @@ void	process_and_add_token(t_token **token_list, char *line, int *i,
 	else
 	{
 		type = TOKEN_WORD;
-		if (line[*i] == '$' && line[*i + 1] && line[*i + 1] != '?')
+		if (line[*i] == '$' && line[*i + 1] != '?')
 			value = extract_env_value(line, i, env);
 		else if (line[*i] == '\'' || line[*i] == '\"')
 			value = extract_quoted_value(line, i);

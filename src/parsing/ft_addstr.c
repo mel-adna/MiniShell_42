@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_addstr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 00:44:55 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/26 11:54:15 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/03/26 19:38:10 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,3 @@ char	**ft_addstr(char **arr, char *new_str)
 	free(arr);
 	return (new_arr);
 }
-
