@@ -1,0 +1,30 @@
+test
+|test
+ | test
+< | test
+<< | test
+> | test
+>> | test
+| < test
+| << test
+| > test
+| >> test
+| test
+
+test | >  
+test | >>  
+test | <  
+
+echo hiecho hi
+echo hi|echo hi
+echo hi |echo hi
+echo hi| echo hi
+echo hi | | echo hi
+echo hi ||| echo hi
+
+echo >
+echo >>
+echo <
+echo >>>
+echo <<<
+echo hi >< file

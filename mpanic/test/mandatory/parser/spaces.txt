@@ -1,0 +1,13 @@
+""
+" "
+  
+	echo hi@\\techo hi
+echo	hi@echo\\thi
+	echo	hi@\\techo\\thi
+	echo	hi@\\techo\\thi
+   	echo	hi@  \\techo\\thi
+	echo	   hi@\\techo\\t   hi
+
+
+			@many tabs
+            @many spaces

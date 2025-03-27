@@ -1,0 +1,110 @@
+
+> no_cmd_file;cat no_cmd_file;rm no_cmd_file@> no_cmd_file
+>> no_cmd_test;cat no_cmd_test;rm no_cmd_test@>> no_cmd_test
+echo hola | > filepipe;cat filepipe;rm filepipe@echo hola | > filepipe
+> file_first | > file_second;cat file_first;cat file_second;rm file_first;rm file_second@> file_first | > file_second
+
+echo hi > file;cat file;rm file@echo hi > file
+echo hi >> file;echo hi >> file;cat file;rm file@echo hi >> file
+
+echo hi > *.txt;cat '*.txt';rm '*.txt'@echo hi > *.txt
+
+echo > file hi;cat file;rm file@echo >> file hi
+echo >> file hi;echo >> file hi;cat file;rm file@echo >> file2 hi
+
+> file echo hi;cat file;rm file@> file echo hi
+>> file echo hi;>> file echo hi;cat file;rm file@>> file echo hi
+
+echo hi > file2 > file hi;ls;cat file;rm file file2@echo hi > file2 > file hi
+echo hi >> file2 > file hi;echo hi >> file2 > file hi;ls;cat file;rm file file2@echo hi >> file2 > file hi
+echo hi > file2 >> file hi;echo hi > file2 >> file hi;ls;cat file;rm file file2@echo hi > file2 >> file hi
+echo hi > file2 > file hi;echo hi > file2 > file hi;ls;cat file;rm file file2@echo hi > file2 > file hi
+echo hi >> file2 >> file hi;echo hi >> file2 >> file hi;ls;cat file;rm file file2@echo hi >> file2 >> file hi
+echo hi>file2>file hi;ls;cat file;rm file file2@echo hi>file2>file hi
+echo hi>>file2>>file hi;ls;cat file;rm file file2@echo hi>>file2>>file hi
+
+echo hi > file3 > file2 > file hi;echo hii > file3 > file2 > file hii;ls;cat file;rm file file2 file3@echo hi > file3 > file2 > file hi
+echo hi > file3 >> file2 > file hi;echo hii > file3 >> file2 > file hii;ls;cat file;rm file file2 file3@echo hi > file3 >> file2 > file hi
+echo hi > file3 > file2 >> file hi;echo hii > file3 > file2 >> file hii;ls;cat file;rm file file2 file3@echo hi > file3 > file2 >> file hi
+echo hi >> file3 > file2 > file hi;echo hii >> file3 > file2 > file hii;ls;cat file;rm file file2 file3@echo hi >> file3 > file2 > file hi
+echo hi >> file3 > file2 >> file hi;echo hii >> file3 > file2 >> file hii;ls;cat file;rm file file2 file3@echo hi >> file3 > file2 >> file hi
+echo hi >> file3 >> file2 > file hi;echo hii >> file3 >> file2 > file hii;ls;cat file;rm file file2 file3@echo hi >> file3 >> file2 > file hi
+echo hi>file3>file2>file hi;ls;cat file;rm file file2 file3@echo hi>file3>file2>file hi
+
+> file3 echo hi > file2 > file hi;> file3 echo hi > file2 > file hi;ls;cat file;rm file file2 file3@> file3 echo hi > file2 > file hi
+> file3 echo hi > file2 >> file hi;> file3 echo hi > file2 >> file hi;ls;cat file;rm file file2 file3@> file3 echo hi > file2 >> file hi
+>> file3 echo hi > file2 > file hi;>> file3 echo hi > file2 > file hi;ls;cat file;rm file file2 file3@>> file3 echo hi > file2 > file hi
+> file3 echo hi >> file2 > file hi;> file3 echo hi >> file2 > file hi;ls;cat file;rm file file2 file3@> file3 echo hi >> file2 > file hi
+>file3 echo hi>file2>file hi;> file3 echo hi > file2 > file hi;ls;cat file;rm file file2 file3@>file3 echo hi>file2>file hi
+
+echo hi >filea>fileb>filec hi;echo hi >filea>fileb>filec hi;ls;cat filec;rm filea fileb filec@echo hi >filea>fileb>filec hi
+echo hi >filea>>fileb>filec hi;echo hi >filea>>fileb>filec hi;ls;cat filec;rm filea fileb filec@echo hi >filea>>fileb>filec hi
+echo hi >filea>fileb>>filec hi;echo hi >filea>fileb>>filec hi;ls;cat filec;rm filea fileb filec@echo hi >filea>fileb>>filec hi
+echo hi >>filea>fileb>filec hi;echo hi >>filea>fileb>filec hi;ls;cat filec;rm filea fileb filec@echo hi >>filea>fileb>filec hi
+
+echo hi > "doble"quote;cat doblequote;rm doblequote@echo hi > "doble"quote
+echo hi >"doble"quote;cat doblequote;rm doblequote@echo hi >"doble"quote
+echo -n hi >>"doble"quote;echo -n hi >>"doble"quote;cat doblequote;rm doblequote@echo -n hi >>"doble"quote
+
+echo hi > 'simple'quote;cat simplequote;rm simplequote@echo hi > 'simple'quote
+echo hi >'simple'quote;cat simplequote;rm simplequote@echo hi >'simple'quote
+echo -n hi >>'simple'quote;echo -n hi >>'simple'quote;cat simplequote;rm simplequote@echo -n hi >>'simple'quote
+
+echo hi > 'with spaces';cat 'with spaces';rm 'with spaces'@echo hi > 'with spaces'
+echo hi >>'with spaces';echo hi >>'with spaces';cat 'with spaces';rm 'with spaces'@echo hi >>'with spaces'
+
+echo hi > "mixed"'file 'name;cat "mixedfile name";rm "mixedfile name"@echo hi > "mixed"'file 'name
+echo hi >> "mixed"'file 'name;echo hi >> "mixed"'file 'name;cat "mixedfile name";rm "mixedfile name"@echo hi >> "mixed"'file 'name
+
+echo hi 0< file; rm file @echo hi 0> file
+bash 4> outpfile;echo hola >&4;cat outpfile; rm outpfile @4> file
+
+# mkdir testfolder &> /dev/null
+echo hi > testfolder
+echo hi >> testfolder
+echo hi 2> testfolder
+echo hi 2>> testfolder
+
+# chmod 000 testfolder &> /dev/null
+echo hi > testfolder
+echo hi >> testfolder
+echo hi 2> testfolder
+echo hi 2>> testfolder
+
+# chmod 666 testfolder &> /dev/null
+# rm -rf testfolder &> /dev/null
+
+# touch file &> /dev/null && touch file2 &> /dev/null && touch file3 &> /dev/null
+# chmod 000 file &> /dev/null && chmod 000 file2 &> /dev/null && chmod 000 file3 &> /dev/null
+echo > file hi;cat file;@echo > file hi (no permision)
+echo >> file2 hi;cat file2;@echo >> file2 hi (no permision)
+
+> file echo hi;cat file;@> file echo hi (no permision)
+>> file3 echo hi;cat file3;@>> file3 echo hi (no permision)
+
+# chmod 666 file &> /dev/null && chmod 666 file2 &> /dev/null && chmod 666 file3 &> /dev/null
+# rm file file2 file3 &> /dev/null
+
+# echo hi, I am the file > file
+# echo hi, I am the file2 > file2
+# echo hi, I am the file3 > file3
+# chmod 000 file3 &> /dev/null
+
+cat < file@cat < file
+< file cat < file2@< file cat < file2
+cat < nonexist@cat < nonexist
+cat < $USER@cat < $USER
+cat < file3@cat < file3 (no permision)
+
+# chmod 666 file3 &> /dev/null
+
+# rm file file2 file3 &> /dev/null
+
+echo hi 2> error_outp < non_exist@echo hi 2> error_outp < non_exist
+# rm error_outp &> /dev/null
+
+echo hi < non_exist > wrong;ls;rm wrong@echo hi < non_exist > wrong
+< non_exist echo hi > wrong;ls;rm wrong@< non_exist echo hi > wrong
+> correct echo hi < non_exist;ls;rm correct@> correct echo hi < non_exist
+
+#rm correct

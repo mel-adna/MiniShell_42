@@ -1,0 +1,15 @@
+echo \\a
+echo \\ 
+e\\cho hi
+eC\\ho hi
+e\\Cho hi
+echo \\ hi
+echo hi \\ \\| echo hi
+echo hi \\ \\&\\& echo hi
+echo \\$USER
+echo $\\USER
+echo " \\" "
+echo " \\' "
+echo ' \\" '
+echo ' \\' '
+echo\\ hi

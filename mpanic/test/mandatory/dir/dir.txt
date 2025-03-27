@@ -1,0 +1,29 @@
+pwd
+cd;pwd@cd
+pwd;cd "";pwd@cd ""
+cd " "
+cd "" ""
+cd / non_existent
+cd /.
+cd //
+cd ' / '
+pwd
+pwd argument
+pwd argument1 argument2
+#touch file &> /dev/null
+cd file
+#chmod 000 &> /dev/null
+cd file@cd file (no permission)
+cd file/non_existent
+#chmod 777 file &> /dev/null
+#rm -rf file &> /dev/null
+cd ~;cd non_exist@cd non_exist
+cd ..;pwd@cd ..
+cd ~;pwd@cd ~
+cd ..;cd ~;pwd@cd ~
+cd .
+#mkdir testdirtest &> /dev/null;chmod 000 testdirtest &> /dev/null
+cd testdirtest;@cd testdirtest(no permision)
+#chmod 666 testdirtest &> /dev/null;rm -rf testdirtest &> /dev/null
+cd 255chars255chars255chars255char255chars255chars255chars255chars255chars255chars255chars255chars255chars255chars255chars255chars255chars255chars255chars255chars255chars255chars255chars255chars255chars255chars255chars255chars255chars255chars255chars255chars@cd maxpathlen
+cd 256chars256chars256chars256chars256chars256chars256chars256chars256chars256chars256chars256chars256chars256chars256chars256chars256chars256chars256chars256chars256chars256chars256chars256chars256chars256chars256chars256chars256chars256chars256chars256chars@cd maxpathlen + 1
