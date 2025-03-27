@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 16:38:13 by szemmour          #+#    #+#             */
-/*   Updated: 2025/03/26 16:41:25 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/03/27 12:33:54 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ static void	expand_variables(t_env *env, char *line, int fd)
 static char	*unqouted_limiter(char *limiter)
 {
 	char	*unqouted_lm;
+	char	*tmp;
 	int		len;
 
 	unqouted_lm = NULL;
@@ -78,32 +79,45 @@ static char	*unqouted_limiter(char *limiter)
 		{
 			unqouted_lm = ft_substr(limiter, 1, len - 2);
 			if (!unqouted_lm)
-				return (ft_strdup(limiter));
+				return (ft_strjoin(limiter, "\n"));
 		}
+		tmp = unqouted_lm;
+		unqouted_lm = ft_strjoin(unqouted_lm, "\n");
+		free(tmp);
+		if (!unqouted_lm)
+			return (ft_strjoin(limiter, "\n"));
 		return (unqouted_lm);
 	}
-	return (ft_strdup(limiter));
+	return (ft_strjoin(limiter, "\n"));
+}
+
+static void	handle_heredoc_signals(int sig)
+{
+	if (sig == SIGINT)
+	{
+		ft_putchar_fd('\n', STDOUT_FILENO);
+		close(STDIN_FILENO);
+	}
 }
 
 int	ft_heredoc(char *limiter, t_env *env)
 {
-	char	*line;
-	char	*unqouted_lm;
 	int		fd[2];
+	char	*unqouted_lm;
+	char	*line;
 
+	signal(SIGINT, handle_heredoc_signals);
+	signal(SIGQUIT, SIG_IGN);
 	unqouted_lm = unqouted_limiter(limiter);
-	limiter = ft_strjoin(unqouted_lm, "\n");
-	if (!limiter)
-		return (-1);
 	if (pipe(fd) == -1)
-		return (free(limiter), perror("pipe"), -1);
+		return (free(unqouted_lm), perror("pipe"), -1);
 	while (1)
 	{
 		ft_putstr_fd("heredoc> ", 1);
 		line = get_next_line(0);
-		if (!line || ft_strcmp(line, limiter) == 0)
+		if (!line || ft_strcmp(line, unqouted_lm) == 0)
 			break ;
-		if (var_in_line(limiter, line))
+		if (var_in_line(unqouted_lm, line))
 			expand_variables(env, line, fd[1]);
 		else
 			ft_putstr_fd(line, fd[1]);
@@ -111,6 +125,5 @@ int	ft_heredoc(char *limiter, t_env *env)
 	}
 	if (line)
 		free(line);
-	return (get_next_line(-1), close(fd[1]), free(unqouted_lm), free(limiter),
-		fd[0]);
+	return (get_next_line(-1), close(fd[1]), free(unqouted_lm), fd[0]);
 }

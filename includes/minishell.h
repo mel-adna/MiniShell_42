@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 16:36:26 by szemmour          #+#    #+#             */
-/*   Updated: 2025/03/26 20:07:14 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/03/27 14:20:59 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int						check_redirect_errors(char *input, int i);
 char					**ft_addstr(char **arr, char *new_str);
 void					process_and_add_token(t_token **token_list, char *line,
 							int *i, t_env **env);
-t_command				*parse_tokens(t_token *tokens, t_command	*cmds);
+void					parse_tokens(t_token *tokens, t_command	**cmds);
 t_command				*init_command(void);
 void					push_cmd_back(t_command **head, t_command *node);
 char					*get_value(char *name, t_env **env);

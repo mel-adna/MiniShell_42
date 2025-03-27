@@ -3,39 +3,75 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 00:44:44 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/26 20:06:43 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/03/27 15:30:25 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char	*extract_env_value(char *line, int *i, t_env **env)
-{
-	char	*value;
-	int		start;
-	char	*name;
+// char	*extract_env_value(char *line, int *i, t_env **env)
+// {
+// 	char	*value;
+// 	int		start;
+// 	char	*name;
 
-	if (line[0] == '$')
-	{
-		while (line[*i] && line[*i] != ' ')
-			(*i)++;
-		return (ft_strdup(""));
-	}
-	start = ++(*i);
-	while (line[*i] && (ft_isalnum(line[*i]) || line[*i] == '_'))
-		(*i)++;
-	name = ft_substr(line, start, *i - start);
-	if (!name)
-		return (ft_strdup(""));
-	value = get_value(name, env);
-	if (!value)
-		value = ft_strdup("");
-	free(name);
-	return (value);
+// 	if (line[0] == '$')
+// 	{
+// 		while (line[*i] && line[*i] != ' ')
+// 			(*i)++;
+// 		return (ft_strdup(""));
+// 	}
+// 	start = ++(*i);
+// 	while (line[*i] && (ft_isalnum(line[*i]) || line[*i] == '_'))
+// 		(*i)++;
+// 	name = ft_substr(line, start, *i - start);
+// 	if (!name)
+// 		return (ft_strdup(""));
+// 	value = get_value(name, env);
+// 	if (!value)
+// 		value = ft_strdup("");
+// 	free(name);
+// 	return (value);
+// }
+
+char *extract_env_value(char *line, int *i, t_env **env)
+{
+    char *value;
+    int start;
+    char *name;
+
+    if (line[*i] == '$')
+    {
+        (*i)++;
+        if (line[*i] == '?' || line[*i] == '$' || line[*i] == '!')
+        {
+            if (line[*i] == '?')
+                value = ft_itoa(g_exit_code); // Handle $? (exit status)
+            else if (line[*i] == '$')
+                value = ft_itoa(getpid()); // Handle $$ (current PID)
+            else
+                value = ft_strdup("0"); // Handle $!
+            (*i)++;
+            return value;
+        }
+        start = *i;
+        while (ft_isalnum(line[*i]) || line[*i] == '_')
+            (*i)++;
+        if (*i == start) // Case where $ is alone or followed by an invalid character
+            return ft_strdup("$");
+        name = ft_substr(line, start, *i - start);
+        if (!name)
+            return ft_strdup("");
+        value = get_value(name, env);
+        free(name);
+        return (value ? value : ft_strdup(""));
+    }
+    return ft_strdup("");
 }
+
 
 char	*extract_quoted_value(char *line, int *i)
 {
@@ -102,7 +138,8 @@ void	process_and_add_token(t_token **token_list, char *line,
 	else
 	{
 		type = TOKEN_WORD;
-		if (line[*i] == '$' && line[*i + 1] != '?')
+		// && line[*i + 1] != '?'
+		if (line[*i] == '$')
 			value = extract_env_value(line, i, env);
 		else if (line[*i] == '\'' || line[*i] == '\"')
 			value = extract_quoted_value(line, i);

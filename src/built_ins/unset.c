@@ -6,11 +6,27 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 15:27:54 by szemmour          #+#    #+#             */
-/*   Updated: 2025/03/26 14:19:17 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/03/27 16:35:33 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+int	is_valid_var(char *var)
+{
+	int	i;
+
+	i = 0;
+	if (!var || var[0] == '\0' || (!ft_isalpha(var[0]) && var[0] != '_'))
+		return (0);
+	while (var[i] && var[i] != '=')
+	{
+		if (!ft_isalnum(var[i]) && var[i] != '_')
+			return (0);
+		i++;
+	}
+	return (1);
+}
 
 void	remove_env_var(char *var, t_env **env)
 {
@@ -49,11 +65,11 @@ int	ft_unset(char **args, t_env **env)
 	i = 1;
 	while (args[i])
 	{
-		if (!is_valid_env_var(args[i]))
+		if (!is_valid_var(args[i]))
 		{
-			ft_putstr_fd("minishell: unset: `", 2);
-			ft_putstr_fd(args[i], 2);
-			ft_putendl_fd("`: not a valid identifier", 2);
+			ft_putstr_fd("minishell: unset: `", STDERR_FILENO);
+			ft_putstr_fd(args[i], STDERR_FILENO);
+			ft_putendl_fd("`: not a valid identifier", STDERR_FILENO);
 			g_exit_code = FAILURE;
 		}
 		else

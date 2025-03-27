@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 13:02:32 by szemmour          #+#    #+#             */
-/*   Updated: 2025/03/26 16:38:43 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/03/27 15:35:04 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,9 @@ static void	child_process(t_command *cmds, t_fd *fd, char **envp)
 			exit_func(fd, FAILURE);
 	if (!cmds->cmd_path)
 	{
-		ft_putstr_fd("minishell: command not found: ", 2);
+		ft_putstr_fd("minishell: ", 2);
 		ft_putendl_fd(cmds->args[0], 2);
+		ft_putstr_fd(": command not found: ", 2);
 		exit_func(fd, NOTFOUND);
 	}
 	close(fd->pipefd[1]);
@@ -115,7 +116,7 @@ void	exec(t_command **cmds, t_env **env, char **envp)
 		if (current->heredoc)
 			fd.fdin = ft_heredoc(current->heredoc, *env);
 		if (current->args && is_builtin(current->args[0]))
-			g_exit_code = exec_bltin(current, env, &fd);
+			exec_bltin(current, env, &fd);
 		else if (current->args && !ft_strcmp(current->args[0], "exit"))
 		{
 			if (!current->pipe)

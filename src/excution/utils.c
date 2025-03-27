@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 15:08:53 by szemmour          #+#    #+#             */
-/*   Updated: 2025/03/26 16:41:37 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/03/27 15:34:57 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,7 @@ void	wait_children(t_command *cmds)
 {
 	t_command	*current;
 	int			status;
-	int			last_exit_code;
 
-	last_exit_code = 0;
 	current = cmds;
 	while (current)
 	{
@@ -44,11 +42,10 @@ void	wait_children(t_command *cmds)
 				return ;
 			}
 			if (WIFEXITED(status))
-				last_exit_code = WEXITSTATUS(status);
+				g_exit_code = WEXITSTATUS(status);
 			else if (WIFSIGNALED(status))
-				last_exit_code = handel_signal_exit(status);
+				g_exit_code = handel_signal_exit(status);
 		}
 		current = current->next;
 	}
-	g_exit_code = last_exit_code;
 }

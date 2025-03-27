@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 14:19:36 by szemmour          #+#    #+#             */
-/*   Updated: 2025/03/26 16:38:15 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/03/27 16:54:19 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,26 +70,55 @@ int	is_var_in_env(char *var, t_env *env)
 
 void	print_env_error(char *var)
 {
-	ft_putstr_fd("minishell: export: `", 2);
-	ft_putstr_fd(var, 2);
-	ft_putendl_fd("`: not a valid identifier", 2);
+	ft_putstr_fd("minishell: export: `", STDERR_FILENO);
+	ft_putstr_fd(var, STDERR_FILENO);
+	ft_putendl_fd("`: not a valid identifier", STDERR_FILENO);
 	g_exit_code = FAILURE;
 }
 
 int	is_valid_env_var(char *var)
 {
-	int	i;
+	int		i;
+	char	*var_name;
 
 	i = 0;
-	if (!var || (!ft_isalpha(var[0]) && var[0] != '_'))
-		return (0);
-	while (var[i])
+	var_name = get_var_name(var);
+	if (!var_name || var_name[0] == '\0' || (!ft_isalpha(var_name[0])
+			&& var_name[0] != '_'))
 	{
-		if (!ft_isalnum(var[i]) && var[i] != '_')
-			return (0);
+		if (var_name)
+			free(var_name);
+		return (0);
+	}
+	while (var_name[i] && var_name[i] != '=')
+	{
+		if (!ft_isalnum(var_name[i]) && var_name[i] != '_')
+			return (free(var_name), 0);
 		i++;
 	}
-	return (1);
+	return (free(var_name), 1);
+}
+
+int	is_valid_env_value(char *var)
+{
+	int		i;
+	char	*var_value;
+
+	i = 0;
+	var_value = get_var_value(var);
+	if (!var_value || !var_value[0] || (!ft_isalpha(var_value[0]) && var_value[0] != '_'))
+	{
+		if (var_value)
+			free(var_value);
+		return (0);
+	}
+	while (var_value[i] && var_value[i] != '=')
+	{
+		if (!ft_isalnum(var_value[i]) && var_value[i] != '_')
+			return (free(var_value), 0);
+		i++;
+	}
+	return (free(var_value), 1);
 }
 
 int	ft_export(char **args, t_env **env)
@@ -104,7 +133,7 @@ int	ft_export(char **args, t_env **env)
 	{
 		if (!is_valid_env_var(args[i]))
 			print_env_error(args[i]);
-		else if (!is_var_in_env(args[i], *env))
+		else if (is_valid_env_value(args[i]) && !is_var_in_env(args[i], *env))
 		{
 			g_exit_code = SUCCESS;
 			var = get_var(args[i]);

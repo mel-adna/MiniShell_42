@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 00:44:41 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/26 20:07:45 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/03/27 14:20:04 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ t_command	*tokenize_line(char *line, t_env **env)
 	int			i;
 
 	token_list = NULL;
+	cmds = NULL;
 	i = 0;
 	while (line[i])
 	{
@@ -33,7 +34,7 @@ t_command	*tokenize_line(char *line, t_env **env)
 			break ;
 		process_and_add_token(&token_list, line, &i, env);
 	}
-	cmds = parse_tokens(token_list, NULL);
+	parse_tokens(token_list, &cmds);
 	free_token_list(&token_list);
 	return (cmds);
 }

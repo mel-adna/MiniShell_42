@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 00:44:46 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/26 20:03:46 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/03/27 14:33:24 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,36 +48,42 @@ static void	process_redirection(t_command *cmd, t_token *current)
 	}
 }
 
-static void	handle_pipe(t_command **cmd, t_command **cmds)
+static t_command	*handle_pipe(t_command *cmd, t_command **cmds)
 {
-	(*cmd)->pipe = 1;
-	push_cmd_back(cmds, *cmd);
-	*cmd = init_command();
+	t_command	*command;
+
+	cmd->pipe = 1;
+	push_cmd_back(cmds, cmd);
+	command = init_command();
+	if (!command)
+		return (NULL);
+	return (command);
 }
 
-t_command	*parse_tokens(t_token *tokens, t_command *cmds)
+void	parse_tokens(t_token *tokens, t_command **cmds)
 {
 	t_command	*cmd;
 	t_token		*token;
 
 	cmd = init_command();
-	if (cmd == NULL)
-		return (NULL);
 	token = tokens;
+	if (!cmd)
+		return ;
 	while (token)
 	{
 		if (token->type == TOKEN_WORD)
 			cmd->args = ft_addstr(cmd->args, token->value);
 		else if (token->type == TOKEN_PIPE)
-		{
-			if (!cmd)
-				return (cmds);
-			handle_pipe(&cmd, &cmds);
-		}
+			cmd = handle_pipe(cmd, cmds);
 		else
+		{
 			process_redirection(cmd, token);
+			if (token->next)
+				token = token->next;
+			else
+				break ;
+		}
 		token = token->next;
 	}
-	push_cmd_back(&cmds, cmd);
-	return (cmds);
+	push_cmd_back(cmds, cmd);
 }

@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 14:58:58 by szemmour          #+#    #+#             */
-/*   Updated: 2025/03/26 16:35:10 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/03/27 15:33:49 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,12 @@ int	ft_echo(char **args)
 		n_option = 1;
 		i++;
 	}
-	if (args[i] && !ft_strcmp(args[i], "$?"))
-	{
-		if (print_exit_code() == FAILURE)
-			return (FAILURE);
-		i++;
-	}
+	// if (args[i] && !ft_strcmp(args[i], "$?"))
+	// {
+	// 	if (print_exit_code() == FAILURE)
+	// 		return (FAILURE);
+	// 	i++;
+	// }
 	while (args[i])
 	{
 		ft_putstr_fd(args[i], 1);

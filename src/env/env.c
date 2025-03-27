@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 15:47:22 by szemmour          #+#    #+#             */
-/*   Updated: 2025/03/26 16:38:23 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/03/27 14:02:22 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,10 @@ int	print_sorted_env(t_env *env)
 		return (FAILURE);
 	sort_env(env_arr);
 	while (env_arr[i])
-		ft_putendl_fd(env_arr[i++], 1);
+	{
+		ft_putstr_fd("declare -x ", STDOUT_FILENO);
+		ft_putendl_fd(env_arr[i++], STDOUT_FILENO);
+	}
 	free_array(env_arr);
 	return (SUCCESS);
 }
