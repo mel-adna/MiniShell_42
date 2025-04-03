@@ -6,7 +6,7 @@
 /*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 00:44:44 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/03 15:14:32 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/03 17:27:15 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,11 @@ char	*extract_env_value(char *line, int *i, t_env **env)
 	char	*name;
 
 	value = NULL;
-	if (line[0] == '$')
+	if (line[*i] == '$')
 	{
 		(*i)++;
 		if (line[*i] == '?')
-			if (line[*i] == '?')
-				return ((*i)++, ft_itoa(g_exit_code));
+			return ((*i)++, ft_itoa(g_exit_code));
 	}
 	start = ++(*i);
 	while (line[*i] && (ft_isalnum(line[*i]) || line[*i] == '_'))
