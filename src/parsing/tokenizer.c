@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 00:44:44 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/03 15:14:32 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/03 17:27:39 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,27 +17,59 @@ char	*extract_env_value(char *line, int *i, t_env **env)
 	char	*value;
 	int		start;
 	char	*name;
+	char	*tmp;
 
-	value = NULL;
-	if (line[0] == '$')
+	value = ft_strdup("");
+	if (!value)
+		return (NULL);
+	if (line[*i] == '~')
+	{
+		tmp = get_value("HOME", env);
+		if (tmp)
+		{
+			char *new_value = ft_strjoin(value, tmp);
+			free(value);
+			value = new_value;
+		}
+		(*i)++;
+	}
+	if (line[*i] == '$')
 	{
 		(*i)++;
 		if (line[*i] == '?')
-			if (line[*i] == '?')
-				return ((*i)++, ft_itoa(g_exit_code));
+		{
+			tmp = ft_itoa(g_exit_code);
+			if (tmp)
+			{
+				char *new_value = ft_strjoin(value, tmp);
+				free(value);
+				value = new_value;
+				free(tmp);
+			}
+			(*i)++;
+		}
 	}
-	start = ++(*i);
+	start = *i;
 	while (line[*i] && (ft_isalnum(line[*i]) || line[*i] == '_'))
 		(*i)++;
-	name = ft_substr(line, start, *i - start);
-	if (!name)
-		return (ft_strdup(""));
-	value = get_value(name, env);
-	if (!value)
-		value = ft_strdup("");
-	free(name);
+	if (*i > start)
+	{
+		name = ft_substr(line, start, *i - start);
+		if (name)
+		{
+			tmp = get_value(name, env);
+			if (tmp)
+			{
+				char *new_value = ft_strjoin(value, tmp);
+				free(value);
+				value = new_value;
+			}
+			free(name);
+		}
+	}
 	return (value);
 }
+
 
 char	*extract_quoted_value(char *line, int *i)
 {
@@ -104,7 +136,7 @@ void	process_and_add_token(t_token **token_list, char *line, int *i,
 	else
 	{
 		type = TOKEN_WORD;
-		if (line[*i] == '$' && line[*i + 1] == '?')
+		if (line[*i] == '$' || line[*i] == '~')
 			value = extract_env_value(line, i, env);
 		else if (line[*i] == '\'' || line[*i] == '\"')
 			value = extract_quoted_value(line, i);

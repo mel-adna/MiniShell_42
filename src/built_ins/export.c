@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 14:19:36 by szemmour          #+#    #+#             */
-/*   Updated: 2025/03/27 16:54:19 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/03 15:18:23 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,8 @@ int	is_valid_env_value(char *var)
 
 	i = 0;
 	var_value = get_var_value(var);
-	if (!var_value || !var_value[0] || (!ft_isalpha(var_value[0]) && var_value[0] != '_'))
+	if (!var_value || !var_value[0] || (!ft_isalpha(var_value[0])
+			&& var_value[0] != '_'))
 	{
 		if (var_value)
 			free(var_value);
