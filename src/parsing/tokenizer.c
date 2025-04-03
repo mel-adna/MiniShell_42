@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 00:44:44 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/03 17:52:39 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/03 17:57:37 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*extract_env_value(char *line, int *i, t_env **env)
 	char	*tmp;
 
 	value = NULL;
-	if (line[0] == '$')
+	if (line[*i] == '$')
 	{
 		(*i)++;
 		if (line[*i] == '?')
