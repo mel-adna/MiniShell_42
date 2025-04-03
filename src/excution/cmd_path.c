@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 15:09:32 by szemmour          #+#    #+#             */
-/*   Updated: 2025/03/24 16:44:44 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/03 14:15:47 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ static char	*get_cmd_path(char **paths, char *cmd)
 	char	*temp;
 
 	i = 0;
-	if (!paths || !cmd)
+	if (!paths || !cmd || !*cmd)
 		return (NULL);
 	if (access(cmd, X_OK) == 0)
 		return (ft_strdup(cmd));

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 13:02:32 by szemmour          #+#    #+#             */
-/*   Updated: 2025/03/27 15:35:04 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/03 14:14:28 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ void	exec(t_command **cmds, t_env **env, char **envp)
 			if (!current->pipe)
 				ft_exit(current->args, cmds, env, &fd);
 		}
-		else if (current->args && current->args[0] && current->args[0][0])
+		else if (current->args)
 			ft_exec_cmd(&fd, current, envp);
 		current = current->next;
 	}

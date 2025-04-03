@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 16:38:13 by szemmour          #+#    #+#             */
-/*   Updated: 2025/03/27 12:33:54 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/03 14:13:47 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,14 +91,6 @@ static char	*unqouted_limiter(char *limiter)
 	return (ft_strjoin(limiter, "\n"));
 }
 
-static void	handle_heredoc_signals(int sig)
-{
-	if (sig == SIGINT)
-	{
-		ft_putchar_fd('\n', STDOUT_FILENO);
-		close(STDIN_FILENO);
-	}
-}
 
 int	ft_heredoc(char *limiter, t_env *env)
 {
@@ -106,8 +98,6 @@ int	ft_heredoc(char *limiter, t_env *env)
 	char	*unqouted_lm;
 	char	*line;
 
-	signal(SIGINT, handle_heredoc_signals);
-	signal(SIGQUIT, SIG_IGN);
 	unqouted_lm = unqouted_limiter(limiter);
 	if (pipe(fd) == -1)
 		return (free(unqouted_lm), perror("pipe"), -1);
