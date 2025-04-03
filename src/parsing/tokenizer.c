@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 00:44:44 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/03 17:27:39 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/03 17:52:39 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,35 +19,13 @@ char	*extract_env_value(char *line, int *i, t_env **env)
 	char	*name;
 	char	*tmp;
 
-	value = ft_strdup("");
-	if (!value)
-		return (NULL);
-	if (line[*i] == '~')
-	{
-		tmp = get_value("HOME", env);
-		if (tmp)
-		{
-			char *new_value = ft_strjoin(value, tmp);
-			free(value);
-			value = new_value;
-		}
-		(*i)++;
-	}
-	if (line[*i] == '$')
+	value = NULL;
+	if (line[0] == '$')
 	{
 		(*i)++;
 		if (line[*i] == '?')
-		{
-			tmp = ft_itoa(g_exit_code);
-			if (tmp)
-			{
-				char *new_value = ft_strjoin(value, tmp);
-				free(value);
-				value = new_value;
-				free(tmp);
-			}
-			(*i)++;
-		}
+			if (line[*i] == '?')
+				return ((*i)++, ft_itoa(g_exit_code));
 	}
 	start = *i;
 	while (line[*i] && (ft_isalnum(line[*i]) || line[*i] == '_'))
