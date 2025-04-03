@@ -6,7 +6,7 @@
 /*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 00:44:44 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/03 17:57:37 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/03 18:28:21 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,11 @@ char	*extract_env_value(char *line, int *i, t_env **env)
 	char	*tmp;
 
 	value = NULL;
+	if (line[*i] == '~' && (line[*i] == ' ' || line[*i] == '\0'))
+	{
+		(*i)++;
+		return (ft_strdup(getenv("HOME")));
+	}
 	if (line[*i] == '$')
 	{
 		(*i)++;
