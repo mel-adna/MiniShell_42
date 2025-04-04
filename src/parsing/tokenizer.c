@@ -6,7 +6,7 @@
 /*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 00:44:44 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/03 18:28:21 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/03 19:10:36 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +20,19 @@ char	*extract_env_value(char *line, int *i, t_env **env)
 	char	*tmp;
 
 	value = NULL;
-	if (line[*i] == '~' && (line[*i] == ' ' || line[*i] == '\0'))
-	{
-		(*i)++;
-		return (ft_strdup(getenv("HOME")));
-	}
 	if (line[*i] == '$')
 	{
 		(*i)++;
 		if (line[*i] == '?')
-			if (line[*i] == '?')
-				return ((*i)++, ft_itoa(g_exit_code));
+			return ((*i)++, ft_itoa(g_exit_code));
 	}
+	if (line[*i] == '~' && (line[*i + 1] == ' ' || line[*i + 1] == '\0' || line[*i + 1] == '\\'))
+	{
+		(*i)++;
+		return ((*i)++, ft_strdup(getenv("HOME")));
+	}
+	else if (line[*i] == '~')
+		return (extract_word_value(line, i));
 	start = *i;
 	while (line[*i] && (ft_isalnum(line[*i]) || line[*i] == '_'))
 		(*i)++;

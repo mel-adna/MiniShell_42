@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 16:36:26 by szemmour          #+#    #+#             */
-/*   Updated: 2025/03/27 14:20:59 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/03 19:05:12 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ void					parse_tokens(t_token *tokens, t_command	**cmds);
 t_command				*init_command(void);
 void					push_cmd_back(t_command **head, t_command *node);
 char					*get_value(char *name, t_env **env);
+char					*extract_word_value(char *line, int *i);
 
 // ====================== env ======================
 int						env_init(t_env **env, char **envp);
