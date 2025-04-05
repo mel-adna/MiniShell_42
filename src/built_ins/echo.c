@@ -6,7 +6,7 @@
 /*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 14:58:58 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/03 18:25:13 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/04 18:10:11 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	ft_echo(char **args)
 
 	n_option = 0;
 	i = 1;
-	while (args[i][0] == '\0')
+	while (args[i] && args[i][0] == '\0')
 		i++;
 	while (args[i] && !ft_strncmp(args[i], "-n", 2))
 	{

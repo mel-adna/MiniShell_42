@@ -5,128 +5,139 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/15 00:44:44 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/03 19:10:36 by mel-adna         ###   ########.fr       */
+/*   Created: 2025/04/05 09:51:00 by mel-adna          #+#    #+#             */
+/*   Updated: 2025/04/05 09:51:01 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char	*extract_env_value(char *line, int *i, t_env **env)
+static void	expand_env(char *l, int *i, t_env **e, char **r)
 {
-	char	*value;
-	int		start;
-	char	*name;
-	char	*tmp;
+	int		j;
+	char	*t;
+	char	*v;
 
-	value = NULL;
-	if (line[*i] == '$')
+	(*i)++;
+	if (l[*i] == '?')
 	{
 		(*i)++;
-		if (line[*i] == '?')
-			return ((*i)++, ft_itoa(g_exit_code));
+		*r = add_result(*r, ft_itoa(g_exit_code));
+		return ;
 	}
-	if (line[*i] == '~' && (line[*i + 1] == ' ' || line[*i + 1] == '\0' || line[*i + 1] == '\\'))
+	if (ft_isdigit(l[*i]))
 	{
 		(*i)++;
-		return ((*i)++, ft_strdup(getenv("HOME")));
+		return ;
 	}
-	else if (line[*i] == '~')
-		return (extract_word_value(line, i));
-	start = *i;
-	while (line[*i] && (ft_isalnum(line[*i]) || line[*i] == '_'))
+	j = *i;
+	while (l[*i] && (ft_isalnum(l[*i]) || l[*i] == '_'))
 		(*i)++;
-	if (*i > start)
+	if (*i > j)
 	{
-		name = ft_substr(line, start, *i - start);
-		if (name)
+		t = ft_substr(l, j, *i - j);
+		if (t)
 		{
-			tmp = get_value(name, env);
-			if (tmp)
-			{
-				char *new_value = ft_strjoin(value, tmp);
-				free(value);
-				value = new_value;
-			}
-			free(name);
+			v = get_value(t, e);
+			if (v)
+				*r = add_result(*r, ft_strdup(v));
+			else
+				*r = add_result(*r, ft_strdup(""));
+			free(t);
 		}
 	}
-	return (value);
 }
 
-
-char	*extract_quoted_value(char *line, int *i)
+static char	*handle_quotes(char *l, int *i, t_env **e, char q)
 {
-	char	*value;
-	int		start;
-	char	quote;
+	char	*r[3];
+	int		j;
 
-	quote = line[*i];
-	start = ++(*i);
-	while (line[*i] && line[*i] != quote)
-		(*i)++;
-	if (!line[*i])
-		return (ft_strdup(""));
-	value = ft_substr(line, start, *i - start);
-	(*i)++;
-	if (!value)
-		return (ft_strdup(""));
-	return (value);
-}
-
-static void	handle_quotes_in_word(char *line, int *i)
-{
-	char	quote;
-
-	quote = line[*i];
-	(*i)++;
-	while (line[*i] && line[*i] != quote)
-		(*i)++;
-	if (line[*i])
-		(*i)++;
-}
-
-char	*extract_word_value(char *line, int *i)
-{
-	char	*value;
-	int		start;
-
-	start = *i;
-	while (line[*i] && line[*i] != ' ' && !is_special_char(line, *i))
+	r[0] = ft_strdup("");
+	j = ++(*i);
+	r[2] = NULL;
+	while (l[*i] && l[*i] != q)
 	{
-		if (line[*i] == '\'' || line[*i] == '\"')
-			handle_quotes_in_word(line, i);
+		if (q == '"' && l[*i] == '$' && (ft_isalnum(l[*i + 1]) || l[*i
+				+ 1] == '_' || l[*i + 1] == '?'))
+		{
+			if (*i > j)
+			{
+				r[1] = ft_substr(l, j, *i - j);
+				r[0] = add_result(r[0], r[1]);
+			}
+			expand_env(l, i, e, &r[0]);
+			j = *i;
+		}
 		else
 			(*i)++;
 	}
-	value = ft_substr(line, start, *i - start);
-	if (!value)
-		return (ft_strdup(""));
-	return (value);
+	if (*i > j)
+	{
+		r[1] = ft_substr(l, j, *i - j);
+		r[0] = add_result(r[0], r[1]);
+	}
+	if (l[*i] == q)
+		(*i)++;
+	return (r[0]);
 }
 
-void	process_and_add_token(t_token **token_list, char *line, int *i,
-		t_env **env)
+static void	handle_char(char c, char **v)
+{
+	char	t[2];
+	char	*o;
+
+	t[0] = c;
+	t[1] = '\0';
+	o = *v;
+	*v = ft_strjoin(*v, t);
+	free(o);
+}
+
+static void	process_word(char *l, int *i, t_env **e, char **v)
+{
+	char	*t;
+	char	q;
+
+	if (l[*i] == '"' || l[*i] == '\'')
+	{
+		q = l[*i];
+		t = handle_quotes(l, i, e, q);
+		if (t)
+			*v = add_result(*v, t);
+	}
+	else if (l[*i] == '$' && (ft_isalnum(l[*i + 1]) || l[*i + 1] == '_' || l[*i
+			+ 1] == '?'))
+		expand_env(l, i, e, v);
+	else if (l[*i] == '~' && (l[*i + 1] == '/' || !l[*i + 1] || l[*i
+			+ 1] == ' ') && (*i == 0 || l[*i - 1] == ' '))
+	{
+		(*i)++;
+		*v = add_result(*v, ft_strdup(getenv("HOME")));
+	}
+	else
+		handle_char(l[(*i)++], v);
+}
+
+void	process_and_add_token(t_token **t, char *l, int *i, t_env **e)
 {
 	t_token_type	type;
-	char			*value;
+	char			*v;
 
-	(void)env;
-	if (is_special_char(line, *i))
+	if (is_special_char(l, *i))
 	{
-		type = get_token_type(line, i);
-		value = ft_strdup("");
+		type = get_token_type(l, i);
+		push_back(t, ft_strdup(""), type);
 	}
 	else
 	{
 		type = TOKEN_WORD;
-		if (line[*i] == '$' || line[*i] == '~')
-			value = extract_env_value(line, i, env);
-		else if (line[*i] == '\'' || line[*i] == '\"')
-			value = extract_quoted_value(line, i);
+		v = ft_strdup("");
+		while (l[*i] && l[*i] != ' ' && !is_special_char(l, *i))
+			process_word(l, i, e, &v);
+		if (v && *v)
+			push_back(t, v, type);
 		else
-			value = extract_word_value(line, i);
+			free(v);
 	}
-	if (value)
-		push_back(token_list, value, type);
 }

@@ -3,19 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 00:44:41 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/03 17:10:32 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/04 17:58:58 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static void	skip_spaces(char *line, int *i)
+char	*add_result(char *result, char *tmp)
 {
-	while (line[*i] && line[*i] == ' ')
-		(*i)++;
+	char	*new_result;
+
+	if (!tmp)
+		tmp = ft_strdup("");
+	if (!result)
+		return (tmp);
+	new_result = ft_strjoin(result, tmp);
+	free(result);
+	free(tmp);
+	return (new_result);
 }
 
 t_command	*tokenize_line(char *line, t_env **env)
@@ -29,10 +37,10 @@ t_command	*tokenize_line(char *line, t_env **env)
 	i = 0;
 	while (line[i])
 	{
-		skip_spaces(line, &i);
-		if (!line[i])
-			break ;
-		process_and_add_token(&token_list, line, &i, env);
+		if (line[i] == ' ')
+			i++;
+		else
+			process_and_add_token(&token_list, line, &i, env);
 	}
 	parse_tokens(token_list, &cmds);
 	free_token_list(&token_list);
