@@ -6,7 +6,7 @@
 /*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 09:51:00 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/05 09:51:01 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/05 11:40:35 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,39 +48,41 @@ static void	expand_env(char *l, int *i, t_env **e, char **r)
 	}
 }
 
-static char	*handle_quotes(char *l, int *i, t_env **e, char q)
+static char	*handle_quotes(char *line, int *i, t_env **env, char quote)
 {
-	char	*r[3];
-	int		j;
+	char	*result;
+	char	*tmp;
+	int		start;
 
-	r[0] = ft_strdup("");
-	j = ++(*i);
-	r[2] = NULL;
-	while (l[*i] && l[*i] != q)
+	result = ft_strdup("");
+	start = ++(*i);
+	while (line[*i] && line[*i] != quote)
 	{
-		if (q == '"' && l[*i] == '$' && (ft_isalnum(l[*i + 1]) || l[*i
-				+ 1] == '_' || l[*i + 1] == '?'))
+		if (quote == '"' && line[*i] == '$' &&
+			(ft_isalnum(line[*i + 1]) || line[*i + 1] == '_' || line[*i + 1] == '?'))
 		{
-			if (*i > j)
+			if (*i > start)
 			{
-				r[1] = ft_substr(l, j, *i - j);
-				r[0] = add_result(r[0], r[1]);
+				tmp = ft_substr(line, start, *i - start);
+				result = add_result(result, tmp);
 			}
-			expand_env(l, i, e, &r[0]);
-			j = *i;
+			expand_env(line, i, env, &result);
+			start = *i;
 		}
 		else
 			(*i)++;
 	}
-	if (*i > j)
+	if (*i > start)
 	{
-		r[1] = ft_substr(l, j, *i - j);
-		r[0] = add_result(r[0], r[1]);
+		tmp = ft_substr(line, start, *i - start);
+		result = add_result(result, tmp);
 	}
-	if (l[*i] == q)
+
+	if (line[*i] == quote)
 		(*i)++;
-	return (r[0]);
+	return (result);
 }
+
 
 static void	handle_char(char c, char **v)
 {
@@ -123,7 +125,9 @@ void	process_and_add_token(t_token **t, char *l, int *i, t_env **e)
 {
 	t_token_type	type;
 	char			*v;
+	int				has_quotes;
 
+	has_quotes = 0;
 	if (is_special_char(l, *i))
 	{
 		type = get_token_type(l, i);
@@ -134,8 +138,12 @@ void	process_and_add_token(t_token **t, char *l, int *i, t_env **e)
 		type = TOKEN_WORD;
 		v = ft_strdup("");
 		while (l[*i] && l[*i] != ' ' && !is_special_char(l, *i))
+		{
+			if (l[*i] == '\'' || l[*i] == '"')
+				has_quotes = 1;
 			process_word(l, i, e, &v);
-		if (v && *v)
+		}
+		if ((v && *v) || has_quotes)
 			push_back(t, v, type);
 		else
 			free(v);
