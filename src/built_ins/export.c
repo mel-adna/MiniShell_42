@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 14:19:36 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/03 15:18:23 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/06 17:27:10 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,83 +68,67 @@ int	is_var_in_env(char *var, t_env *env)
 	return (free(var_name), 0);
 }
 
-void	print_env_error(char *var)
+int	print_env_error(char *var, int errn)
 {
-	ft_putstr_fd("minishell: export: `", STDERR_FILENO);
-	ft_putstr_fd(var, STDERR_FILENO);
-	ft_putendl_fd("`: not a valid identifier", STDERR_FILENO);
-	g_exit_code = FAILURE;
+	if (errn == 1)
+	{
+		ft_putstr_fd("minishell: export: `", STDERR_FILENO);
+		ft_putstr_fd(var, STDERR_FILENO);
+		ft_putendl_fd("`: not a valid identifier", STDERR_FILENO);
+	}
+	else
+	{
+		ft_putstr_fd("minishell: export: -", STDERR_FILENO);
+		ft_putchar_fd(var[1], STDERR_FILENO);
+		ft_putendl_fd(": invalid option", STDERR_FILENO);
+		ft_putendl_fd("export: usage: export [-nf] [name[=value] ...] or export -p", 2);
+	}
+	return (FAILURE);
 }
 
-int	is_valid_env_var(char *var)
-{
-	int		i;
-	char	*var_name;
-
-	i = 0;
-	var_name = get_var_name(var);
-	if (!var_name || var_name[0] == '\0' || (!ft_isalpha(var_name[0])
-			&& var_name[0] != '_'))
-	{
-		if (var_name)
-			free(var_name);
-		return (0);
-	}
-	while (var_name[i] && var_name[i] != '=')
-	{
-		if (!ft_isalnum(var_name[i]) && var_name[i] != '_')
-			return (free(var_name), 0);
-		i++;
-	}
-	return (free(var_name), 1);
-}
-
-int	is_valid_env_value(char *var)
-{
-	int		i;
-	char	*var_value;
-
-	i = 0;
-	var_value = get_var_value(var);
-	if (!var_value || !var_value[0] || (!ft_isalpha(var_value[0])
-			&& var_value[0] != '_'))
-	{
-		if (var_value)
-			free(var_value);
-		return (0);
-	}
-	while (var_value[i] && var_value[i] != '=')
-	{
-		if (!ft_isalnum(var_value[i]) && var_value[i] != '_')
-			return (free(var_value), 0);
-		i++;
-	}
-	return (free(var_value), 1);
-}
-
-int	ft_export(char **args, t_env **env)
+void	var_handeler(t_env **env, char *arg)
 {
 	char	*var;
-	int		i;
 
-	i = 1;
-	if (!args[1])
-		return (print_sorted_env(*env));
-	while (args[i])
+	if (!is_var_in_env(arg, *env))
 	{
-		if (!is_valid_env_var(args[i]))
-			print_env_error(args[i]);
-		else if (is_valid_env_value(args[i]) && !is_var_in_env(args[i], *env))
+		if (ft_strchr(arg, '='))
 		{
-			g_exit_code = SUCCESS;
-			var = get_var(args[i]);
+			var = get_var(arg);
 			if (var)
 			{
 				push_env_back(env, var);
 				free(var);
 			}
 		}
+		else
+			push_env_back(env, arg);
+	}
+}
+
+int	ft_export(char **args, t_env **env)
+{
+	int	i;
+	int	had_error;
+
+	had_error = 0;
+	i = 1;
+	if (!args[1])
+		return (print_sorted_env(*env), 0);
+	while (args[i])
+	{
+		if (args[i][0] == '-' && (args[i][1] == '-' || ft_isalpha(args[i][1])))
+		{
+			print_env_error(args[i], 2);
+			had_error = 2;
+			i++;
+			continue ;
+		}
+		if (!is_valid_env_var_name(args[i]))
+			had_error = print_env_error(args[i], 1);
+		else
+			var_handeler(env, args[i]);
 		i++;
 	}
-	return (g_exit_code);
+	return (had_error);
 }

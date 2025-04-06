@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 17:59:36 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/05 11:52:50 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/06 15:33:10 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@
 // 	return (g_exit_code);
 // }
 
-
 #include "../../includes/minishell.h"
 
 int		g_exit_code;
@@ -75,7 +74,7 @@ void	process_input(t_command **cmds, char *input, t_env **env, char **envp)
 	free(input);
 }
 
-void ll()
+void	ll(void)
 {
 	system("leaks -q minishell");
 }
@@ -93,35 +92,30 @@ int	main(int argc, char **argv, char **envp)
 	increment_shell_lvl(env);
 	// (void) argc;
 	// (void) argv;
-
 	if (argc >= 3 && !ft_strncmp(argv[1], "-c", 3))
 	{
 		input = ft_strdup(argv[2]);
 		process_input(&cmds, input, &env, envp);
-		exit(g_exit_code);
+		return (g_exit_code);
 	}
-
 	while (1)
 	{
 		input = readline("minishell $");
 		if (!input)
 		{
 			if (isatty(STDIN_FILENO))
-			write(2, "exit\n", 6);
-			exit (g_exit_code);
+				write(2, "exit\n", 6);
+			exit(g_exit_code);
 		}
-
 		if (!input)
 		{
 			// printf("Exiting...\n");
 			break ;
 		}
-
 		process_input(&cmds, input, &env, envp);
 		// system ("leaks -q minishell");
 		// system ("lsof -c minishell");
 	}
-
 	reset_terminal();
 	return (g_exit_code);
 }

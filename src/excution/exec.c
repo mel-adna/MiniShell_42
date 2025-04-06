@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 13:02:32 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/03 16:54:49 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/06 12:50:10 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static void	child_process(t_command *cmds, t_fd *fd, char **envp)
 	{
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(cmds->args[0], 2);
-		ft_putendl_fd(": command not found: ", 2);
+		ft_putendl_fd(": command not found", 2);
 		exit_func(fd, NOTFOUND);
 	}
 	close(fd->pipefd[1]);

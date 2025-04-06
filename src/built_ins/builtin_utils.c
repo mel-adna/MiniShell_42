@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 14:50:54 by szemmour          #+#    #+#             */
-/*   Updated: 2025/03/27 16:46:20 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/06 17:27:16 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,6 @@ char	*get_var_name(char *var)
 	i = 0;
 	while (var[i] && var[i] != '=')
 		i++;
-	if (!var[i])
-		return (NULL);
 	var_name = (char *)malloc(sizeof(char) * (i + 1));
 	if (!var_name)
 		return (NULL);
@@ -87,4 +85,28 @@ char	*get_var_value(char *var)
 			i++;
 	}
 	return (ft_substr(var, start, i - start));
+}
+
+int	is_valid_env_var_name(char *var)
+{
+	int		i;
+	char	*var_name;
+
+	if (!var || var[0] == '\0')
+		return (0);
+	var_name = get_var_name(var);
+	if (!var_name || var_name[0] == '\0')
+		return (free(var_name), 0);
+	if (var_name[0] == '-' && var_name[1] == '-')
+		return (free(var_name), 0);
+	if (!isalpha(var_name[0]) && var_name[0] != '_')
+		return (free(var_name), 0);
+	i = 1;
+	while (var_name[i])
+	{
+		if (!ft_isalnum(var_name[i]) && var_name[i] != '_')
+			return (free(var_name), 0);
+		i++;
+	}
+	return (free(var_name), 1);
 }

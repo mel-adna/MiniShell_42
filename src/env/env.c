@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 15:47:22 by szemmour          #+#    #+#             */
-/*   Updated: 2025/03/27 14:02:22 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/06 16:30:59 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ int	print_sorted_env(t_env *env)
 {
 	char	**env_arr;
 	int		i;
+	char	*var_name;
+	char	*var_value;
 
 	env_arr = env_to_str(env);
 	i = 0;
@@ -76,8 +78,23 @@ int	print_sorted_env(t_env *env)
 	sort_env(env_arr);
 	while (env_arr[i])
 	{
-		ft_putstr_fd("declare -x ", STDOUT_FILENO);
-		ft_putendl_fd(env_arr[i++], STDOUT_FILENO);
+		var_name = get_var_name(env_arr[i]);
+		var_value = get_var_value(env_arr[i]);
+		if (var_name)
+		{
+			ft_putstr_fd("declare -x ", STDOUT_FILENO);
+			ft_putstr_fd(var_name, STDOUT_FILENO);
+			if (var_value && ft_strcmp(var_name, "OLDPWD") != 0)
+			{
+				ft_putstr_fd("=\"", STDOUT_FILENO);
+				ft_putstr_fd(var_value, STDOUT_FILENO);
+				ft_putchar_fd('\"', STDOUT_FILENO);
+			}
+			ft_putchar_fd('\n', STDOUT_FILENO);
+			free(var_name);
+			free(var_value);
+		}
+		i++;
 	}
 	free_array(env_arr);
 	return (SUCCESS);
@@ -113,7 +130,7 @@ void	push_env_back(t_env **head, char *value)
 
 int	env_init(t_env **env, char **envp)
 {
-	int		i;
+	int	i;
 
 	i = 0;
 	if (!env || !envp)

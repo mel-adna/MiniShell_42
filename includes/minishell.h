@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 16:36:26 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/04 17:24:03 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/06 17:27:00 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ char					*get_var_name(char *var);
 char					*get_env_value(t_env *env, const char *key);
 char					*get_var_value(char *var);
 char					**env_to_str(t_env *env);
-int						is_valid_env_var(char *var);
+int						is_valid_env_var_name(char *var);
 // ====================== here doc ======================
 int						ft_heredoc(char *limiter, t_env *env);
 void					handel_nul_args(t_command *current, char **envp);
