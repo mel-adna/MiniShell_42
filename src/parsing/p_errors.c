@@ -6,7 +6,7 @@
 /*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 13:19:19 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/06 13:36:31 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/06 19:52:53 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	check_redirect_errors(char *input, int i)
 			i++;
 			while (input[i] == ' ')
 				i++;
-			if (!input[i] || input[i] == '>' || input[i] == '<'
+			if (!input[i] || input[0] == '~' || input[i] == '>' || input[i] == '<'
 				|| input[i] == '|')
 				return (g_exit_code = 2, ft_putendl_fd("Syntax error!!", 2), 1);
 			filename = extract_filename(&input[i]);

@@ -6,7 +6,7 @@
 /*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 13:19:11 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/06 13:19:12 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/06 18:14:13 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static int	check_pipe_errors(char *input)
 	i = 0;
 	while (input[i] == ' ')
 		i++;
-	if (input[i] == '|')
+	if (input[i] == '|' || input[i] == '~')
 		return (g_exit_code = 258, ft_putendl_fd("Syntax error!!", 2), 1);
 	while (input[i])
 	{
