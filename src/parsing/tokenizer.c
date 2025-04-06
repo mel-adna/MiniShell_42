@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/05 09:51:00 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/05 11:40:35 by mel-adna         ###   ########.fr       */
+/*   Created: 2025/04/06 12:00:00 by username          #+#    #+#             */
+/*   Updated: 2025/04/06 13:35:08 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,6 @@
 
 static void	expand_env(char *l, int *i, t_env **e, char **r)
 {
-	int		j;
-	char	*t;
-	char	*v;
-
 	(*i)++;
 	if (l[*i] == '?')
 	{
@@ -30,42 +26,23 @@ static void	expand_env(char *l, int *i, t_env **e, char **r)
 		(*i)++;
 		return ;
 	}
-	j = *i;
-	while (l[*i] && (ft_isalnum(l[*i]) || l[*i] == '_'))
-		(*i)++;
-	if (*i > j)
-	{
-		t = ft_substr(l, j, *i - j);
-		if (t)
-		{
-			v = get_value(t, e);
-			if (v)
-				*r = add_result(*r, ft_strdup(v));
-			else
-				*r = add_result(*r, ft_strdup(""));
-			free(t);
-		}
-	}
+	process_env_var(l, i, e, r);
 }
 
 static char	*handle_quotes(char *line, int *i, t_env **env, char quote)
 {
 	char	*result;
-	char	*tmp;
 	int		start;
 
 	result = ft_strdup("");
 	start = ++(*i);
 	while (line[*i] && line[*i] != quote)
 	{
-		if (quote == '"' && line[*i] == '$' &&
-			(ft_isalnum(line[*i + 1]) || line[*i + 1] == '_' || line[*i + 1] == '?'))
+		if (quote == '"' && line[*i] == '$' && (ft_isalnum(line[*i + 1])
+				|| line[*i + 1] == '_' || line[*i + 1] == '?'))
 		{
 			if (*i > start)
-			{
-				tmp = ft_substr(line, start, *i - start);
-				result = add_result(result, tmp);
-			}
+				result = add_result(result, ft_substr(line, start, *i - start));
 			expand_env(line, i, env, &result);
 			start = *i;
 		}
@@ -73,16 +50,11 @@ static char	*handle_quotes(char *line, int *i, t_env **env, char quote)
 			(*i)++;
 	}
 	if (*i > start)
-	{
-		tmp = ft_substr(line, start, *i - start);
-		result = add_result(result, tmp);
-	}
-
+		result = add_result(result, ft_substr(line, start, *i - start));
 	if (line[*i] == quote)
 		(*i)++;
 	return (result);
 }
-
 
 static void	handle_char(char c, char **v)
 {
@@ -98,21 +70,21 @@ static void	handle_char(char c, char **v)
 
 static void	process_word(char *l, int *i, t_env **e, char **v)
 {
+	char	*q;
 	char	*t;
-	char	q;
 
 	if (l[*i] == '"' || l[*i] == '\'')
 	{
-		q = l[*i];
-		t = handle_quotes(l, i, e, q);
+		q = &l[*i];
+		t = handle_quotes(l, i, e, *q);
 		if (t)
 			*v = add_result(*v, t);
 	}
-	else if (l[*i] == '$' && (ft_isalnum(l[*i + 1]) || l[*i + 1] == '_' || l[*i
-			+ 1] == '?'))
+	else if (l[*i] == '$' && (ft_isalnum(l[*i + 1]) || l[*i + 1] == '_' 
+			|| l[*i + 1] == '?'))
 		expand_env(l, i, e, v);
-	else if (l[*i] == '~' && (l[*i + 1] == '/' || !l[*i + 1] || l[*i
-			+ 1] == ' ') && (*i == 0 || l[*i - 1] == ' '))
+	else if (l[*i] == '~' && (l[*i + 1] == '/' || !l[*i + 1] 
+			|| l[*i + 1] == ' ') && (*i == 0 || l[*i - 1] == ' '))
 	{
 		(*i)++;
 		*v = add_result(*v, ft_strdup(getenv("HOME")));

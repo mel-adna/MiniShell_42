@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/15 00:44:52 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/26 19:42:38 by mel-adna         ###   ########.fr       */
+/*   Created: 2025/04/06 13:19:19 by mel-adna          #+#    #+#             */
+/*   Updated: 2025/04/06 13:36:31 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	check_redirect_errors(char *input, int i)
 	while (input[i])
 	{
 		if (check_semicolon(input))
-			return (g_exit_code = 2, ft_putendl_fd("Syntax error!!", 1), 1);
+			return (g_exit_code = 2, ft_putendl_fd("Syntax error!!", 2), 1);
 		if ((input[i] == '>' && input[i + 1] != '>') || (input[i] == '<'
 				&& input[i + 1] != '<'))
 		{
@@ -71,7 +71,7 @@ int	check_redirect_errors(char *input, int i)
 				i++;
 			if (!input[i] || input[i] == '>' || input[i] == '<'
 				|| input[i] == '|')
-				return (g_exit_code = 2, ft_putendl_fd("Syntax error!!", 1), 1);
+				return (g_exit_code = 2, ft_putendl_fd("Syntax error!!", 2), 1);
 			filename = extract_filename(&input[i]);
 			if (access(filename, F_OK) == -1 && (input[i] == '>' 
 					&& input[i - 1] != '>') && !(input[i] == '<' 
