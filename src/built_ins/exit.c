@@ -6,7 +6,7 @@
 /*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 14:03:17 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/06 12:59:37 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/06 13:53:43 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	args_count(char **args)
 
 void	ft_exit(char **args, t_command **cmds, t_env **env, t_fd *fd)
 {
-	ft_putendl_fd("exit", 1);
+	ft_putendl_fd("exit", 2);
 	if (args_count(args) > 1)
 	{
 		if (!is_number(args[1]) || args[1][0] == '\0')
