@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 16:36:26 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/06 17:31:27 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/06 18:44:05 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 
 # include <fcntl.h>
+# include <dirent.h>
 # include <limits.h>
 # include <stdio.h>
 # include <termios.h>

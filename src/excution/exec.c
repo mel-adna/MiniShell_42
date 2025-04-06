@@ -6,11 +6,45 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 13:02:32 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/06 12:50:10 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/06 19:49:38 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+void	error_path(char *msg, char *cmd)
+{
+	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	ft_putstr_fd(cmd, STDERR_FILENO);
+	ft_putstr_fd(msg, STDERR_FILENO);
+}
+
+int	check_is_dir(char *cmd)
+{
+	DIR	*dir;
+
+	dir = opendir(cmd);
+	if (ft_strcmp(cmd, ".") == 0)
+	{
+		ft_putstr_fd("minishell: .: filename argument required\n",
+			STDERR_FILENO);
+		ft_putstr_fd(".: usage: . filename [arguments]\n", STDERR_FILENO);
+		return (closedir(dir), exit(2), 1);
+	}
+	else if (dir && (ft_strchr(cmd, '/')))
+		return (closedir(dir), error_path(": is a directory\n", cmd), exit(126),
+			1);
+	else if (dir)
+		closedir(dir);
+	else if ((ft_strchr(cmd, '/')) && access(cmd, F_OK) == -1)
+	{
+		error_path(": No such file or directory\n", cmd);
+		return (exit(127), 1);
+	}
+	else if ((ft_strchr(cmd, '/')) && access(cmd, X_OK) == -1)
+		return (error_path(": Permission denied\n", cmd), exit(126), 1);
+	return (0);
+}
 
 void	exit_func(t_fd *fd, int status)
 {
@@ -34,7 +68,8 @@ static void	child_process(t_command *cmds, t_fd *fd, char **envp)
 	if (cmds->outfile)
 		if (dup_stdout(fd, fd->fdout) == FAILURE)
 			exit_func(fd, FAILURE);
-	if (!cmds->cmd_path)
+	check_is_dir(cmds->args[0]);
+	if (!cmds->cmd_path || !ft_strcmp(cmds->args[0], ".."))
 	{
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(cmds->args[0], 2);
