@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 14:19:36 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/06 17:27:10 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/07 17:21:44 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int	print_env_error(char *var, int errn)
 	{
 		ft_putstr_fd("minishell: export: `", STDERR_FILENO);
 		ft_putstr_fd(var, STDERR_FILENO);
-		ft_putendl_fd("`: not a valid identifier", STDERR_FILENO);
+		ft_putendl_fd("': not a valid identifier", STDERR_FILENO);
 	}
 	else
 	{

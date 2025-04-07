@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 16:36:26 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/07 12:11:41 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/07 17:22:12 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ typedef struct s_command
 	pid_t				pid;
 	int					pipe;
 	int					append;
-	int					exit_status;
 	struct s_command	*next;
 }						t_command;
 
