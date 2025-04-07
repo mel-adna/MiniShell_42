@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 16:36:26 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/07 10:02:45 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/07 12:11:41 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
-# define FAILURE 1
 # define SUCCESS 0
+# define FAILURE 1
 # define NOTFOUND 127
 
 extern int				g_exit_code;

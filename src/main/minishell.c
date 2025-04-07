@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 17:59:36 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/07 10:21:29 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/07 12:39:13 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,13 +90,11 @@ int	main(int argc, char **argv, char **envp)
 	setup_signals();
 	env_init(&env, envp);
 	increment_shell_lvl(env);
-	// (void) argc;
-	// (void) argv;
 	if (argc >= 3 && !ft_strncmp(argv[1], "-c", 3))
 	{
 		input = ft_strdup(argv[2]);
 		process_input(&cmds, input, &env, envp);
-		return (g_exit_code);
+		return g_exit_code;
 	}
 	while (1)
 	{
