@@ -6,7 +6,7 @@
 /*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 13:19:19 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/06 19:52:53 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/07 18:51:19 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ int	check_semicolon(char *input)
 	quote = 0;
 	while (input[i])
 	{
+		if (input[i] == '|' && input[i + 1] == '|' && input[i + 2] == '|')
+			return (1);
 		if (input[i] == '"' || input[i] == '\'')
 		{
 			if (quote == 0)
@@ -62,7 +64,7 @@ int	check_redirect_errors(char *input, int i)
 	while (input[i])
 	{
 		if (check_semicolon(input))
-			return (g_exit_code = 2, ft_putendl_fd("Syntax error!!", 2), 1);
+			return (g_exit_code = 2, ft_putendl_fd("syntax error near unexpected ", 2), 1);
 		if ((input[i] == '>' && input[i + 1] != '>') || (input[i] == '<'
 				&& input[i + 1] != '<'))
 		{
@@ -71,7 +73,7 @@ int	check_redirect_errors(char *input, int i)
 				i++;
 			if (!input[i] || input[0] == '~' || input[i] == '>' || input[i] == '<'
 				|| input[i] == '|')
-				return (g_exit_code = 2, ft_putendl_fd("Syntax error!!", 2), 1);
+				return (g_exit_code = 2, ft_putendl_fd("syntax error near unexpected token ", 2), 1);
 			filename = extract_filename(&input[i]);
 			if (access(filename, F_OK) == -1 && (input[i] == '>' 
 					&& input[i - 1] != '>') && !(input[i] == '<' 

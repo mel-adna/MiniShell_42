@@ -6,7 +6,7 @@
 /*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 13:19:11 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/07 10:54:48 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/07 18:43:22 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,8 @@ static int	check_pipe_errors(char *input)
 	while (input[i] == ' ')
 		i++;
 	if (input[i] == '|')
-		return (g_exit_code = 258, ft_putendl_fd("Syntax error!!", 2), 1);
+		return (g_exit_code = 258,
+			ft_putendl_fd("syntax error near unexpected token ", 2), 1);
 	while (input[i])
 	{
 		if (input[i] == '|' && input[i + 1] != '|')
@@ -79,11 +80,11 @@ static int	check_pipe_errors(char *input)
 			while (input[i] == ' ')
 				i++;
 			if (input[i] == '|')
-				return (g_exit_code = 258, ft_putendl_fd("Syntax error!!", 2),
-					1);
+				return (g_exit_code = 258,
+					ft_putendl_fd("syntax error near unexpected token ", 2), 1);
 			if (input[i] == '\0')
-				return (g_exit_code = 258, ft_putendl_fd("Syntax error!!", 2),
-					1);
+				return (g_exit_code = 258,
+					ft_putendl_fd("syntax error near unexpected token ", 2), 1);
 		}
 		i++;
 	}
@@ -98,7 +99,8 @@ t_command	*parse(char *input, t_env **env)
 	if (!input || !*input)
 		return (NULL);
 	if (is_open_quotes(input))
-		return (g_exit_code = 258, ft_putendl_fd("Syntax error!!", 2), NULL);
+		return (g_exit_code = 258,
+			ft_putendl_fd("syntax error near unexpected ", 2), NULL);
 	if (check_redirect_errors(input, 0))
 		return (NULL);
 	if (check_pipe_errors(input))
