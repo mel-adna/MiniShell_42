@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 16:23:52 by szemmour          #+#    #+#             */
-/*   Updated: 2025/03/26 12:14:32 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/08 15:01:19 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ int	open_file(t_fd *fd, t_command *cmd, int n)
 		fd->fdin = open(cmd->infile, O_RDONLY);
 		if (fd->fdin < 0)
 		{
-			perror("minishell: open");
+			ft_putstr_fd("minishell: open: ", 2);
+			perror(cmd->infile);
 			return (g_exit_code = FAILURE, FAILURE);
 		}
 	}
@@ -31,7 +32,8 @@ int	open_file(t_fd *fd, t_command *cmd, int n)
 			fd->fdout = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (fd->fdout < 0)
 		{
-			perror("minishell: open");
+			ft_putstr_fd("minishell: open: ", 2);
+			perror(cmd->outfile);
 			close(fd->fdin);
 			return (g_exit_code = FAILURE, FAILURE);
 		}

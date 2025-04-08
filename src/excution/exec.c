@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 13:02:32 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/07 09:30:37 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/08 15:02:42 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,11 +57,11 @@ static void	child_process(t_command *cmds, t_fd *fd, char **envp)
 {
 	if (fd->fdin >= 0)
 	{
-		if (fd->fdin == -1)
-			exit_func(fd, FAILURE);
 		if (dup_stdin(fd, fd->fdin) == FAILURE)
 			exit_func(fd, FAILURE);
 	}
+	if (cmds->infile &&  fd->fdin == -1)
+		exit_func(fd, FAILURE);
 	if (cmds->pipe)
 		if (dup_stdout(fd, fd->pipefd[1]) == FAILURE)
 			exit_func(fd, FAILURE);
@@ -108,6 +108,8 @@ static int	exec_bltin(t_command *current, t_env **env, t_fd *fd)
 	int	stdin_copy;
 	int	stdout_copy;
 
+	if (current->infile &&  fd->fdin == -1)
+		return (g_exit_code = FAILURE ,FAILURE);
 	stdin_copy = dup(STDIN_FILENO);
 	stdout_copy = dup(STDOUT_FILENO);
 	if (current->pipe)
@@ -139,13 +141,16 @@ void	exec(t_command **cmds, t_env **env, char **envp)
 {
 	t_fd		fd;
 	t_command	*current;
+	int			count;
 
+	count = 0;
 	init_fds(&fd);
 	if (!resolve_cmd_paths(envp, *cmds))
 		ft_putendl_fd("minishell: command error!", 2);
 	current = *cmds;
 	while (current)
 	{
+		count++;
 		if (open_redir(current, &fd) == FAILURE)
 			return ;
 		if (current->heredoc)
@@ -154,7 +159,7 @@ void	exec(t_command **cmds, t_env **env, char **envp)
 			exec_bltin(current, env, &fd);
 		else if (current->args && !ft_strcmp(current->args[0], "exit"))
 		{
-			if (!current->pipe)
+			if (!current->pipe && count == 1)
 				ft_exit(current->args, cmds, env, &fd);
 		}
 		else if (current->args)

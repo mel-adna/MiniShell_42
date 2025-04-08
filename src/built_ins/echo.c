@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 14:58:58 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/07 11:50:49 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/08 15:52:27 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	has_only_n(char *arg)
 {
 	int	i;
 
-	i = 0;
+	i = 1;
 	while (arg[i])
 	{
 		if (arg[i] != 'n')
@@ -33,7 +33,7 @@ int	ft_echo(char **args)
 
 	n_option = 0;
 	i = 1;
-	while (args[i] && !ft_strncmp(args[i], "-n", 2) && has_only_n(args[i] + 1))
+	while (args[i] && !ft_strncmp(args[i], "-n", 2) && has_only_n(args[i]))
 	{
 		n_option = 1;
 		i++;

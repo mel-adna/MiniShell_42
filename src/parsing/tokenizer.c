@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 12:00:00 by username          #+#    #+#             */
-/*   Updated: 2025/04/06 13:35:08 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/08 16:11:06 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ static void	process_word(char *l, int *i, t_env **e, char **v)
 	char	*q;
 	char	*t;
 
+	if((l[*i] == '$' && l[*i + 1] == '"') || (l[*i] == '$' && l[*i + 1] == '\''))
+		(*i)++;
 	if (l[*i] == '"' || l[*i] == '\'')
 	{
 		q = &l[*i];

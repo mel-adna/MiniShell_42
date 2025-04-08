@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 17:59:36 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/07 19:48:16 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/08 13:33:37 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,12 +90,8 @@ int	main(int argc, char **argv, char **envp)
 	setup_signals();
 	env_init(&env, envp);
 	increment_shell_lvl(env);
-	if (argc >= 3 && !ft_strncmp(argv[1], "-c", 3))
-	{
-		input = ft_strdup(argv[2]);
-		process_input(&cmds, input, &env, envp);
-		return g_exit_code;
-	}
+	(void) argc;
+	(void) argv;
 	while (1)
 	{
 		input = readline("minishell $");
@@ -104,11 +100,6 @@ int	main(int argc, char **argv, char **envp)
 			if (isatty(STDIN_FILENO))
 				write(2, "exit\n", 6);
 			exit(g_exit_code);
-		}
-		if (!input)
-		{
-			// printf("Exiting...\n");
-			break ;
 		}
 		process_input(&cmds, input, &env, envp);
 		// system ("leaks -q minishell");
