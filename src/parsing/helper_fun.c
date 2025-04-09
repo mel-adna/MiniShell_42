@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   helper_fun.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 13:19:36 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/06 13:28:16 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/09 18:35:13 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	process_env_var(char *l, int *i, t_env **e, char **r)
 		t = ft_substr(l, j, *i - j);
 		if (t)
 		{
-			v = get_value(t, e);
+			v = get_env_value(*e, t);
 			if (v)
 				*r = add_result(*r, ft_strdup(v));
 			else
