@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 14:03:17 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/08 13:31:56 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/09 15:29:18 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,9 @@ int	isllong(char *str, int sign, int start_idx)
 
 int	is_llong_min_max(char *str)
 {
-	int	i;
 	int	digit_count;
-	int	sign;
-	int	start_idx;
 
+	int start_idx, (i), (sign);
 	i = 0;
 	digit_count = 0;
 	sign = 1;
@@ -57,7 +55,10 @@ int	is_llong_min_max(char *str)
 	}
 	start_idx = i;
 	while (str[i] >= '0' && str[i] <= '9')
-		digit_count++, (i++);
+	{
+		digit_count++;
+		i++;
+	}
 	if (digit_count < 19)
 		return (0);
 	if (digit_count > 19)
@@ -72,16 +73,18 @@ int	is_number(char *str)
 	i = 0;
 	if (!str || !str[0])
 		return (0);
+	if (is_llong_min_max(str))
+		return (0);
 	while (str[i] && (str[i] == ' ' || str[i] == '\t'))
 		i++;
 	if (str[i] == '-' || str[i] == '+')
 		i++;
+	if (str[i] == '-' && !str[i + 1])
+		return (1);
 	if (!str[i] || !ft_isdigit(str[i]))
 		return (0);
 	while (str[i] && ft_isdigit(str[i]))
 		i++;
-	if (is_llong_min_max(str))
-		return (0);
 	while (str[i] && (str[i] == ' ' || str[i] == '\t'))
 		i++;
 	return (str[i] == '\0');

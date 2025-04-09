@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 17:58:09 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/25 11:44:23 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/09 13:15:16 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,32 @@ void	init_name(t_env *env)
 		}
 		current = current->next;
 	}
+}
+
+char	**env_to_str(t_env *env)
+{
+	char	**str_env;
+	int		i;
+
+	i = 0;
+	str_env = (char **)malloc(sizeof(char *) * (env_size(env) + 1));
+	if (!str_env)
+		return (NULL);
+	while (env)
+	{
+		str_env[i] = ft_strdup(env->value);
+		if (!str_env[i])
+		{
+			while (i--)
+				free(str_env[i]);
+			free(str_env);
+			return (NULL);
+		}
+		env = env->next;
+		i++;
+	}
+	str_env[i] = NULL;
+	return (str_env);
 }
 
 void	increment_shell_lvl(t_env *env)

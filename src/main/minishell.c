@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 17:59:36 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/08 13:33:37 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/09 15:06:20 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,13 @@
 
 int		g_exit_code;
 
-void	process_input(t_command **cmds, char *input, t_env **env, char **envp)
+void	process_input(t_command **cmds, char *input, t_env **env)
 {
+	char	**envp;
+	t_fd	fd;
+
+	init_fds(&fd);
+	envp = env_to_str(*env);
 	if (*input)
 		add_history(input);
 	*cmds = parse(input, env);
@@ -69,7 +74,7 @@ void	process_input(t_command **cmds, char *input, t_env **env, char **envp)
 		free(input);
 		return ;
 	}
-	exec(cmds, env, envp);
+	exec(cmds, env, envp, &fd);
 	free_command_list(cmds);
 	free(input);
 }
@@ -90,8 +95,8 @@ int	main(int argc, char **argv, char **envp)
 	setup_signals();
 	env_init(&env, envp);
 	increment_shell_lvl(env);
-	(void) argc;
-	(void) argv;
+	(void)argc;
+	(void)argv;
 	while (1)
 	{
 		input = readline("minishell $");
@@ -101,7 +106,7 @@ int	main(int argc, char **argv, char **envp)
 				write(2, "exit\n", 6);
 			exit(g_exit_code);
 		}
-		process_input(&cmds, input, &env, envp);
+		process_input(&cmds, input, &env);
 		// system ("leaks -q minishell");
 		// system ("lsof -c minishell");
 	}

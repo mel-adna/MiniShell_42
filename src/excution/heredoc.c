@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 16:38:13 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/03 14:13:47 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/09 15:03:01 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,6 @@ static char	*unqouted_limiter(char *limiter)
 	return (ft_strjoin(limiter, "\n"));
 }
 
-
 int	ft_heredoc(char *limiter, t_env *env)
 {
 	int		fd[2];
@@ -103,7 +102,7 @@ int	ft_heredoc(char *limiter, t_env *env)
 		return (free(unqouted_lm), perror("pipe"), -1);
 	while (1)
 	{
-		ft_putstr_fd("heredoc> ", 1);
+		ft_putstr_fd("> ", 1);
 		line = get_next_line(0);
 		if (!line || ft_strcmp(line, unqouted_lm) == 0)
 			break ;

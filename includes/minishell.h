@@ -6,20 +6,21 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 16:36:26 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/07 17:22:12 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/09 15:34:33 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include <fcntl.h>
+# include "./gnl/get_next_line.h"
+# include "./libft/libft.h"
 # include <dirent.h>
+# include <errno.h>
+# include <fcntl.h>
 # include <limits.h>
 # include <stdio.h>
 # include <termios.h>
-# include "./libft/libft.h"
-# include "./gnl/get_next_line.h"
 # include <readline/readline.h>
 # include <readline/history.h>
 
@@ -45,7 +46,7 @@ typedef enum e_token_type
 	TOKEN_REDIR_APPEND,
 	TOKEN_HEREDOC,
 	TOKEN_AND,
-	TOKEN_OR,
+	TOKEN_OR
 }						t_token_type;
 
 typedef struct s_token
@@ -82,7 +83,7 @@ t_command				*tokenize_line(char *line, t_env **env);
 int						is_special_char(char *line, int i);
 t_token_type			get_token_type(char *line, int *i);
 void					handle_signals(int sig);
-int						check_redirect_errors(char *input, int i);
+int						check_redirect_errors(char *input, int i, char *filename);
 char					**ft_addstr(char **arr, char *new_str);
 void					process_and_add_token(t_token **token_list, char *line,
 							int *i, t_env **env);
@@ -108,7 +109,7 @@ void					free_env(t_env **env);
 void					free_array(char **arr);
 
 // ====================== Excution ======================
-void					exec(t_command **cmds, t_env **env, char **envp);
+void					exec(t_command **cmds, t_env **env, char **envp, t_fd *fd);
 int						resolve_cmd_paths(char **envp, t_command *cmds);
 void					push_env_back(t_env **head, char *value);
 void					init_fds(t_fd *fd);
@@ -120,6 +121,13 @@ int						open_redir(t_command *current, t_fd *fd);
 void					close_fds(t_fd *fd);
 int						dup_stdout(t_fd *fd, int newfd);
 int						dup_stdin(t_fd *fd, int newfd);
+
+// ====================== Error Handler ======================
+void					exit_func(t_fd *fd, int status);
+int						check_is_dir(char *cmd);
+int						builtin_files_handler(t_command *current, t_fd *fd, int *stdin_copy,
+						int *stdout_copy);
+void					cmd_files_handler(t_command *cmd, t_fd *fd);
 
 // ====================== Builtins ======================
 int						env_size(t_env *env);
