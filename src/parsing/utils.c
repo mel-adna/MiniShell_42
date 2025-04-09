@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 13:20:15 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/09 18:34:04 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/09 18:55:19 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,21 +65,3 @@ t_command	*init_command(void)
 	cmd->cmd_path = NULL;
 	return (cmd);
 }
-
-// char	*get_value(char *name, t_env **env)
-// {
-// 	t_env	*current;
-
-// 	current = *env;
-// 	while (current)
-// 	{
-// 		if (!ft_strcmp(current->name, name))
-// 		{
-// 			if(current->value + ft_strlen(name) + 1)
-// 				return (ft_strdup(current->value + ft_strlen(name) + 1));
-// 			return (NULL);
-// 		}
-// 		current = current->next;
-// 	}
-// 	return (NULL);
-// }

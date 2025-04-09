@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 16:36:26 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/09 15:34:33 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/09 18:55:35 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ extern int				g_exit_code;
 
 typedef struct s_env
 {
-	char				*name;
 	char				*value;
 	struct s_env		*next;
 }						t_env;

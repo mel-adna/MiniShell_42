@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 17:58:09 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/09 13:15:16 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/09 18:56:52 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,25 +25,6 @@ int	env_size(t_env *env)
 	return (size);
 }
 
-void	init_name(t_env *env)
-{
-	t_env	*current;
-	char	*name;
-
-	current = env;
-	while (current)
-	{
-		name = ft_strchr(current->value, '=') - 1;
-		if (name)
-		{
-			current->name = ft_substr(current->value, 0, name - current->value
-					+ 1);
-			if (!current->name)
-				return ;
-		}
-		current = current->next;
-	}
-}
 
 char	**env_to_str(t_env *env)
 {
@@ -80,7 +61,6 @@ void	increment_shell_lvl(t_env *env)
 
 	shlvl = 0;
 	current = env;
-	init_name(env);
 	while (current && ft_strncmp(current->value, "SHLVL=", 6) != 0)
 		current = current->next;
 	if (!current)
