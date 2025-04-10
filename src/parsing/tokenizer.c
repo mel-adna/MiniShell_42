@@ -5,28 +5,28 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/06 12:00:00 by username          #+#    #+#             */
-/*   Updated: 2025/04/09 13:15:34 by mel-adna         ###   ########.fr       */
+/*   Created: 2025/04/10 09:49:24 by mel-adna          #+#    #+#             */
+/*   Updated: 2025/04/10 09:58:23 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static void	expand_env(char *l, int *i, t_env **e, char **r)
+static void	expand_env(char *line, int *i, t_env **env, char **result)
 {
 	(*i)++;
-	if (l[*i] == '?')
+	if (line[*i] == '?')
 	{
 		(*i)++;
-		*r = add_result(*r, ft_itoa(g_exit_code));
+		*result = add_result(*result, ft_itoa(g_exit_code));
 		return ;
 	}
-	if (ft_isdigit(l[*i]))
+	if (ft_isdigit(line[*i]))
 	{
 		(*i)++;
 		return ;
 	}
-	process_env_var(l, i, e, r);
+	process_env_var(line, i, env, result);
 }
 
 static char	*handle_quotes(char *line, int *i, t_env **env, char quote)
@@ -56,71 +56,71 @@ static char	*handle_quotes(char *line, int *i, t_env **env, char quote)
 	return (result);
 }
 
-static void	handle_char(char c, char **v)
+static void	handle_char(char c, char **value)
 {
-	char	t[2];
-	char	*o;
+	char	str[2];
+	char	*tmp;
 
-	t[0] = c;
-	t[1] = '\0';
-	o = *v;
-	*v = ft_strjoin(*v, t);
-	free(o);
+	str[0] = c;
+	str[1] = '\0';
+	tmp = *value;
+	*value = ft_strjoin(*value, str);
+	free(tmp);
 }
 
-static void	process_word(char *l, int *i, t_env **e, char **v)
+static void	process_word(char *line, int *i, t_env **env, char **value)
 {
-	char	*q;
-	char	*t;
+	char	*quoit;
+	char	*tmp;
 
-	if ((l[*i] == '$' && l[*i + 1] == '"') || (l[*i] == '$' && l[*i
-				+ 1] == '\''))
+	if ((line[*i] == '$' && line[*i + 1] == '"') || (line[*i] == '$' 
+			&& line[*i + 1] == '\''))
 		(*i)++;
-	if (l[*i] == '"' || l[*i] == '\'')
+	if (line[*i] == '"' || line[*i] == '\'')
 	{
-		q = &l[*i];
-		t = handle_quotes(l, i, e, *q);
-		if (t)
-			*v = add_result(*v, t);
+		quoit = &line[*i];
+		tmp = handle_quotes(line, i, env, *quoit);
+		if (tmp)
+			*value = add_result(*value, tmp);
 	}
-	else if (l[*i] == '$' && (ft_isalnum(l[*i + 1]) || l[*i + 1] == '_' || l[*i
-				+ 1] == '?'))
-		expand_env(l, i, e, v);
-	else if (l[*i] == '~' && (l[*i + 1] == '/' || !l[*i + 1] || l[*i
-				+ 1] == ' ') && (*i == 0 || l[*i - 1] == ' '))
+	else if (line[*i] == '$' && (ft_isalnum(line[*i + 1]) || line[*i + 1] == '_'
+			|| line[*i + 1] == '?'))
+		expand_env(line, i, env, value);
+	else if (line[*i] == '~' && (line[*i + 1] == '/' || !line[*i + 1] 
+			|| line[*i + 1] == ' ') && (*i == 0 || line[*i - 1] == ' '))
 	{
 		(*i)++;
-		*v = add_result(*v, ft_strdup(getenv("HOME")));
+		*value = add_result(*value, ft_strdup(getenv("HOME")));
 	}
 	else
-		handle_char(l[(*i)++], v);
+		handle_char(line[(*i)++], value);
 }
 
-void	process_and_add_token(t_token **t, char *l, int *i, t_env **e)
+void	process_and_add_token(t_token **type, char *line, int *i, t_env **env)
 {
-	t_token_type	type;
-	char			*v;
+	t_token_type	tmp;
+	char			*vlaue;
 	int				has_quotes;
 
 	has_quotes = 0;
-	if (is_special_char(l, *i))
+	if (is_special_char(line, *i))
 	{
-		type = get_token_type(l, i);
-		push_back(t, ft_strdup(""), type);
+		tmp = get_token_type(line, i);
+		push_back(type, ft_strdup(""), tmp);
 	}
 	else
 	{
-		type = TOKEN_WORD;
-		v = ft_strdup("");
-		while (l[*i] && l[*i] != ' ' && !is_special_char(l, *i))
+		tmp = TOKEN_WORD;
+		vlaue = ft_strdup("");
+		while (line[*i] && line[*i] != ' ' && !is_special_char(line, *i))
 		{
-			if (l[*i] == '\'' || l[*i] == '"')
+			if (line[*i] == '\'' || line[*i] == '"')
 				has_quotes = 1;
-			process_word(l, i, e, &v);
+			process_word(line, i, env, &vlaue);
 		}
-		if ((v && *v) || has_quotes)
-			push_back(t, v, type);
+		if ((vlaue && *vlaue) || has_quotes)
+			push_back(type, vlaue, tmp);
 		else
-			free(v);
+			free(vlaue);
 	}
 }
