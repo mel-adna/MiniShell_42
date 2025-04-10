@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 16:23:52 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/08 15:01:19 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/10 15:12:20 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,16 @@ int	open_redir(t_command *current, t_fd *fd)
 	if (current->pipe)
 		if (pipe(fd->pipefd) == -1)
 			return (perror("minishell: pipe"), g_exit_code = FAILURE, FAILURE);
+	if (current->heredoc)
+	{
+		fd->fdin = open("/tmp/here_doc", O_RDONLY | O_CREAT | O_APPEND, 0644);
+		if (fd->fdin < 0)
+		{
+			ft_putstr_fd("minishell: open: ", 2);
+			perror("/tmp/here_doc");
+			return (FAILURE);
+		}
+	}
 	return (SUCCESS);
 }
 

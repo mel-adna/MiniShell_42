@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 11:42:43 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/09 18:37:50 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/10 10:30:38 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@ char	*get_env_value(t_env *env, const char *key)
 		if (ft_strcmp(var_name, key) == 0)
 		{
 			free(var_name);
-			if(env->value)
+			if (env->value)
 				return (env->value + ft_strlen(key) + 1);
 			else
-				break;
+				break ;
 		}
 		free(var_name);
 		env = env->next;

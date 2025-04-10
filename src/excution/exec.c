@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 13:02:32 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/09 15:28:40 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/10 18:32:35 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ static int	exec_bltin(t_command *current, t_env **env, t_fd *fd)
 	return (SUCCESS);
 }
 
-t_command	*init_vars(int *prv_pipe, t_command *cmds, char **envp)
+t_command	*init_vars(t_command *cmds, char **envp, int *prv_pipe)
 {
 	*prv_pipe = 0;
 	resolve_cmd_paths(envp, cmds);
@@ -94,24 +94,24 @@ void	exec(t_command **cmds, t_env **env, char **envp, t_fd *fd)
 	t_command	*current;
 	int			prv_pipe;
 
-	current = init_vars(&prv_pipe, *cmds, envp);
+	current = init_vars(*cmds, envp, &prv_pipe);
 	while (current)
 	{
 		if (current->pipe)
 			prv_pipe = 1;
+		if (current->heredoc)
+			if (ft_heredoc(current->heredoc, *env) == FAILURE)
+				return ;
 		if (open_redir(current, fd) == FAILURE)
 			return ;
-		if (current->heredoc)
-			fd->fdin = ft_heredoc(current->heredoc, *env);
 		if (current->args && is_builtin(current->args[0]) && !current->pipe
 			&& !prv_pipe)
 			exec_bltin(current, env, fd);
-		else if (current->args && !ft_strcmp(current->args[0], "exit"))
-		{
-			if (!current->pipe && !prv_pipe)
-				ft_exit(current->args, cmds, env, fd);
-		}
-		else if(current->args && current->args[0])
+		else if (current->args && !ft_strcmp(current->args[0], "exit")
+			&& !current->pipe && !prv_pipe)
+			ft_exit(current->args, cmds, env, fd);
+		else if (current->args && current->args[0]
+			&& ft_strcmp(current->args[0], "exit"))
 			ft_exec_cmd(fd, current, env, envp);
 		current = current->next;
 	}

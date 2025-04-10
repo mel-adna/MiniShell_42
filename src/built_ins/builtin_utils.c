@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 14:50:54 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/09 15:27:20 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/10 10:30:18 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ char	*get_var_name(char *var)
 
 char	*get_var_value(char *var)
 {
-	char(quote);
+	char (quote);
 	int start, (i);
 	if (!var)
 		return (NULL);

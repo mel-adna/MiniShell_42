@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 17:58:09 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/09 18:56:52 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/10 10:31:19 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ int	env_size(t_env *env)
 	}
 	return (size);
 }
-
 
 char	**env_to_str(t_env *env)
 {

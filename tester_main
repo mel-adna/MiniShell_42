@@ -1,0 +1,40 @@
+// void	ll(void)
+// {
+// 	system("leaks -q minishell");
+// }
+
+// int	main(int argc, char **argv, char **envp)
+// {
+// 	t_command	*cmds;
+// 	char		*input;
+// 	t_env		*env;
+
+// 	atexit(ll);
+// 	cmds = NULL;
+// 	setup_signals();
+// 	env_init(&env, envp);
+// 	increment_shell_lvl(env);
+// 	// (void)argc;
+// 	// (void)argv;
+// 	if (argc >= 3 && !ft_strncmp(argv[1], "-c", 3))
+// 	{
+// 		input = ft_strdup(argv[2]);
+// 		process_input(&cmds, input, &env);
+// 		exit(g_exit_code);
+// 	}
+// 	while (1)
+// 	{
+// 		input = readline("minishell $");
+// 		if (!input)
+// 		{
+// 			if (isatty(STDIN_FILENO))
+// 				write(2, "exit\n", 6);
+// 			exit(g_exit_code);
+// 		}
+// 		process_input(&cmds, input, &env);
+// 		system ("leaks -q minishell");
+// 		system ("lsof -c minishell");
+// 	}
+// 	reset_terminal();
+// 	return (g_exit_code);
+// }
