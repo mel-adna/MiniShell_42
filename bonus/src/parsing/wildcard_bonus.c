@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   wildcard.c                                         :+:      :+:    :+:   */
+/*   wildcard_bonus.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 11:04:36 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/12 18:42:18 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/12 19:03:00 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../../includes/minishell_bonus.h"
 
 int	ft_fnmatch(const char *pattern, const char *string)
 {
@@ -39,12 +39,23 @@ int	ft_fnmatch(const char *pattern, const char *string)
 	return (1);
 }
 
-static int	process_matches(DIR *dir, char *pattern_only, char *dir_path, t_token **t)
+static void	int_function(struct dirent *entry, t_token **t, char *dir_path)
 {
-	struct dirent	*entry = readdir(dir);
-	char			*tmp;
-	int				matched = 0;
+	char	*tmp;
 
+	tmp = ft_strjoin(dir_path, "/");
+	push_back(t, ft_strjoin(tmp, entry->d_name), TOKEN_WORD);
+	free(tmp);
+}
+
+static int	process_matches(DIR *dir, char *pattern_only, char *dir_path, 
+			t_token **t)
+{
+	struct dirent	*entry;
+	int				matched;
+
+	matched = 0;
+	entry = readdir(dir);
 	while (entry)
 	{
 		if (ft_fnmatch(pattern_only, entry->d_name) == 0
@@ -54,11 +65,7 @@ static int	process_matches(DIR *dir, char *pattern_only, char *dir_path, t_token
 			if (ft_strcmp(dir_path, ".") == 0)
 				push_back(t, ft_strdup(entry->d_name), TOKEN_WORD);
 			else
-			{
-				tmp = ft_strjoin(dir_path, "/");
-				push_back(t, ft_strjoin(tmp, entry->d_name), TOKEN_WORD);
-				free(tmp);
-			}
+				int_function(entry, t, dir_path);
 		}
 		entry = readdir(dir);
 	}

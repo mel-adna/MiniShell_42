@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 11:42:43 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/10 10:30:38 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/12 19:03:00 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../../includes/minishell_bonus.h"
 
 char	*get_env_value(t_env *env, const char *key)
 {

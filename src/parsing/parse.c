@@ -6,7 +6,7 @@
 /*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:49:12 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/12 17:38:21 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/12 18:47:27 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static int	check_pipe_errors(char *input)
 	int	i;
 
 	i = 0;
-	while (input[i] == ' ' || input[i] == '\t'  || input[i] == '\r')
+	while (input[i] == ' ' || input[i] == '\t' || input[i] == '\r')
 		i++;
 	if (input[i] == '|')
 		return (g_exit_code = 258,
@@ -77,7 +77,7 @@ static int	check_pipe_errors(char *input)
 		if (input[i] == '|' && input[i + 1] != '|')
 		{
 			i++;
-			while (input[i] == ' ' || input[i] == '\t'  || input[i] == '\r')
+			while (input[i] == ' ' || input[i] == '\t' || input[i] == '\r')
 				i++;
 			if (input[i] == '|')
 				return (g_exit_code = 258,

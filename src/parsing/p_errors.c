@@ -6,7 +6,7 @@
 /*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:49:06 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/12 17:34:46 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/12 18:47:06 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ char	*extract_filename(char *input)
 
 	filename = NULL;
 	i = 0;
-	while (input[i] == ' ' || input[i] == '\t'  || input[i] == '\r')
+	while (input[i] == ' ' || input[i] == '\t' || input[i] == '\r')
 		i++;
 	if (input[i] == '"' || input[i] == '\'')
 		i++;
@@ -74,7 +74,7 @@ int	check_redirect_errors(char *input, int i, char *filename)
 				&& input[i + 1] != '<'))
 		{
 			i++;
-			while (input[i] == ' ' || input[i] == '\t'  || input[i] == '\r')
+			while (input[i] == ' ' || input[i] == '\t' || input[i] == '\r')
 				i++;
 			if (!input[i] || input[0] == '~' || input[i] == '>'
 				|| input[i] == '<' || input[i] == '|')
