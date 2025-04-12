@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 15:08:53 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/06 18:25:38 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/12 13:07:04 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	wait_children(t_command *cmds)
 	current = cmds;
 	while (current)
 	{
-		if (current->pid != -1)
+		if (current->pid > 0)
 		{
 			if (waitpid(current->pid, &status, 0) == -1)
 			{
@@ -47,5 +47,14 @@ void	wait_children(t_command *cmds)
 				g_exit_code = handel_signal_exit(status);
 		}
 		current = current->next;
+	}
+}
+
+void	signal_herdoc(int sig)
+{
+	if (sig == SIGINT)
+	{
+		ft_putendl_fd("", STDOUT_FILENO);
+		exit(1);
 	}
 }

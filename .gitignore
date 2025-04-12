@@ -3,5 +3,4 @@
 libft/libft.a
 minishell
 .vscode
-mpanic
-minishell_tester
+.gitignore

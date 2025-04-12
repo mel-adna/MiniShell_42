@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 16:38:13 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/03 14:13:47 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/12 13:08:04 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ static void	expand_variables(t_env *env, char *line, int fd)
 	}
 }
 
-static char	*unqouted_limiter(char *limiter)
+static char	*unquoted_limiter(char *limiter)
 {
 	char	*unqouted_lm;
 	char	*tmp;
@@ -81,9 +81,9 @@ static char	*unqouted_limiter(char *limiter)
 			if (!unqouted_lm)
 				return (ft_strjoin(limiter, "\n"));
 		}
+		tmp = ft_strjoin(unqouted_lm, "\n");
+		free(unqouted_lm);
 		tmp = unqouted_lm;
-		unqouted_lm = ft_strjoin(unqouted_lm, "\n");
-		free(tmp);
 		if (!unqouted_lm)
 			return (ft_strjoin(limiter, "\n"));
 		return (unqouted_lm);
@@ -91,29 +91,55 @@ static char	*unqouted_limiter(char *limiter)
 	return (ft_strjoin(limiter, "\n"));
 }
 
-
-int	ft_heredoc(char *limiter, t_env *env)
+void	heredoc_handeler(char *limiter, t_env *env, int fd)
 {
-	int		fd[2];
-	char	*unqouted_lm;
 	char	*line;
+	char	*unqouted_lm;
 
-	unqouted_lm = unqouted_limiter(limiter);
-	if (pipe(fd) == -1)
-		return (free(unqouted_lm), perror("pipe"), -1);
+	signal(SIGINT, signal_herdoc);
+	unqouted_lm = unquoted_limiter(limiter);
 	while (1)
 	{
-		ft_putstr_fd("heredoc> ", 1);
+		ft_putstr_fd("> ", 1);
 		line = get_next_line(0);
 		if (!line || ft_strcmp(line, unqouted_lm) == 0)
 			break ;
 		if (var_in_line(unqouted_lm, line))
-			expand_variables(env, line, fd[1]);
+			expand_variables(env, line, fd);
 		else
-			ft_putstr_fd(line, fd[1]);
+			ft_putstr_fd(line, fd);
 		free(line);
 	}
 	if (line)
 		free(line);
-	return (get_next_line(-1), close(fd[1]), free(unqouted_lm), fd[0]);
+	get_next_line(-1);
+	free(unqouted_lm);
+}
+
+int	ft_heredoc(char *limiter, t_env *env)
+{
+	int	pid;
+	int	status;
+	int	fd;
+
+	status = 0;
+	signal(SIGINT, SIG_IGN);
+	if (access("/tmp/here_doc", F_OK) == 0)
+		unlink("/tmp/here_doc");
+	fd = open("/tmp/here_doc", O_CREAT | O_TRUNC | O_WRONLY, 0644);
+	if (fd == -1)
+		return (perror("open"), exit(EXIT_FAILURE), FAILURE);
+	pid = fork();
+	if (pid == -1)
+		return (close(fd), perror("fork"), exit(EXIT_FAILURE), FAILURE);
+	if (pid == 0)
+		heredoc_handeler(limiter, env, fd);
+	else
+	{
+		waitpid(pid, &status, 0);
+		status = WEXITSTATUS(status);
+	}
+	if (status == 1)
+		return (close(fd), g_exit_code = 1, FAILURE);
+	return (close(fd), SUCCESS);
 }

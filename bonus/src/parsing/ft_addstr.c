@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/06 13:19:27 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/09 10:51:03 by mel-adna         ###   ########.fr       */
+/*   Created: 2025/04/10 09:48:58 by mel-adna          #+#    #+#             */
+/*   Updated: 2025/04/10 09:48:59 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,20 +37,4 @@ char	**ft_addstr(char **arr, char *new_str)
 	new_arr[i + 1] = NULL;
 	free(arr);
 	return (new_arr);
-}
-
-#include "../../includes/minishell.h"
-
-t_command *create_command(void)
-{
-    t_command *cmd = malloc(sizeof(t_command));
-    if (!cmd)
-        return (NULL);
-    cmd->infile = NULL;
-    cmd->outfile = NULL;
-    cmd->heredoc = NULL;
-    cmd->append = 0;
-    cmd->pipe = 0;
-    cmd->args = NULL;
-    return (cmd);
 }

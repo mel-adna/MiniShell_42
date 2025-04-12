@@ -1,10 +1,11 @@
 NAME = minishell
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra #-fsanitize=address -g
+CFLAGS = -Wall -Werror -Wextra
 LDFLAGS = -lreadline
 INCLUDES = -Iincludes -Ilibft
 LIBFT_DIR = includes/libft
 LIBFT = $(LIBFT_DIR)/libft.a
+BONUS = ./bonus
 
 SRC = src/main/minishell.c src/env/env.c src/env/shell_lvl.c src/parsing/parse.c \
  	  src/tools/list_utils.c src/parsing/redirection.c src/parsing/p_errors.c \
@@ -32,9 +33,16 @@ $(LIBFT):
 clean:
 	@rm -f $(OBJ)
 	@$(MAKE) -C $(LIBFT_DIR) clean
+	@$(MAKE) -C $(BONUS) clean
+
+bonus:
+	@$(MAKE) -C $(BONUS)
 
 fclean: clean
 	@rm -f $(NAME)
 	@$(MAKE) -C $(LIBFT_DIR) fclean
+	@$(MAKE) -C $(BONUS) fclean
 
-re: fclean bonus all 
+re: fclean all 
+
+.PHONY: clean bonus

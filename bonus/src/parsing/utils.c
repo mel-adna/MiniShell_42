@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/06 13:20:15 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/06 13:20:16 by mel-adna         ###   ########.fr       */
+/*   Created: 2025/04/10 09:49:30 by mel-adna          #+#    #+#             */
+/*   Updated: 2025/04/12 15:29:03 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,16 +66,28 @@ t_command	*init_command(void)
 	return (cmd);
 }
 
-char	*get_value(char *name, t_env **env)
+void	helper_func(t_token **type, char *line, int *i, t_env **env)
 {
-	t_env	*current;
+	t_token_type	tmp;
+	int				has_quotes;
+	char			*value;
 
-	current = *env;
-	while (current)
+	has_quotes = 0;
+	tmp = TOKEN_WORD;
+	value = ft_strdup("");
+	while (line[*i] && line[*i] != ' ' && !is_special_char(line, *i))
 	{
-		if (!ft_strcmp(current->name, name))
-			return (ft_strdup(current->value + ft_strlen(name) + 1));
-		current = current->next;
+		if (line[*i] == '\'' || line[*i] == '"')
+			has_quotes = 1;
+		process_word(line, i, env, &value);
 	}
-	return (NULL);
+	if (strchr(value, '*') && !has_quotes)
+	{
+		expand_wildcard(value, type);
+		free(value);
+	}
+	else if ((value && *value) || has_quotes)
+		push_back(type, value, tmp);
+	else
+		free(value);
 }

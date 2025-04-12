@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 14:19:36 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/07 17:21:44 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/09 13:12:22 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,8 @@ int	print_env_error(char *var, int errn)
 		ft_putstr_fd("minishell: export: -", STDERR_FILENO);
 		ft_putchar_fd(var[1], STDERR_FILENO);
 		ft_putendl_fd(": invalid option", STDERR_FILENO);
-		ft_putendl_fd("export: usage: export [-nf] [name[=value] ...] or export -p", 2);
+		ft_putstr_fd("export: usage: export [-nf] [name[=value] ", 2);
+		ft_putendl_fd("or export -p", 2);
 	}
 	return (FAILURE);
 }

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/06 13:19:00 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/09 10:54:08 by mel-adna         ###   ########.fr       */
+/*   Created: 2025/04/10 09:49:18 by mel-adna          #+#    #+#             */
+/*   Updated: 2025/04/10 09:49:19 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,12 @@ static void	update_redirection(char **field, t_token *current)
 {
 	char	*new_value;
 
-	if (!current->next || !current->next->value)
+	if (!current || !current->next || !current->next->value)
 		return ;
 	new_value = ft_strdup(current->next->value);
 	if (!new_value)
 		return ;
-	if (*field)
-		free(*field);
+	free(*field);
 	*field = new_value;
 }
 

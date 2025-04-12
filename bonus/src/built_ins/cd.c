@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 15:25:58 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/06 17:30:38 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/12 13:08:18 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,8 @@ int	cd_oldpwd(t_env *env)
 
 int	ft_cd(char **args, t_env **env)
 {
+	if (args[1] && !args[1][0])
+		return (SUCCESS);
 	if (!args[1] || ft_strcmp(args[1], "~") == 0)
 		return (cd_home(*env));
 	if (ft_strcmp(args[1], "-") == 0)
@@ -113,8 +115,17 @@ int	ft_cd(char **args, t_env **env)
 		return (FAILURE);
 	if (chdir(args[1]) == 0)
 		return (update_pwd(*env));
-	ft_putstr_fd("minishell: cd: ", 2);
-	ft_putstr_fd(args[1], 2);
-	ft_putendl_fd(": No such file or directory", 2);
+	if (errno == ENAMETOOLONG)
+	{
+		ft_putstr_fd("minishell: cd: ", 2);
+		ft_putstr_fd(args[1], 2);
+		ft_putendl_fd(": File name too long", 2);
+	}
+	else
+	{
+		ft_putstr_fd("minishell: cd: ", 2);
+		ft_putstr_fd(args[1], 2);
+		ft_putendl_fd(": No such file or directory", 2);
+	}
 	return (FAILURE);
 }

@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 00:45:07 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/25 11:43:59 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/09 18:56:02 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,6 @@ void	free_env(t_env **env)
 		tmp = *env;
 		*env = (*env)->next;
 		free(tmp->value);
-		free(tmp->name);
 		free(tmp);
 	}
 	*env = NULL;

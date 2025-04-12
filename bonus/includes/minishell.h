@@ -3,25 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/09 09:23:54 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/12 13:10:12 by szemmour         ###   ########.fr       */
+/*   Created: 2025/03/26 16:36:26 by szemmour          #+#    #+#             */
+/*   Updated: 2025/04/12 15:36:00 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include <fcntl.h>
+# include "./gnl/get_next_line.h"
+# include "./libft/libft.h"
 # include <dirent.h>
+# include <errno.h>
+# include <fcntl.h>
 # include <limits.h>
 # include <stdio.h>
-# include <dirent.h>
-# include <fnmatch.h>
 # include <termios.h>
-# include "./libft/libft.h"
-# include "./gnl/get_next_line.h"
 # include <readline/readline.h>
 # include <readline/history.h>
 
@@ -33,7 +32,6 @@ extern int				g_exit_code;
 
 typedef struct s_env
 {
-	char				*name;
 	char				*value;
 	struct s_env		*next;
 }						t_env;
@@ -45,10 +43,9 @@ typedef enum e_token_type
 	TOKEN_REDIR_IN,
 	TOKEN_REDIR_OUT,
 	TOKEN_REDIR_APPEND,
-	TOKEN_APPEND_OUT,
 	TOKEN_HEREDOC,
 	TOKEN_AND,
-	TOKEN_OR,
+	TOKEN_OR
 }						t_token_type;
 
 typedef struct s_token
@@ -96,11 +93,15 @@ void					push_cmd_back(t_command **head, t_command *node);
 char					*get_value(char *name, t_env **env);
 char					*add_result(char *result, char *tmp);
 void					process_env_var(char *l, int *i, t_env **e, char **r);
-void					expand_wildcard(const char *pat, t_token **t);
+void					expand_wildcard(const char *pattern, t_token **type);
+void					helper_func(t_token **type, char *line, int *i, 
+							t_env **env);
+void					process_word(char *line, int *i, t_env **env, 
+							char **value);
 
 // ====================== env ======================
 int						env_init(t_env **env, char **envp);
-void					increment_shell_lvl(t_env *env);
+void					increment_shell_lvl(t_env **env);
 
 // ====================== utils ======================
 void					push_back(t_token **head, char *value,
@@ -113,7 +114,8 @@ void					free_env(t_env **env);
 void					free_array(char **arr);
 
 // ====================== Excution ======================
-void					exec(t_command **cmds, t_env **env, char **envp);
+void					exec(t_command **cmds, t_env **env, char **envp,
+							t_fd *fd);
 int						resolve_cmd_paths(char **envp, t_command *cmds);
 void					push_env_back(t_env **head, char *value);
 void					init_fds(t_fd *fd);
@@ -125,6 +127,13 @@ int						open_redir(t_command *current, t_fd *fd);
 void					close_fds(t_fd *fd);
 int						dup_stdout(t_fd *fd, int newfd);
 int						dup_stdin(t_fd *fd, int newfd);
+
+// ====================== Error Handler ======================
+void					exit_func(t_fd *fd, int status);
+int						check_is_dir(char *cmd);
+int						builtin_files_handler(t_command *current, t_fd *fd,
+							int *stdin_copy, int *stdout_copy);
+void					cmd_files_handler(t_command *cmd, t_fd *fd);
 
 // ====================== Builtins ======================
 int						env_size(t_env *env);
@@ -146,6 +155,7 @@ char					**env_to_str(t_env *env);
 int						is_valid_env_var_name(char *var);
 // ====================== here doc ======================
 int						ft_heredoc(char *limiter, t_env *env);
+void					signal_herdoc(int sig);
 
 // ====================== Signals Handling ======================
 void					handle_signals(int sig);

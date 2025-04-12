@@ -6,7 +6,7 @@
 /*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 11:04:36 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/09 11:28:23 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/12 15:32:54 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ static void	process_matches(DIR *dir, char *pattern_only, char *dir_path,
 	struct dirent	*entry;
 	char			*tmp;
 
-	while ((entry = readdir(dir)) != NULL)
+	entry = readdir(dir);
+	while (entry != NULL)
 	{
 		if (ft_fnmatch(pattern_only, entry->d_name) == 0)
 		{
@@ -58,6 +59,7 @@ static void	process_matches(DIR *dir, char *pattern_only, char *dir_path,
 				free(tmp);
 			}
 		}
+		entry = readdir(dir);
 	}
 	closedir(dir);
 	free(dir_path);
@@ -73,14 +75,16 @@ void	expand_wildcard(const char *pattern, t_token **t)
 
 	dir_path = ft_strdup(".");
 	pattern_only = ft_strdup(pattern);
-	if ((slash = ft_strrchr(pattern, '/')))
+	slash = ft_strrchr(pattern, '/');
+	if (slash)
 	{
 		free(dir_path);
 		dir_path = ft_substr(pattern, 0, slash - pattern);
 		free(pattern_only);
 		pattern_only = ft_strdup(slash + 1);
 	}
-	if (!(dir = opendir(dir_path)))
+	dir = opendir(dir_path);
+	if (!dir)
 	{
 		free(dir_path);
 		free(pattern_only);

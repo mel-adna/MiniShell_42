@@ -3,96 +3,101 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/03 15:26:52 by szemmour          #+#    #+#             */
-/*   Updated: 2024/12/07 13:35:03 by szemmour         ###   ########.fr       */
+/*   Created: 2024/12/02 00:35:44 by mel-adna          #+#    #+#             */
+/*   Updated: 2025/04/10 10:10:07 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*read_line(int fd, char *line)
+void	free_str(char **str)
 {
-	int		byte_read;
-	char	*buffer;
-	char	*tmp;
-
-	buffer = malloc(BUFFER_SIZE + 1);
-	if (!buffer)
-		return (NULL);
-	byte_read = read(fd, buffer, BUFFER_SIZE);
-	while (byte_read > 0)
+	if (*str)
 	{
-		buffer[byte_read] = '\0';
-		tmp = line;
-		line = ft_strjoin(tmp, buffer);
-		free(tmp);
-		if (!line)
-			return (free(buffer), NULL);
-		if (ft_strchr(buffer, '\n'))
-			break ;
-		byte_read = read(fd, buffer, BUFFER_SIZE);
+		free(*str);
+		*str = NULL;
 	}
-	free(buffer);
+}
+
+char	*up_rest(char **rest)
+{
+	char	*restline;
+	int		index;
+
+	index = gnl_strchr(*rest, '\n');
+	if (index == -1)
+		return (free_str(rest), NULL);
+	index++;
+	restline = malloc(gnl_strlen(*rest + index) + 1);
+	if (!restline)
+		return (free_str(rest), NULL);
+	gnl_strlcpy(restline, *rest + index, gnl_strlen(*rest + index) + 1);
+	free(*rest);
+	*rest = restline;
+	return (*rest);
+}
+
+char	*extract_line(char *rest)
+{
+	char	*line;
+	int		i;
+	int		index;
+
+	index = gnl_strchr(rest, '\n');
+	if (index != -1)
+		i = index + 1;
+	else
+		i = gnl_strlen(rest);
+	line = malloc(i + 1);
+	if (!line)
+		return (NULL);
+	gnl_strlcpy(line, rest, i + 1);
 	return (line);
 }
 
-char	*get_left_str(char *line)
+char	*ft_readline(int fd, char *rest)
 {
-	char	*left_str;
-	char	*newline;
+	char	*buff;
+	char	*temp;
+	ssize_t	nread;
 
-	if (!line)
-		return (NULL);
-	newline = ft_strchr(line, '\n');
-	if (!newline)
-		return (NULL);
-	left_str = ft_strdup(newline + 1);
-	return (left_str);
-}
-
-char	*ft_get_line(char *line)
-{
-	char	*result;
-	char	*newline;
-	size_t	len;
-
-	if (!line)
-		return (NULL);
-	len = 0;
-	newline = ft_strchr(line, '\n');
-	if (!newline)
-		len = ft_strlen(line);
-	else
+	buff = malloc(BUFFER_SIZE + 1);
+	if (!buff)
+		return (free(rest), NULL);
+	nread = read(fd, buff, BUFFER_SIZE);
+	while (nread > 0)
 	{
-		while (line[len] != '\n')
-			len++;
-		len++;
+		buff[nread] = '\0';
+		temp = rest;
+		rest = gnl_strjoin(rest, buff);
+		free(temp);
+		temp = NULL;
+		if (!rest)
+			return (free(buff), NULL);
+		if (gnl_strchr(buff, '\n') > -1)
+			break ;
+		nread = read(fd, buff, BUFFER_SIZE);
 	}
-	result = malloc(len + 1);
-	if (!result)
-		return (NULL);
-	ft_strlcpy(result, line, len + 1);
-	return (result);
+	free(buff);
+	return (rest);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*left_str = NULL;
-	char		*line;
-	char		*result;
+	static char	*rest;
+	char		*strline;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
-		return (free(left_str), left_str = NULL, NULL);
-	line = read_line(fd, left_str);
-	left_str = NULL;
-	if (!line || *line == '\0')
-		return (free(line), NULL);
-	result = ft_get_line(line);
-	left_str = get_left_str(line);
-	if (!result)
-		return (free(left_str), free(line), left_str = NULL, NULL);
-	free(line);
-	return (result);
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) == -1)
+		return (free_str(&rest), NULL);
+	rest = ft_readline(fd, rest);
+	if (!rest || *rest == '\0')
+		return (free_str(&rest), NULL);
+	strline = extract_line(rest);
+	if (!strline)
+		return (free_str(&rest), NULL);
+	if (!up_rest(&rest))
+		return (free_str(&rest), strline);
+	return (strline);
 }

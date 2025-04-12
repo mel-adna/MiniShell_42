@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 17:58:09 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/03/25 11:44:23 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/12 13:04:31 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,27 +25,33 @@ int	env_size(t_env *env)
 	return (size);
 }
 
-void	init_name(t_env *env)
+char	**env_to_str(t_env *env)
 {
-	t_env	*current;
-	char	*name;
+	char	**str_env;
+	int		i;
 
-	current = env;
-	while (current)
+	i = 0;
+	str_env = (char **)malloc(sizeof(char *) * (env_size(env) + 1));
+	if (!str_env)
+		return (NULL);
+	while (env)
 	{
-		name = ft_strchr(current->value, '=') - 1;
-		if (name)
+		str_env[i] = ft_strdup(env->value);
+		if (!str_env[i])
 		{
-			current->name = ft_substr(current->value, 0, name - current->value
-					+ 1);
-			if (!current->name)
-				return ;
+			while (i--)
+				free(str_env[i]);
+			free(str_env);
+			return (NULL);
 		}
-		current = current->next;
+		env = env->next;
+		i++;
 	}
+	str_env[i] = NULL;
+	return (str_env);
 }
 
-void	increment_shell_lvl(t_env *env)
+void	increment_shell_lvl(t_env **env)
 {
 	int		shlvl;
 	char	*new_value;
@@ -53,13 +59,16 @@ void	increment_shell_lvl(t_env *env)
 	t_env	*current;
 
 	shlvl = 0;
-	current = env;
-	init_name(env);
+	current = *env;
 	while (current && ft_strncmp(current->value, "SHLVL=", 6) != 0)
 		current = current->next;
 	if (!current)
-		return ;
+		return (push_env_back(env, "SHLVL=1"));
 	shlvl = ft_atoi(current->value + 6) + 1;
+	if (shlvl > 1000)
+		shlvl = 1;
+	if (shlvl < 0)
+		shlvl = 0;
 	shlvl_str = ft_itoa(shlvl);
 	if (!shlvl_str)
 		return ;

@@ -3,34 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   helper_fun.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/06 13:19:36 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/09 18:27:26 by szemmour         ###   ########.fr       */
+/*   Created: 2025/04/10 09:48:48 by mel-adna          #+#    #+#             */
+/*   Updated: 2025/04/10 09:50:38 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	process_env_var(char *l, int *i, t_env **e, char **r)
+void	process_env_var(char *line, int *i, t_env **env, char **result)
 {
 	char	*t;
 	char	*v;
 	int		j;
 
 	j = *i;
-	while (l[*i] && (ft_isalnum(l[*i]) || l[*i] == '_'))
+	while (line[*i] && (ft_isalnum(line[*i]) || line[*i] == '_'))
 		(*i)++;
 	if (*i > j)
 	{
-		t = ft_substr(l, j, *i - j);
+		t = ft_substr(line, j, *i - j);
 		if (t)
 		{
-			v = get_value(t, e);
+			v = get_env_value(*env, t);
 			if (v)
-				*r = add_result(*r, ft_strdup(v));
+				*result = add_result(*result, ft_strdup(v));
 			else
-				*r = add_result(*r, ft_strdup(""));
+				*result = add_result(*result, ft_strdup(""));
 			free(t);
 		}
 	}

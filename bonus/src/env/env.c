@@ -3,40 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 15:47:22 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/07 11:00:55 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/09 13:17:03 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-char	**env_to_str(t_env *env)
-{
-	char	**str_env;
-	int		i;
-
-	i = 0;
-	str_env = (char **)malloc(sizeof(char *) * (env_size(env) + 1));
-	if (!str_env)
-		return (NULL);
-	while (env)
-	{
-		str_env[i] = ft_strdup(env->value);
-		if (!str_env[i])
-		{
-			while (i--)
-				free(str_env[i]);
-			free(str_env);
-			return (NULL);
-		}
-		env = env->next;
-		i++;
-	}
-	str_env[i] = NULL;
-	return (str_env);
-}
 
 void	sort_env(char **env_arr)
 {
@@ -64,6 +38,19 @@ void	sort_env(char **env_arr)
 	}
 }
 
+void	print_value(char *var_name, char *var_value)
+{
+	ft_putstr_fd("declare -x ", STDOUT_FILENO);
+	ft_putstr_fd(var_name, STDOUT_FILENO);
+	if (var_value && ft_strcmp(var_name, "OLDPWD") != 0)
+	{
+		ft_putstr_fd("=\"", STDOUT_FILENO);
+		ft_putstr_fd(var_value, STDOUT_FILENO);
+		ft_putchar_fd('\"', STDOUT_FILENO);
+	}
+	ft_putchar_fd('\n', STDOUT_FILENO);
+}
+
 int	print_sorted_env(t_env *env)
 {
 	char	**env_arr;
@@ -82,15 +69,7 @@ int	print_sorted_env(t_env *env)
 		var_value = get_var_value(env_arr[i]);
 		if (var_name)
 		{
-			ft_putstr_fd("declare -x ", 1);
-			ft_putstr_fd(var_name, 1);
-			if (var_value && ft_strcmp(var_name, "OLDPWD") != 0)
-			{
-				ft_putstr_fd("=\"", STDOUT_FILENO);
-				ft_putstr_fd(var_value, STDOUT_FILENO);
-				ft_putchar_fd('\"', STDOUT_FILENO);
-			}
-			ft_putchar_fd('\n', STDOUT_FILENO);
+			print_value(var_name, var_value);
 			free(var_name);
 			free(var_value);
 		}

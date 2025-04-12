@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 14:50:54 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/06 17:27:16 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/10 10:30:18 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 int	is_builtin(char *command)
 {
+	if (!command || !command[0])
+		return (0);
 	return (!ft_strcmp(command, "cd") || !ft_strcmp(command, "echo")
 		|| !ft_strcmp(command, "pwd") || !ft_strcmp(command, "env")
 		|| !ft_strcmp(command, "export") || !ft_strcmp(command, "unset"));

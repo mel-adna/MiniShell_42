@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 15:09:32 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/06 19:01:41 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/09 10:30:47 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,32 +20,10 @@ void	init_fds(t_fd *fd)
 	fd->pipefd[1] = -1;
 }
 
-static char	*get_current_dir(char **envp)
-{
-	int		i;
-	char	*pwd;
-
-	i = 0;
-	while (envp[i])
-	{
-		if (ft_strncmp(envp[i], "PWD=", 4) == 0)
-		{
-			pwd = ft_strjoin(":", envp[i] + 4);
-			if (!pwd)
-				return (NULL);
-			return (pwd);
-		}
-		i++;
-	}
-	return (NULL);
-}
-
 static char	**get_paths(char **envp)
 {
 	int		i;
-	char	*str;
 	char	**paths;
-	char	*pwd;
 
 	i = 0;
 	if (!envp)
@@ -54,11 +32,7 @@ static char	**get_paths(char **envp)
 	{
 		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
 		{
-			pwd = get_current_dir(envp);
-			str = ft_strjoin(envp[i], pwd);
-			paths = ft_split(str + 5, ':');
-			free(str);
-			free(pwd);
+			paths = ft_split(envp[i] + 5, ':');
 			if (!paths)
 				return (NULL);
 			return (paths);
@@ -77,7 +51,7 @@ static char	*get_cmd_path(char **paths, char *cmd)
 	i = 0;
 	if (!paths || !cmd || !*cmd)
 		return (NULL);
-	if (access(cmd, X_OK) == 0)
+	if (ft_strchr(cmd, '/') || !ft_strncmp(cmd, "./", 2))
 		return (ft_strdup(cmd));
 	while (paths[i])
 	{
