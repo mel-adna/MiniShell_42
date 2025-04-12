@@ -1,6 +1,0 @@
-.DS_Store
-*.o
-libft/libft.a
-minishell
-.vscode
-.gitignore
