@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 16:36:26 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/10 18:33:15 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/12 13:12:39 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,8 @@ t_command				*tokenize_line(char *line, t_env **env);
 int						is_special_char(char *line, int i);
 t_token_type			get_token_type(char *line, int *i);
 void					handle_signals(int sig);
-int						check_redirect_errors(char *input, int i, char *filename);
+int						check_redirect_errors(char *input, int i,
+							char *filename);
 char					**ft_addstr(char **arr, char *new_str);
 void					process_and_add_token(t_token **token_list, char *line,
 							int *i, t_env **env);
@@ -95,7 +96,7 @@ void					process_env_var(char *l, int *i, t_env **e, char **r);
 
 // ====================== env ======================
 int						env_init(t_env **env, char **envp);
-void					increment_shell_lvl(t_env *env);
+void					increment_shell_lvl(t_env **env);
 
 // ====================== utils ======================
 void					push_back(t_token **head, char *value,
@@ -108,7 +109,8 @@ void					free_env(t_env **env);
 void					free_array(char **arr);
 
 // ====================== Excution ======================
-void					exec(t_command **cmds, t_env **env, char **envp, t_fd *fd);
+void					exec(t_command **cmds, t_env **env, char **envp,
+							t_fd *fd);
 int						resolve_cmd_paths(char **envp, t_command *cmds);
 void					push_env_back(t_env **head, char *value);
 void					init_fds(t_fd *fd);
@@ -124,8 +126,8 @@ int						dup_stdin(t_fd *fd, int newfd);
 // ====================== Error Handler ======================
 void					exit_func(t_fd *fd, int status);
 int						check_is_dir(char *cmd);
-int						builtin_files_handler(t_command *current, t_fd *fd, int *stdin_copy,
-						int *stdout_copy);
+int						builtin_files_handler(t_command *current, t_fd *fd,
+							int *stdin_copy, int *stdout_copy);
 void					cmd_files_handler(t_command *cmd, t_fd *fd);
 
 // ====================== Builtins ======================
@@ -148,6 +150,7 @@ char					**env_to_str(t_env *env);
 int						is_valid_env_var_name(char *var);
 // ====================== here doc ======================
 int						ft_heredoc(char *limiter, t_env *env);
+void					signal_herdoc(int sig);
 
 // ====================== Signals Handling ======================
 void					handle_signals(int sig);

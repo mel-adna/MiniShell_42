@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 15:25:58 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/10 19:04:42 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/12 13:08:18 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ int	cd_oldpwd(t_env *env)
 
 int	ft_cd(char **args, t_env **env)
 {
-	if(args[1] && !args[1][0])
+	if (args[1] && !args[1][0])
 		return (SUCCESS);
 	if (!args[1] || ft_strcmp(args[1], "~") == 0)
 		return (cd_home(*env));

@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 17:59:36 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/10 18:57:56 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/12 13:07:35 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,34 +37,27 @@ void	process_input(t_command **cmds, char *input, t_env **env)
 	free_array(envp);
 }
 
-void	ll(void)
-{
-	system("leaks -q minishell");
-}
-
 int	main(int argc, char **argv, char **envp)
 {
 	t_command	*cmds;
 	char		*input;
 	t_env		*env;
 
-	// atexit(ll);
 	cmds = NULL;
 	(void)argc;
 	(void)argv;
 	setup_signals();
 	env_init(&env, envp);
-	increment_shell_lvl(env);
+	increment_shell_lvl(&env);
 	while (1)
 	{
 		input = readline("minishell> ");
 		if (!input)
 		{
-			// printf("Exiting...\n");
+			printf("Exiting...\n");
 			break ;
 		}
 		process_input(&cmds, input, &env);
-		// system("leaks -q minishell");
 	}
 	free_env(&env);
 	reset_terminal();

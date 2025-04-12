@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 16:38:13 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/10 17:54:38 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/12 13:08:04 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	var_in_line(char *limiter, char *line)
 	while (line[i])
 	{
 		if (line[i] == '$' && line[i + 1] && line[i + 1] != ' ' && line[i
-			+ 1] != '\n')
+				+ 1] != '\n')
 			return (1);
 		i++;
 	}
@@ -89,15 +89,6 @@ static char	*unquoted_limiter(char *limiter)
 		return (unqouted_lm);
 	}
 	return (ft_strjoin(limiter, "\n"));
-}
-
-void	signal_herdoc(int sig)
-{
-	if (sig == SIGINT)
-	{
-		ft_putendl_fd("", STDOUT_FILENO);
-		exit(1);
-	}
 }
 
 void	heredoc_handeler(char *limiter, t_env *env, int fd)

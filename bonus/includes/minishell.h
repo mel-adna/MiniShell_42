@@ -3,13 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 09:23:54 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/09 11:49:25 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/12 13:10:12 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -18,8 +17,8 @@
 # include <dirent.h>
 # include <limits.h>
 # include <stdio.h>
-#include <dirent.h>
-#include <fnmatch.h>
+# include <dirent.h>
+# include <fnmatch.h>
 # include <termios.h>
 # include "./libft/libft.h"
 # include "./gnl/get_next_line.h"
@@ -86,7 +85,8 @@ t_command				*tokenize_line(char *line, t_env **env);
 int						is_special_char(char *line, int i);
 t_token_type			get_token_type(char *line, int *i);
 void					handle_signals(int sig);
-int						check_redirect_errors(char *input, int i, char *filename);
+int						check_redirect_errors(char *input, int i,
+							char *filename);
 char					**ft_addstr(char **arr, char *new_str);
 void					process_and_add_token(t_token **token_list, char *line,
 							int *i, t_env **env);

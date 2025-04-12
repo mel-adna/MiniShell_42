@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 14:03:17 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/10 18:19:24 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/12 12:22:27 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ void	ft_exit(char **args, t_command **cmds, t_env **env, t_fd *fd)
 	long long	exit_code;
 
 	exit_code = 0;
-	// ft_putendl_fd("exit", 2);
+	ft_putendl_fd("exit", 2);
 	if (args_count(args) > 1)
 	{
 		if (!is_number(args[1]))
