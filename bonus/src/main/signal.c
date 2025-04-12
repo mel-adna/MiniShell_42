@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 19:08:26 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/10 10:55:15 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/12 18:43:08 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	handle_signals(int sig)
 		rl_redisplay();
 	}
 	else if (sig == SIGQUIT)
-		rl_redisplay();
+		return ;
 }
 
 void	setup_signals(void)

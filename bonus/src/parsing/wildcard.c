@@ -6,7 +6,7 @@
 /*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 11:04:36 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/12 15:32:54 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/12 18:42:18 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,17 +39,18 @@ int	ft_fnmatch(const char *pattern, const char *string)
 	return (1);
 }
 
-static void	process_matches(DIR *dir, char *pattern_only, char *dir_path,
-		t_token **t)
+static int	process_matches(DIR *dir, char *pattern_only, char *dir_path, t_token **t)
 {
-	struct dirent	*entry;
+	struct dirent	*entry = readdir(dir);
 	char			*tmp;
+	int				matched = 0;
 
-	entry = readdir(dir);
-	while (entry != NULL)
+	while (entry)
 	{
-		if (ft_fnmatch(pattern_only, entry->d_name) == 0)
+		if (ft_fnmatch(pattern_only, entry->d_name) == 0
+			&& !(entry->d_name[0] == '.' && pattern_only[0] != '.'))
 		{
+			matched = 1;
 			if (ft_strcmp(dir_path, ".") == 0)
 				push_back(t, ft_strdup(entry->d_name), TOKEN_WORD);
 			else
@@ -61,9 +62,10 @@ static void	process_matches(DIR *dir, char *pattern_only, char *dir_path,
 		}
 		entry = readdir(dir);
 	}
-	closedir(dir);
 	free(dir_path);
 	free(pattern_only);
+	closedir(dir);
+	return (matched);
 }
 
 void	expand_wildcard(const char *pattern, t_token **t)
@@ -72,6 +74,7 @@ void	expand_wildcard(const char *pattern, t_token **t)
 	char	*dir_path;
 	char	*pattern_only;
 	char	*slash;
+	int		matched;
 
 	dir_path = ft_strdup(".");
 	pattern_only = ft_strdup(pattern);
@@ -85,10 +88,9 @@ void	expand_wildcard(const char *pattern, t_token **t)
 	}
 	dir = opendir(dir_path);
 	if (!dir)
-	{
-		free(dir_path);
-		free(pattern_only);
-		return ;
-	}
-	process_matches(dir, pattern_only, dir_path, t);
+		return (free(dir_path), free(pattern_only), push_back(t,
+				ft_strdup(pattern), TOKEN_WORD));
+	matched = process_matches(dir, pattern_only, dir_path, t);
+	if (!matched)
+		push_back(t, ft_strdup(pattern), TOKEN_WORD);
 }

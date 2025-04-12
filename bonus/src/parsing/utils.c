@@ -6,7 +6,7 @@
 /*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:49:30 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/12 15:29:03 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/12 17:46:52 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void	helper_func(t_token **type, char *line, int *i, t_env **env)
 			has_quotes = 1;
 		process_word(line, i, env, &value);
 	}
-	if (strchr(value, '*') && !has_quotes)
+	if (ft_strchr(value, '*') && !has_quotes)
 	{
 		expand_wildcard(value, type);
 		free(value);

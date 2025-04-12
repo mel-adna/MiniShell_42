@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 13:02:32 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/10 18:32:35 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/12 17:42:32 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static void	child_process(t_command *cmd, t_fd *fd, t_env **env, char **envp)
 		ft_putendl_fd(": command not found", 2);
 		exit_func(fd, NOTFOUND);
 	}
-	close(fd->pipefd[1]);
+	close(fd->pipefd[0]);
 	execve(cmd->cmd_path, cmd->args, envp);
 	perror("minishell: execve");
 	exit_func(fd, FAILURE);
@@ -111,7 +111,7 @@ void	exec(t_command **cmds, t_env **env, char **envp, t_fd *fd)
 			&& !current->pipe && !prv_pipe)
 			ft_exit(current->args, cmds, env, fd);
 		else if (current->args && current->args[0]
-			&& ft_strcmp(current->args[0], "exit"))
+			&& ft_strcmp(current->args[0], "exit") != 0)
 			ft_exec_cmd(fd, current, env, envp);
 		current = current->next;
 	}
