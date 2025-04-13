@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 16:23:52 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/10 15:12:20 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/13 11:55:48 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,22 +66,22 @@ int	open_redir(t_command *current, t_fd *fd)
 
 void	close_fds(t_fd *fd)
 {
-	if (fd->fdin > 0)
+	if (fd->fdin >= 0)
 	{
 		close(fd->fdin);
 		fd->fdin = -1;
 	}
-	if (fd->fdout > 0)
+	if (fd->fdout >= 0)
 	{
 		close(fd->fdout);
 		fd->fdout = -1;
 	}
-	if (fd->pipefd[0] > 0)
+	if (fd->pipefd[0] >= 0)
 	{
 		close(fd->pipefd[0]);
 		fd->pipefd[0] = -1;
 	}
-	if (fd->pipefd[1] > 0)
+	if (fd->pipefd[1] >= 0)
 	{
 		close(fd->pipefd[1]);
 		fd->pipefd[1] = -1;

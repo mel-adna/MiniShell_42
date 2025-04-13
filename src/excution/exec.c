@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 13:02:32 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/12 17:42:32 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/13 13:32:49 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,18 +29,19 @@ static void	child_process(t_command *cmd, t_fd *fd, t_env **env, char **envp)
 		exit_func(fd, NOTFOUND);
 	}
 	close(fd->pipefd[0]);
+	reset_terminal();
 	execve(cmd->cmd_path, cmd->args, envp);
 	perror("minishell: execve");
 	exit_func(fd, FAILURE);
 }
 
-static void	ft_exec_cmd(t_fd *fd, t_command *cmds, t_env **env, char **envp)
+static int	ft_exec_cmd(t_fd *fd, t_command *cmds, t_env **env, char **envp)
 {
 	cmds->pid = fork();
 	if (cmds->pid < 0)
 	{
 		perror("minishell: fork");
-		return ;
+		return (close_fds(fd), FAILURE);
 	}
 	if (cmds->pid == 0)
 		child_process(cmds, fd, env, envp);
@@ -53,6 +54,7 @@ static void	ft_exec_cmd(t_fd *fd, t_command *cmds, t_env **env, char **envp)
 			close(fd->pipefd[0]);
 		fd->fdin = fd->pipefd[0];
 	}
+	return (SUCCESS);
 }
 
 static int	exec_bltin(t_command *current, t_env **env, t_fd *fd)
@@ -82,11 +84,18 @@ static int	exec_bltin(t_command *current, t_env **env, t_fd *fd)
 	return (SUCCESS);
 }
 
-t_command	*init_vars(t_command *cmds, char **envp, int *prv_pipe)
+int	cmd_handler(t_command *current, t_env **env, int *prv_pipe, t_fd *fd)
 {
-	*prv_pipe = 0;
-	resolve_cmd_paths(envp, cmds);
-	return (cmds);
+	if (current->pipe)
+		*prv_pipe = 1;
+	if (current->heredoc)
+		if (ft_heredoc(current->heredoc, *env) == FAILURE)
+			return (FAILURE);
+	if (open_redir(current, fd) == FAILURE)
+		return (close_fds(fd), FAILURE);
+	if (!current->args)
+		close_fds(fd);
+	return (SUCCESS);
 }
 
 void	exec(t_command **cmds, t_env **env, char **envp, t_fd *fd)
@@ -94,25 +103,22 @@ void	exec(t_command **cmds, t_env **env, char **envp, t_fd *fd)
 	t_command	*current;
 	int			prv_pipe;
 
-	current = init_vars(*cmds, envp, &prv_pipe);
+	current = *cmds;
+	prv_pipe = 0;
 	while (current)
 	{
-		if (current->pipe)
-			prv_pipe = 1;
-		if (current->heredoc)
-			if (ft_heredoc(current->heredoc, *env) == FAILURE)
-				return ;
-		if (open_redir(current, fd) == FAILURE)
-			return ;
+		cmd_handler(current, env, &prv_pipe, fd);
 		if (current->args && is_builtin(current->args[0]) && !current->pipe
 			&& !prv_pipe)
 			exec_bltin(current, env, fd);
-		else if (current->args && !ft_strcmp(current->args[0], "exit")
-			&& !current->pipe && !prv_pipe)
-			ft_exit(current->args, cmds, env, fd);
-		else if (current->args && current->args[0]
-			&& ft_strcmp(current->args[0], "exit") != 0)
-			ft_exec_cmd(fd, current, env, envp);
+		else if (current->args && !ft_strcmp(current->args[0], "exit"))
+		{
+			if (!current->pipe && !prv_pipe)
+				ft_exit(current->args, cmds, env, fd);
+		}
+		else if (current->args && current->args[0])
+			if (ft_exec_cmd(fd, current, env, envp) == FAILURE)
+				break ;
 		current = current->next;
 	}
 	wait_children(*cmds);

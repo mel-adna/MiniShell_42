@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 16:38:13 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/12 13:08:04 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/13 13:36:21 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,8 @@ void	heredoc_handeler(char *limiter, t_env *env, int fd)
 		free(line);
 	get_next_line(-1);
 	free(unqouted_lm);
+	close(fd);
+	exit(0);
 }
 
 int	ft_heredoc(char *limiter, t_env *env)

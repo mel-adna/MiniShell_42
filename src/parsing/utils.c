@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:49:30 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/10 09:49:31 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/13 12:18:15 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ t_command	*tokenize_line(char *line, t_env **env)
 	i = 0;
 	while (line[i])
 	{
-		if (line[i] == ' ')
+		if (line[i] == ' ' || line[i] == '\t' || line[i] == '\r')
 			i++;
 		else
 			process_and_add_token(&token_list, line, &i, env);
