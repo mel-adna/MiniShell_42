@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 13:02:32 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/13 13:32:49 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/13 13:49:52 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ void	exec(t_command **cmds, t_env **env, char **envp, t_fd *fd)
 
 	current = *cmds;
 	prv_pipe = 0;
+	resolve_cmd_paths(envp, *cmds);
 	while (current)
 	{
 		cmd_handler(current, env, &prv_pipe, fd);
