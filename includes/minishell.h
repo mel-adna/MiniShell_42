@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 16:36:26 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/12 13:12:39 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/13 15:40:22 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,12 @@ void					push_cmd_back(t_command **head, t_command *node);
 char					*get_value(char *name, t_env **env);
 char					*add_result(char *result, char *tmp);
 void					process_env_var(char *l, int *i, t_env **e, char **r);
+void					handle_special_cases(char *line, int *i, 
+							t_env **env, char **value);
+char					*handle_quotes(char *line, int *i, 
+							t_env **env, char quote);
+void					expand_env(char *line, int *i, t_env **env, 
+							char **result);
 
 // ====================== env ======================
 int						env_init(t_env **env, char **envp);

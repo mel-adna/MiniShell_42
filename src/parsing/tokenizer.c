@@ -6,13 +6,13 @@
 /*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:49:24 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/13 15:32:52 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/13 15:39:56 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static void	expand_env(char *line, int *i, t_env **env, char **result)
+void	expand_env(char *line, int *i, t_env **env, char **result)
 {
 	(*i)++;
 	if (line[*i] == '?')
@@ -29,7 +29,7 @@ static void	expand_env(char *line, int *i, t_env **env, char **result)
 	process_env_var(line, i, env, result);
 }
 
-static char	*handle_quotes(char *line, int *i, t_env **env, char quote)
+char	*handle_quotes(char *line, int *i, t_env **env, char quote)
 {
 	char	*result;
 	int		start;
