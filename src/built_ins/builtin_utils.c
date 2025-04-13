@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 14:50:54 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/10 10:30:18 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/13 18:21:57 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,9 @@ char	*get_var_name(char *var)
 
 char	*get_var_value(char *var)
 {
-	char (quote);
-	int start, (i);
+	int	start;
+	int	i;
+
 	if (!var)
 		return (NULL);
 	i = 0;
@@ -71,21 +72,9 @@ char	*get_var_value(char *var)
 		i++;
 	if (!var[i] || !var[++i])
 		return (NULL);
-	if (var[i] == '\'' || var[i] == '\"')
-	{
-		quote = var[i++];
-		start = i;
-		while (var[i] && var[i] != quote)
-			i++;
-		if (!var[i])
-			return (NULL);
-	}
-	else
-	{
-		start = i;
-		while (var[i] && var[i] != ' ')
-			i++;
-	}
+	start = i;
+	while (var[i])
+		i++;
 	return (ft_substr(var, start, i - start));
 }
 

@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 11:42:43 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/10 10:30:38 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/13 18:54:46 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ int	ft_env(t_env *env)
 		return (FAILURE);
 	while (env)
 	{
-		ft_putendl_fd(env->value, 1);
+		if (ft_strchr(env->value, '='))
+			ft_putendl_fd(env->value, 1);
 		env = env->next;
 	}
 	return (SUCCESS);

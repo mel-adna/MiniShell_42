@@ -6,11 +6,25 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:48:48 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/13 17:33:03 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/13 18:48:01 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+char	*trim_env(char *s1)
+{
+	int	i;
+	int	start;
+
+	i = 0;
+	while (s1[i] && (s1[i] == ' ' || s1[i] == '\t' || s1[i] == '\r'))
+		i++;
+	start = i;
+	while (s1[i] && !(s1[i] == ' ' || s1[i] == '\t' || s1[i] == '\r'))
+		i++;
+	return (ft_substr(s1, start, i - start));
+}
 
 void	process_env_var(char *line, int *i, t_env **env, char **result)
 {
@@ -28,7 +42,7 @@ void	process_env_var(char *line, int *i, t_env **env, char **result)
 		{
 			v = get_env_value(*env, t);
 			if (v)
-				*result = add_result(*result, ft_strdup(v));
+				*result = add_result(*result, trim_env(v));
 			else
 				*result = add_result(*result, ft_strdup(""));
 			free(t);
@@ -53,7 +67,7 @@ void	handle_special_cases(char *line, int *i, t_env **env, char **value)
 			|| line[*i + 1] == '?'))
 		expand_env(line, i, env, value);
 	else if (line[*i] == '~' && (line[*i + 1] == '/' || !line[*i + 1] || line[*i
-				+ 1] == ' ') && (*i == 0 || line[*i - 1] == ' '))
+			+ 1] == ' ') && (*i == 0 || line[*i - 1] == ' '))
 	{
 		(*i)++;
 		home = get_env_value(*env, "HOME");
