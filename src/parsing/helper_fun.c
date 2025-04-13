@@ -6,7 +6,7 @@
 /*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:48:48 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/10 09:50:38 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/13 15:33:30 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,31 @@ void	process_env_var(char *line, int *i, t_env **env, char **result)
 				*result = add_result(*result, ft_strdup(""));
 			free(t);
 		}
+	}
+}
+
+void	handle_special_cases(char *line, int *i, t_env **env, char **value)
+{
+	char	*tmp;
+	char	*home;
+
+	if ((line[*i] == '$' && (line[*i + 1] == '"' || line[*i + 1] == '\'')))
+		(*i)++;
+	if (line[*i] == '"' || line[*i] == '\'')
+	{
+		tmp = handle_quotes(line, i, env, line[*i]);
+		if (tmp)
+			*value = add_result(*value, tmp);
+	}
+	else if (line[*i] == '$' && (ft_isalnum(line[*i + 1]) || line[*i + 1] == '_'
+			|| line[*i + 1] == '?'))
+		expand_env(line, i, env, value);
+	else if (line[*i] == '~' && (line[*i + 1] == '/' || !line[*i + 1] || line[*i
+				+ 1] == ' ') && (*i == 0 || line[*i - 1] == ' '))
+	{
+		(*i)++;
+		home = get_env_value(*env, "HOME");
+		if (home)
+			*value = add_result(*value, ft_strdup(home));
 	}
 }

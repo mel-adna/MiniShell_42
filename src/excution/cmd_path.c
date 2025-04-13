@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 15:09:32 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/13 13:22:44 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/13 15:06:06 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int	resolve_cmd_paths(char **envp, t_command *cmds)
 			if (ft_strchr(cmds->args[0], '/') || !ft_strncmp(cmds->args[0],
 					"./", 2))
 				cmds->cmd_path = ft_strdup(cmds->args[0]);
-			if (paths && cmds->args[0])
+			else if (paths && cmds->args[0])
 				cmds->cmd_path = get_cmd_path(paths, cmds->args[0]);
 		}
 		cmds = cmds->next;
