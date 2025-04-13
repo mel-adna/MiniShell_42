@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 15:47:22 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/09 13:17:03 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/13 16:02:17 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ int	env_init(t_env **env, char **envp)
 	int	i;
 
 	i = 0;
-	if (!env || !envp)
+	if (!env || !*env || !envp)
 		return (0);
 	*env = NULL;
 	while (envp[i])

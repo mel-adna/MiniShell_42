@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 17:58:09 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/12 13:04:31 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/13 16:08:16 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,25 @@ char	**env_to_str(t_env *env)
 	return (str_env);
 }
 
+void	handle_empty_env(t_env **env)
+{
+	char	*pwd;
+	char	cwd[PATH_MAX];
+
+	if (!env)
+		return ;
+	if (getcwd(cwd, sizeof(cwd)))
+	{
+		pwd = ft_strjoin("PWD=", cwd);
+		if (pwd)
+		{
+			push_env_back(env, pwd);
+			free(pwd);
+		}
+	}
+	push_env_back(env, "SHLVL=1");
+}
+
 void	increment_shell_lvl(t_env **env)
 {
 	int		shlvl;
@@ -59,11 +78,11 @@ void	increment_shell_lvl(t_env **env)
 	t_env	*current;
 
 	shlvl = 0;
+	if (!env || !*env)
+		return (handle_empty_env(env));
 	current = *env;
 	while (current && ft_strncmp(current->value, "SHLVL=", 6) != 0)
 		current = current->next;
-	if (!current)
-		return (push_env_back(env, "SHLVL=1"));
 	shlvl = ft_atoi(current->value + 6) + 1;
 	if (shlvl > 1000)
 		shlvl = 1;
