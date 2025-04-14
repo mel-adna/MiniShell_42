@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:49:24 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/13 18:35:42 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/14 11:14:39 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	expand_env(char *line, int *i, t_env **env, char **result)
 	{
 		(*i)++;
 		*result = add_result(*result, ft_itoa(g_exit_code));
+		g_exit_code = 0;
 		return ;
 	}
 	if (ft_isdigit(line[*i]))

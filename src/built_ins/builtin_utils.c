@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 14:50:54 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/13 18:21:57 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/14 11:51:48 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,13 @@ char	*get_var_name(char *var)
 	if (!var)
 		return (NULL);
 	i = 0;
-	while (var[i] && var[i] != '=')
+	while (var[i] && !(var[i] == '+' && var[i + 1] == '=') && var[i] != '=')
 		i++;
 	var_name = (char *)malloc(sizeof(char) * (i + 1));
 	if (!var_name)
 		return (NULL);
 	i = 0;
-	while (var[i] && var[i] != '=')
+	while (var[i] && !(var[i] == '+' && var[i + 1] == '=') && var[i] != '=')
 	{
 		var_name[i] = var[i];
 		i++;

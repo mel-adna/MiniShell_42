@@ -6,11 +6,26 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 11:42:43 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/13 18:54:46 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/14 11:03:25 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+void	append_env_value(t_env *env, char *var)
+{
+	char	*new_var;
+	char	*var_value;
+
+	var_value = get_var_value(var);
+	if (!var_value)
+		return ;
+	new_var = ft_strjoin(env->value, var_value);
+	if (!new_var)
+		return ;
+	free(env->value);
+	env->value = new_var;
+}
 
 char	*get_env_value(t_env *env, const char *key)
 {

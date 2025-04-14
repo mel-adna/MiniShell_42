@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 16:36:26 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/13 15:40:22 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/14 11:04:08 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,6 +154,7 @@ char					*get_env_value(t_env *env, const char *key);
 char					*get_var_value(char *var);
 char					**env_to_str(t_env *env);
 int						is_valid_env_var_name(char *var);
+void					append_env_value(t_env *env, char *var);
 // ====================== here doc ======================
 int						ft_heredoc(char *limiter, t_env *env);
 void					signal_herdoc(int sig);
