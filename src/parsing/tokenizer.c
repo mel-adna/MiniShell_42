@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:49:24 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/14 11:14:39 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/14 12:13:54 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,29 @@ static void	handle_char(char c, char **value)
 
 static void	process_word(char *line, int *i, t_env **env, char **value)
 {
-	if (line[*i] == '$' || line[*i] == '~' || line[*i] == '"'
-		|| line[*i] == '\'')
-		handle_special_cases(line, i, env, value);
+	char	*quoit;
+	char	*tmp;
+	char	*home;
+
+	skip_dollar(line, i);	
+	if (line[*i] == '"' || line[*i] == '\'')
+	{
+		quoit = &line[*i];
+		tmp = handle_quotes(line, i, env, *quoit);
+		if (tmp)
+			*value = add_result(*value, tmp);
+	}
+	else if (line[*i] == '$' && (ft_isalnum(line[*i + 1]) || line[*i + 1] == '_'
+			|| line[*i + 1] == '?'))
+		expand_env(line, i, env, value);
+	else if (line[*i] == '~' && (line[*i + 1] == '/' || !line[*i + 1] 
+			|| line[*i + 1] == ' ') && (*i == 0 || line[*i - 1] == ' '))
+	{
+		(*i)++;
+		home = get_env_value(*env, "HOME");
+		if (home)
+			*value = add_result(*value, ft_strdup(home));
+	}
 	else
 		handle_char(line[(*i)++], value);
 }
