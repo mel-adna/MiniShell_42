@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   helper_fun.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:48:48 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/13 19:57:22 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/14 13:27:14 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ char	*trim_env(char *s1)
 {
 	int	i;
 	int	start;
+	char *value;
 
 	i = 0;
 	while (s1[i] && (s1[i] == ' ' || s1[i] == '\t' || s1[i] == '\r'))
@@ -23,7 +24,10 @@ char	*trim_env(char *s1)
 	start = i;
 	while (s1[i] && !(s1[i] == ' ' || s1[i] == '\t' || s1[i] == '\r'))
 		i++;
-	return (ft_substr(s1, start, i - start));
+	value = ft_substr(s1, start, i - start);
+	if(!value)
+		return ft_strdup("");
+	return (value);
 }
 
 void	process_env_var(char *line, int *i, t_env **env, char **result)

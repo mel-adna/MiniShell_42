@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 17:58:09 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/13 16:08:16 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/14 13:08:06 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ void	handle_empty_env(t_env **env)
 		}
 	}
 	push_env_back(env, "SHLVL=1");
+	push_env_back(env, "_=/usr/bin/env");
 }
 
 void	increment_shell_lvl(t_env **env)
@@ -83,14 +84,14 @@ void	increment_shell_lvl(t_env **env)
 	current = *env;
 	while (current && ft_strncmp(current->value, "SHLVL=", 6) != 0)
 		current = current->next;
+	if(!current)
+		return (handle_empty_env(env));
 	shlvl = ft_atoi(current->value + 6) + 1;
 	if (shlvl > 1000)
 		shlvl = 1;
 	if (shlvl < 0)
 		shlvl = 0;
 	shlvl_str = ft_itoa(shlvl);
-	if (!shlvl_str)
-		return ;
 	new_value = ft_strjoin("SHLVL=", shlvl_str);
 	free(shlvl_str);
 	if (!new_value)
