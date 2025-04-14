@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:48:48 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/14 13:27:14 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/14 14:03:51 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ char	*trim_env(char *s1)
 	int	start;
 	char *value;
 
+	if (ft_strlen(s1) == 0)
+		return (ft_strdup(""));
 	i = 0;
 	while (s1[i] && (s1[i] == ' ' || s1[i] == '\t' || s1[i] == '\r'))
 		i++;
@@ -26,7 +28,7 @@ char	*trim_env(char *s1)
 		i++;
 	value = ft_substr(s1, start, i - start);
 	if(!value)
-		return ft_strdup("");
+		return (ft_strdup(""));
 	return (value);
 }
 
@@ -35,6 +37,7 @@ void	process_env_var(char *line, int *i, t_env **env, char **result)
 	char	*t;
 	char	*v;
 	int		j;
+	char 	*res;
 
 	j = *i;
 	while (line[*i] && (ft_isalnum(line[*i]) || line[*i] == '_'))
@@ -46,7 +49,11 @@ void	process_env_var(char *line, int *i, t_env **env, char **result)
 		{
 			v = get_env_value(*env, t);
 			if (v)
-				*result = add_result(*result, trim_env(v));
+			{
+				res = trim_env(v);
+				if(res)
+					*result = add_result(*result, res);
+			}
 			else
 				*result = add_result(*result, ft_strdup(""));
 			free(t);
