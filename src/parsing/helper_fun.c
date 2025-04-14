@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   helper_fun.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:48:48 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/14 13:27:14 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/14 15:52:46 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 char	*trim_env(char *s1)
 {
-	int	i;
-	int	start;
-	char *value;
+	int		i;
+	int		start;
+	char	*value;
 
 	i = 0;
 	while (s1[i] && (s1[i] == ' ' || s1[i] == '\t' || s1[i] == '\r'))
@@ -25,8 +25,8 @@ char	*trim_env(char *s1)
 	while (s1[i] && !(s1[i] == ' ' || s1[i] == '\t' || s1[i] == '\r'))
 		i++;
 	value = ft_substr(s1, start, i - start);
-	if(!value)
-		return ft_strdup("");
+	if (!value)
+		return (ft_strdup(""));
 	return (value);
 }
 
