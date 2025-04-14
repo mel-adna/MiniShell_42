@@ -6,7 +6,7 @@
 /*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:49:24 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/14 12:13:54 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/14 15:53:25 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ static void	process_word(char *line, int *i, t_env **env, char **value)
 	char	*tmp;
 	char	*home;
 
-	skip_dollar(line, i);	
+	skip_dollar(line, i);
 	if (line[*i] == '"' || line[*i] == '\'')
 	{
 		quoit = &line[*i];
@@ -86,8 +86,8 @@ static void	process_word(char *line, int *i, t_env **env, char **value)
 	else if (line[*i] == '$' && (ft_isalnum(line[*i + 1]) || line[*i + 1] == '_'
 			|| line[*i + 1] == '?'))
 		expand_env(line, i, env, value);
-	else if (line[*i] == '~' && (line[*i + 1] == '/' || !line[*i + 1] 
-			|| line[*i + 1] == ' ') && (*i == 0 || line[*i - 1] == ' '))
+	else if (line[*i] == '~' && (line[*i + 1] == '/' || !line[*i + 1] || line[*i
+				+ 1] == ' ') && (*i == 0 || line[*i - 1] == ' '))
 	{
 		(*i)++;
 		home = get_env_value(*env, "HOME");

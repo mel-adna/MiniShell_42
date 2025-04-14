@@ -6,7 +6,7 @@
 /*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:13:21 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/14 12:17:03 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/14 15:38:55 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ char					*handle_quotes(char *line, int *i,
 void					expand_env(char *line, int *i, t_env **env, 
 							char **result);
 void					skip_dollar(char *line, int *i);
+int						embiguous_redirect(char *input, t_env *env);
 
 // ====================== env ======================
 int						env_init(t_env **env, char **envp);

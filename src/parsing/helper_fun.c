@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:48:48 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/14 14:03:51 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/14 16:03:45 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 char	*trim_env(char *s1)
 {
-	int	i;
-	int	start;
-	char *value;
+	int		i;
+	int		start;
+	char	*value;
 
 	if (ft_strlen(s1) == 0)
 		return (ft_strdup(""));
@@ -28,7 +28,7 @@ char	*trim_env(char *s1)
 		i++;
 	value = ft_substr(s1, start, i - start);
 	if(!value)
-		return (ft_strdup(""));
+		return ft_strdup("");
 	return (value);
 }
 

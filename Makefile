@@ -15,7 +15,7 @@ SRC = src/main/minishell.c src/env/env.c src/env/shell_lvl.c src/parsing/parse.c
 	  src/built_ins/builtin_utils.c src/built_ins/cd.c src/built_ins/echo.c \
 	  src/built_ins/env.c src/built_ins/export.c src/built_ins/pwd.c src/built_ins/unset.c \
 	  src/built_ins/exit.c src/excution/heredoc.c src/excution/utils.c src/excution/error_handler.c \
-	  includes/gnl/get_next_line.c includes/gnl/get_next_line_utils.c 
+	  includes/gnl/get_next_line.c includes/gnl/get_next_line_utils.c src/parsing/embiguous.c  
 
 OBJ = $(SRC:.c=.o)
 
