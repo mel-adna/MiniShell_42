@@ -6,7 +6,7 @@
 /*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:13:21 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/14 12:13:24 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/14 12:17:03 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,8 @@ char					*get_env_value(t_env *env, const char *key);
 char					*get_var_value(char *var);
 char					**env_to_str(t_env *env);
 int						is_valid_env_var_name(char *var);
+void					append_env_value(t_env *env, char *var);
+
 // ====================== here doc ======================
 int						ft_heredoc(char *limiter, t_env *env);
 void					signal_herdoc(int sig);
