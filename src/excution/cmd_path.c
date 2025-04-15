@@ -3,22 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 15:09:32 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/13 15:06:06 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/15 11:51:17 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-void	init_fds(t_fd *fd)
-{
-	fd->fdin = -1;
-	fd->fdout = -1;
-	fd->pipefd[0] = -1;
-	fd->pipefd[1] = -1;
-}
 
 static char	**get_paths(char **envp)
 {

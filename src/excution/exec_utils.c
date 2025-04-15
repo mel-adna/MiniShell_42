@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 16:23:52 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/13 11:55:48 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/15 13:13:14 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	open_file(t_fd *fd, t_command *cmd, int n)
 		{
 			ft_putstr_fd("minishell: open: ", 2);
 			perror(cmd->infile);
-			return (g_exit_code = FAILURE, FAILURE);
+			return (FAILURE);
 		}
 	}
 	else if (!n && cmd->outfile)
@@ -35,10 +35,10 @@ int	open_file(t_fd *fd, t_command *cmd, int n)
 			ft_putstr_fd("minishell: open: ", 2);
 			perror(cmd->outfile);
 			close(fd->fdin);
-			return (g_exit_code = FAILURE, FAILURE);
+			return (FAILURE);
 		}
 	}
-	return (g_exit_code = SUCCESS, SUCCESS);
+	return (SUCCESS);
 }
 
 int	open_redir(t_command *current, t_fd *fd)
@@ -50,10 +50,10 @@ int	open_redir(t_command *current, t_fd *fd)
 			return (FAILURE);
 	if (current->pipe)
 		if (pipe(fd->pipefd) == -1)
-			return (perror("minishell: pipe"), g_exit_code = FAILURE, FAILURE);
+			return (perror("minishell: pipe"), FAILURE);
 	if (current->heredoc)
 	{
-		fd->fdin = open("/tmp/here_doc", O_RDONLY | O_CREAT | O_APPEND, 0644);
+		fd->fdin = open("/tmp/here_doc", O_RDONLY);
 		if (fd->fdin < 0)
 		{
 			ft_putstr_fd("minishell: open: ", 2);

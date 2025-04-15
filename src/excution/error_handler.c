@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 13:20:26 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/10 17:07:18 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/15 11:51:22 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,20 +53,12 @@ void	exit_func(t_fd *fd, int status)
 	exit(g_exit_code);
 }
 
-int	builtin_files_handler(t_command *current, t_fd *fd, int *stdin_copy,
-		int *stdout_copy)
+void	init_fds(t_fd *fd)
 {
-	if (current->infile && fd->fdin == -1)
-		return (g_exit_code = FAILURE, FAILURE);
-	*stdin_copy = dup(STDIN_FILENO);
-	*stdout_copy = dup(STDOUT_FILENO);
-	if (current->pipe)
-		if (dup_stdout(fd, fd->pipefd[1]) == FAILURE)
-			return (FAILURE);
-	if (current->outfile)
-		if (dup_stdout(fd, fd->fdout) == FAILURE)
-			return (FAILURE);
-	return (SUCCESS);
+	fd->fdin = -1;
+	fd->fdout = -1;
+	fd->pipefd[0] = -1;
+	fd->pipefd[1] = -1;
 }
 
 void	cmd_files_handler(t_command *cmd, t_fd *fd)

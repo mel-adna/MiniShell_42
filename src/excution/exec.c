@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 13:02:32 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/13 18:50:31 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/15 13:19:54 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,10 @@ static int	ft_exec_cmd(t_fd *fd, t_command *cmds, t_env **env, char **envp)
 		close(fd->pipefd[1]);
 		if (fd->fdin != STDIN_FILENO)
 			close(fd->fdin);
-		if (!cmds->next)
+		if (!cmds->next || cmds->next->infile || cmds->next->heredoc)
 			close(fd->pipefd[0]);
-		fd->fdin = fd->pipefd[0];
+		else
+			fd->fdin = fd->pipefd[0];
 	}
 	return (SUCCESS);
 }
@@ -62,26 +63,25 @@ static int	exec_bltin(t_command *current, t_env **env, t_fd *fd)
 	int	stdin_copy;
 	int	stdout_copy;
 
-	if (builtin_files_handler(current, fd, &stdin_copy,
-			&stdout_copy) == FAILURE)
-		return (FAILURE);
+	if (current->infile && fd->fdin == -1)
+		return (g_exit_code = FAILURE, FAILURE);
+	stdin_copy = dup(STDIN_FILENO);
+	stdout_copy = dup(STDOUT_FILENO);
+	if (current->outfile)
+		if (dup_stdout(fd, fd->fdout) == FAILURE)
+			return (g_exit_code = FAILURE, FAILURE);
 	exec_builtin(current->args, env);
 	if (dup_stdin(fd, stdin_copy) == FAILURE)
-		return (FAILURE);
+		return (g_exit_code = FAILURE, FAILURE);
 	if (dup_stdout(fd, stdout_copy) == FAILURE)
-		return (FAILURE);
+		return (g_exit_code = FAILURE, FAILURE);
 	close(stdin_copy);
 	close(stdout_copy);
 	if (fd->fdin != STDIN_FILENO)
 		close(fd->fdin);
 	if (fd->fdout != STDOUT_FILENO)
 		close(fd->fdout);
-	if (current->pipe)
-	{
-		close(fd->pipefd[1]);
-		fd->fdin = fd->pipefd[0];
-	}
-	return (SUCCESS);
+	return (g_exit_code = SUCCESS, SUCCESS);
 }
 
 int	cmd_handler(t_command *current, t_env **env, int *prv_pipe, t_fd *fd)
@@ -89,10 +89,11 @@ int	cmd_handler(t_command *current, t_env **env, int *prv_pipe, t_fd *fd)
 	if (current->pipe)
 		*prv_pipe = 1;
 	if (current->heredoc)
+	{
 		if (ft_heredoc(current->heredoc, *env) == FAILURE)
-			return (FAILURE);
-	if (open_redir(current, fd) == FAILURE)
-		return (close_fds(fd), FAILURE);
+			return (g_exit_code = FAILURE, FAILURE);
+	}
+	g_exit_code = open_redir(current, fd);
 	if (!current->args)
 		close_fds(fd);
 	return (SUCCESS);
@@ -108,7 +109,8 @@ void	exec(t_command **cmds, t_env **env, char **envp, t_fd *fd)
 	resolve_cmd_paths(envp, *cmds);
 	while (current)
 	{
-		cmd_handler(current, env, &prv_pipe, fd);
+		if (cmd_handler(current, env, &prv_pipe, fd) == FAILURE)
+			break ;
 		if (current->args && is_builtin(current->args[0]) && !current->pipe
 			&& !prv_pipe)
 			exec_bltin(current, env, fd);
@@ -123,4 +125,5 @@ void	exec(t_command **cmds, t_env **env, char **envp, t_fd *fd)
 		current = current->next;
 	}
 	wait_children(*cmds);
+	close_fds(fd);
 }
