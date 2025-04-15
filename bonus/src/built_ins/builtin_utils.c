@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 14:50:54 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/12 19:03:00 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/15 17:56:21 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,13 @@ char	*get_var_name(char *var)
 	if (!var)
 		return (NULL);
 	i = 0;
-	while (var[i] && var[i] != '=')
+	while (var[i] && !(var[i] == '+' && var[i + 1] == '=') && var[i] != '=')
 		i++;
 	var_name = (char *)malloc(sizeof(char) * (i + 1));
 	if (!var_name)
 		return (NULL);
 	i = 0;
-	while (var[i] && var[i] != '=')
+	while (var[i] && !(var[i] == '+' && var[i + 1] == '=') && var[i] != '=')
 	{
 		var_name[i] = var[i];
 		i++;
@@ -62,8 +62,9 @@ char	*get_var_name(char *var)
 
 char	*get_var_value(char *var)
 {
-	char (quote);
-	int start, (i);
+	int	start;
+	int	i;
+
 	if (!var)
 		return (NULL);
 	i = 0;
@@ -71,21 +72,9 @@ char	*get_var_value(char *var)
 		i++;
 	if (!var[i] || !var[++i])
 		return (NULL);
-	if (var[i] == '\'' || var[i] == '\"')
-	{
-		quote = var[i++];
-		start = i;
-		while (var[i] && var[i] != quote)
-			i++;
-		if (!var[i])
-			return (NULL);
-	}
-	else
-	{
-		start = i;
-		while (var[i] && var[i] != ' ')
-			i++;
-	}
+	start = i;
+	while (var[i])
+		i++;
 	return (ft_substr(var, start, i - start));
 }
 

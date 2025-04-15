@@ -6,10 +6,9 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:13:21 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/15 12:56:10 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/15 18:37:08 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -135,8 +134,6 @@ int						dup_stdin(t_fd *fd, int newfd);
 // ====================== Error Handler ======================
 void					exit_func(t_fd *fd, int status);
 int						check_is_dir(char *cmd);
-int						builtin_files_handler(t_command *current, t_fd *fd,
-							int *stdin_copy, int *stdout_copy);
 void					cmd_files_handler(t_command *cmd, t_fd *fd);
 
 // ====================== Builtins ======================

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 16:38:13 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/12 19:03:00 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/15 17:56:21 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,8 @@ void	heredoc_handeler(char *limiter, t_env *env, int fd)
 		free(line);
 	get_next_line(-1);
 	free(unqouted_lm);
+	close(fd);
+	exit(0);
 }
 
 int	ft_heredoc(char *limiter, t_env *env)

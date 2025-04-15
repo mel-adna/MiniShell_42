@@ -5,20 +5,21 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/06 12:00:00 by username          #+#    #+#             */
-/*   Updated: 2025/04/13 13:12:59 by szemmour         ###   ########.fr       */
+/*   Created: 2025/04/10 09:49:24 by mel-adna          #+#    #+#             */
+/*   Updated: 2025/04/15 17:56:21 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell_bonus.h"
 
-static void	expand_env(char *line, int *i, t_env **env, char **r)
+void	expand_env(char *line, int *i, t_env **env, char **result)
 {
 	(*i)++;
 	if (line[*i] == '?')
 	{
 		(*i)++;
-		*r = add_result(*r, ft_itoa(g_exit_code));
+		*result = add_result(*result, ft_itoa(g_exit_code));
+		g_exit_code = 0;
 		return ;
 	}
 	if (ft_isdigit(line[*i]))
@@ -26,10 +27,10 @@ static void	expand_env(char *line, int *i, t_env **env, char **r)
 		(*i)++;
 		return ;
 	}
-	process_env_var(line, i, env, r);
+	process_env_var(line, i, env, result);
 }
 
-static char	*handle_quotes(char *line, int *i, t_env **env, char quote)
+char	*handle_quotes(char *line, int *i, t_env **env, char quote)
 {
 	char	*result;
 	int		start;

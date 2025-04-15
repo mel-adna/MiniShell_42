@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 17:58:09 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/14 13:08:06 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/15 18:36:26 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void	increment_shell_lvl(t_env **env)
 	current = *env;
 	while (current && ft_strncmp(current->value, "SHLVL=", 6) != 0)
 		current = current->next;
-	if(!current)
+	if (!current)
 		return (handle_empty_env(env));
 	shlvl = ft_atoi(current->value + 6) + 1;
 	if (shlvl > 1000)

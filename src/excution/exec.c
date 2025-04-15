@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 13:02:32 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/15 13:19:54 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/15 18:32:46 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ static int	exec_bltin(t_command *current, t_env **env, t_fd *fd)
 		close(fd->fdin);
 	if (fd->fdout != STDOUT_FILENO)
 		close(fd->fdout);
-	return (g_exit_code = SUCCESS, SUCCESS);
+	return (SUCCESS);
 }
 
 int	cmd_handler(t_command *current, t_env **env, int *prv_pipe, t_fd *fd)

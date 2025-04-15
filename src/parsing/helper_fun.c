@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:48:48 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/14 16:03:45 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/15 18:36:18 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ char	*trim_env(char *s1)
 	while (s1[i] && !(s1[i] == ' ' || s1[i] == '\t' || s1[i] == '\r'))
 		i++;
 	value = ft_substr(s1, start, i - start);
-	if(!value)
-		return ft_strdup("");
+	if (!value)
+		return (ft_strdup(""));
 	return (value);
 }
 
@@ -37,7 +37,7 @@ void	process_env_var(char *line, int *i, t_env **env, char **result)
 	char	*t;
 	char	*v;
 	int		j;
-	char 	*res;
+	char	*res;
 
 	j = *i;
 	while (line[*i] && (ft_isalnum(line[*i]) || line[*i] == '_'))
@@ -51,7 +51,7 @@ void	process_env_var(char *line, int *i, t_env **env, char **result)
 			if (v)
 			{
 				res = trim_env(v);
-				if(res)
+				if (res)
 					*result = add_result(*result, res);
 			}
 			else
@@ -63,7 +63,7 @@ void	process_env_var(char *line, int *i, t_env **env, char **result)
 
 void	skip_dollar(char *line, int *i)
 {
-	if ((line[*i] == '$' && line[*i + 1] == '"') || (line[*i] == '$' 
-			&& line[*i + 1] == '\''))
+	if ((line[*i] == '$' && line[*i + 1] == '"') || (line[*i] == '$' && line[*i
+				+ 1] == '\''))
 		(*i)++;
 }

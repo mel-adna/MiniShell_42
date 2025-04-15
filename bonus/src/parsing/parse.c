@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:49:12 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/12 19:03:00 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/15 17:56:21 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,9 @@ t_command	*parse(char *input, t_env **env)
 	if (is_open_quotes(input))
 		return (g_exit_code = 258,
 			ft_putendl_fd("syntax error near unexpected ", 2), NULL);
+	if (embiguous_redirect(input, *env))
+		return (g_exit_code = 258, ft_putendl_fd("ambiguous redirect", 2),
+			NULL);
 	if (check_redirect_errors(input, 0, NULL))
 		return (NULL);
 	if (check_pipe_errors(input))

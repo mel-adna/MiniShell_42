@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   shell_lvl.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 17:58:09 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/12 19:03:00 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/15 18:38:09 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell_bonus.h"
+#include "../../includes/minishell.h"
 
 int	env_size(t_env *env)
 {
@@ -51,6 +51,26 @@ char	**env_to_str(t_env *env)
 	return (str_env);
 }
 
+void	handle_empty_env(t_env **env)
+{
+	char	*pwd;
+	char	cwd[PATH_MAX];
+
+	if (!env)
+		return ;
+	if (getcwd(cwd, sizeof(cwd)))
+	{
+		pwd = ft_strjoin("PWD=", cwd);
+		if (pwd)
+		{
+			push_env_back(env, pwd);
+			free(pwd);
+		}
+	}
+	push_env_back(env, "SHLVL=1");
+	push_env_back(env, "_=/usr/bin/env");
+}
+
 void	increment_shell_lvl(t_env **env)
 {
 	int		shlvl;
@@ -59,19 +79,19 @@ void	increment_shell_lvl(t_env **env)
 	t_env	*current;
 
 	shlvl = 0;
+	if (!env || !*env)
+		return (handle_empty_env(env));
 	current = *env;
 	while (current && ft_strncmp(current->value, "SHLVL=", 6) != 0)
 		current = current->next;
 	if (!current)
-		return (push_env_back(env, "SHLVL=1"));
+		return (handle_empty_env(env));
 	shlvl = ft_atoi(current->value + 6) + 1;
 	if (shlvl > 1000)
 		shlvl = 1;
 	if (shlvl < 0)
 		shlvl = 0;
 	shlvl_str = ft_itoa(shlvl);
-	if (!shlvl_str)
-		return ;
 	new_value = ft_strjoin("SHLVL=", shlvl_str);
 	free(shlvl_str);
 	if (!new_value)

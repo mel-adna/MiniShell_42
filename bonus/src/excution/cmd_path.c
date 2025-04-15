@@ -3,22 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 15:09:32 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/12 19:03:00 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/15 18:02:09 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell_bonus.h"
-
-void	init_fds(t_fd *fd)
-{
-	fd->fdin = -1;
-	fd->fdout = -1;
-	fd->pipefd[0] = -1;
-	fd->pipefd[1] = -1;
-}
 
 static char	**get_paths(char **envp)
 {
@@ -51,8 +43,6 @@ static char	*get_cmd_path(char **paths, char *cmd)
 	i = 0;
 	if (!paths || !cmd || !*cmd)
 		return (NULL);
-	if (ft_strchr(cmd, '/') || !ft_strncmp(cmd, "./", 2))
-		return (ft_strdup(cmd));
 	while (paths[i])
 	{
 		temp = ft_strjoin(paths[i], "/");
@@ -77,12 +67,16 @@ int	resolve_cmd_paths(char **envp, t_command *cmds)
 	if (!envp || !cmds)
 		return (0);
 	paths = get_paths(envp);
-	if (!paths)
-		return (0);
 	while (cmds)
 	{
 		if (cmds->args && cmds->args[0])
-			cmds->cmd_path = get_cmd_path(paths, cmds->args[0]);
+		{
+			if (ft_strchr(cmds->args[0], '/') || !ft_strncmp(cmds->args[0],
+					"./", 2))
+				cmds->cmd_path = ft_strdup(cmds->args[0]);
+			else if (paths)
+				cmds->cmd_path = get_cmd_path(paths, cmds->args[0]);
+		}
 		cmds = cmds->next;
 	}
 	free_array(paths);

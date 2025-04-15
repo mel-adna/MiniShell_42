@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   p_errors.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:49:06 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/12 19:03:00 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/15 17:56:21 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,13 +77,12 @@ int	check_redirect_errors(char *input, int i, char *filename)
 			while (input[i] == ' ' || input[i] == '\t' || input[i] == '\r')
 				i++;
 			if (!input[i] || input[0] == '~' || input[i] == '>'
-				|| input[i] == '<' || input[i] == '|')
+				|| input[i] == '<')
 				return (g_exit_code = 2,
 					ft_putendl_fd("syntax error near unexpected token ", 2), 1);
 			filename = extract_filename(&input[i]);
-			if (access(filename, F_OK) == -1 && (input[i] == '>' && 
-					input[i - 1] != '>') 
-				&& !(input[i] == '<' && input[i - 1] != '<'))
+			if (access(filename, F_OK) == -1 && (input[i] == '>' && input[i - 1
+					] != '>') && !(input[i] == '<' && input[i - 1] != '<'))
 				return (g_exit_code = 2, perror(filename), free(filename), 1);
 			free(filename);
 		}
@@ -94,8 +93,9 @@ int	check_redirect_errors(char *input, int i, char *filename)
 
 int	is_special_char(char *line, int i)
 {
-	return ((line[i] == '&' && line[i + 1] == '&') || (line[i] == '|' && line[i
-				+ 1] == '|') || (line[i] == '>' && line[i + 1] == '>')
-		|| (line[i] == '<' && line[i + 1] == '<') || line[i] == '|'
-		|| line[i] == '<' || line[i] == '>');
+	return ((line[i] == '&' && line[i + 1] == '&') 
+		|| (line[i] == '|' && line[i + 1] == '|') 
+		|| (line[i] == '>' && line[i + 1] == '>')
+		|| (line[i] == '<' && line[i + 1] == '<') 
+		|| line[i] == '|' || line[i] == '<' || line[i] == '>');
 }

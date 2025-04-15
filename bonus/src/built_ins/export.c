@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 14:19:36 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/12 19:03:00 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/15 17:56:21 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,11 @@ char	*get_var(char *var)
 	return (val);
 }
 
-int	is_var_in_env(char *var, t_env *env)
+int	is_var_in_env(char *var, t_env *env, char *var_name)
 {
 	char	*env_var_name;
 	char	*new_var;
-	char	*var_name;
 
-	var_name = get_var_name(var);
 	if (!var_name)
 		return (0);
 	while (env)
@@ -55,17 +53,19 @@ int	is_var_in_env(char *var, t_env *env)
 		env_var_name = get_var_name(env->value);
 		if (env_var_name && !ft_strcmp(var_name, env_var_name))
 		{
+			if (ft_strchr(var, '+'))
+				return (append_env_value(env, var), free(env_var_name), 1);
 			free(env->value);
 			new_var = get_var(var);
 			if (new_var)
 				env->value = new_var;
-			return (free(env_var_name), free(var_name), 1);
+			return (free(env_var_name), 1);
 		}
 		if (env_var_name)
 			free(env_var_name);
 		env = env->next;
 	}
-	return (free(var_name), 0);
+	return (0);
 }
 
 int	print_env_error(char *var, int errn)
@@ -90,8 +90,10 @@ int	print_env_error(char *var, int errn)
 void	var_handeler(t_env **env, char *arg)
 {
 	char	*var;
+	char	*var_name;
 
-	if (!is_var_in_env(arg, *env))
+	var_name = get_var_name(arg);
+	if (!is_var_in_env(arg, *env, var_name))
 	{
 		if (ft_strchr(arg, '='))
 		{
@@ -105,6 +107,8 @@ void	var_handeler(t_env **env, char *arg)
 		else
 			push_env_back(env, arg);
 	}
+	if (var_name)
+		free(var_name);
 }
 
 int	ft_export(char **args, t_env **env)

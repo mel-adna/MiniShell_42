@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_bonus.h                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 16:36:26 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/13 15:38:20 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/15 17:58:33 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,14 +90,14 @@ void					process_and_add_token(t_token **token_list, char *line,
 void					parse_tokens(t_token *tokens, t_command **cmds);
 t_command				*init_command(void);
 void					push_cmd_back(t_command **head, t_command *node);
-char					*get_value(char *name, t_env **env);
 char					*add_result(char *result, char *tmp);
 void					process_env_var(char *l, int *i, t_env **e, char **r);
-void					expand_wildcard(const char *pattern, t_token **type);
+void					expand_wildcard(const char *pattern, t_token **t);
 void					helper_func(t_token **type, char *line, int *i, 
 							t_env **env);
 void					process_word(char *line, int *i, t_env **env, 
 							char **value);
+int						embiguous_redirect(char *input, t_env *env);
 
 // ====================== env ======================
 int						env_init(t_env **env, char **envp);
@@ -131,8 +131,6 @@ int						dup_stdin(t_fd *fd, int newfd);
 // ====================== Error Handler ======================
 void					exit_func(t_fd *fd, int status);
 int						check_is_dir(char *cmd);
-int						builtin_files_handler(t_command *current, t_fd *fd,
-							int *stdin_copy, int *stdout_copy);
 void					cmd_files_handler(t_command *cmd, t_fd *fd);
 
 // ====================== Builtins ======================
@@ -153,6 +151,7 @@ char					*get_env_value(t_env *env, const char *key);
 char					*get_var_value(char *var);
 char					**env_to_str(t_env *env);
 int						is_valid_env_var_name(char *var);
+void					append_env_value(t_env *env, char *var);
 // ====================== here doc ======================
 int						ft_heredoc(char *limiter, t_env *env);
 void					signal_herdoc(int sig);

@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 17:59:36 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/12 13:07:35 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/15 19:44:52 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	main(int argc, char **argv, char **envp)
 		input = readline("minishell> ");
 		if (!input)
 		{
-			printf("Exiting...\n");
+			ft_putendl_fd("exit", 1);
 			break ;
 		}
 		process_input(&cmds, input, &env);
