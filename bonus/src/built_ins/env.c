@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 11:42:43 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/15 17:56:21 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/16 10:14:13 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,9 @@ void	append_env_value(t_env *env, char *var)
 		return ;
 	new_var = ft_strjoin(env->value, var_value);
 	if (!new_var)
-		return ;
+		return (free(var_value));
 	free(env->value);
+	free(var_value);
 	env->value = new_var;
 }
 
