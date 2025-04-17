@@ -3,26 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:13:21 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/15 18:37:08 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/17 09:25:19 by mel-adna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-
 # include "./gnl/get_next_line.h"
 # include "./libft/libft.h"
 # include <dirent.h>
 # include <errno.h>
 # include <fcntl.h>
 # include <limits.h>
+# include <readline/history.h>
+# include <readline/readline.h>
 # include <stdio.h>
 # include <termios.h>
-# include <readline/readline.h>
-# include <readline/history.h>
 
 # define SUCCESS 0
 # define FAILURE 1
@@ -93,11 +92,11 @@ void					push_cmd_back(t_command **head, t_command *node);
 char					*get_value(char *name, t_env **env);
 char					*add_result(char *result, char *tmp);
 void					process_env_var(char *l, int *i, t_env **e, char **r);
-void					handle_special_cases(char *line, int *i, 
-							t_env **env, char **value);
-char					*handle_quotes(char *line, int *i, 
-							t_env **env, char quote);
-void					expand_env(char *line, int *i, t_env **env, 
+void					handle_special_cases(char *line, int *i, t_env **env,
+							char **value);
+char					*handle_quotes(char *line, int *i, t_env **env,
+							char quote);
+void					expand_env(char *line, int *i, t_env **env,
 							char **result);
 void					skip_dollar(char *line, int *i);
 int						embiguous_redirect(char *input, t_env *env);

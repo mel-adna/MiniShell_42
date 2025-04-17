@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 16:23:52 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/16 09:33:44 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/16 12:38:46 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	open_file(t_fd *fd, t_command *cmd, int n)
 		fd->fdin = open(cmd->infile, O_RDONLY);
 		if (fd->fdin < 0)
 		{
-			ft_putstr_fd("minishell: open: ", 2);
+			ft_putstr_fd("minishell: ", 2);
 			perror(cmd->infile);
 			return (FAILURE);
 		}
@@ -32,7 +32,7 @@ int	open_file(t_fd *fd, t_command *cmd, int n)
 			fd->fdout = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (fd->fdout < 0)
 		{
-			ft_putstr_fd("minishell: open: ", 2);
+			ft_putstr_fd("minishell: ", 2);
 			perror(cmd->outfile);
 			close(fd->fdin);
 			return (FAILURE);
@@ -53,10 +53,12 @@ int	open_redir(t_command *current, t_fd *fd)
 			return (perror("minishell: pipe"), FAILURE);
 	if (current->heredoc)
 	{
+		if (fd->fdin >= 0)
+			close(fd->fdin);
 		fd->fdin = open("/tmp/here_doc", O_RDONLY);
 		if (fd->fdin < 0)
 		{
-			ft_putstr_fd("minishell: open: ", 2);
+			ft_putstr_fd("minishell: ", 2);
 			perror("/tmp/here_doc");
 			return (FAILURE);
 		}
