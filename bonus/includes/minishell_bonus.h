@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 16:36:26 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/15 17:58:33 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/17 19:08:46 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,9 @@ typedef struct s_token
 typedef struct s_command
 {
 	char				**args;
-	char				*outfile;
+	char				**outfile;
+	char				**heredoc;
 	char				*infile;
-	char				*heredoc;
 	char				*cmd_path;
 	pid_t				pid;
 	int					pipe;
@@ -95,9 +95,10 @@ void					process_env_var(char *l, int *i, t_env **e, char **r);
 void					expand_wildcard(const char *pattern, t_token **t);
 void					helper_func(t_token **type, char *line, int *i, 
 							t_env **env);
-void					process_word(char *line, int *i, t_env **env, 
+void					process_word(char *line, int *i, t_env **env,
 							char **value);
 int						embiguous_redirect(char *input, t_env *env);
+void					skip_dollar(char *line, int *i);
 
 // ====================== env ======================
 int						env_init(t_env **env, char **envp);
@@ -122,7 +123,6 @@ void					init_fds(t_fd *fd);
 
 // ====================== Excution Utils ======================
 void					wait_children(t_command *cmds);
-int						open_file(t_fd *fd, t_command *cmd, int n);
 int						open_redir(t_command *current, t_fd *fd);
 void					close_fds(t_fd *fd);
 int						dup_stdout(t_fd *fd, int newfd);

@@ -6,23 +6,38 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:49:18 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/15 17:56:21 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/17 14:55:42 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell_bonus.h"
 
-static void	update_redirection(char **field, t_token *current)
+void	update_redirection(char ***list, t_token *current)
 {
-	char	*new_value;
+	int		i;
+	char	**new_list;
 
-	if (!current || !current->next || !current->next->value)
+	if (!*list)
+	{
+		*list = ft_calloc(2, sizeof(char *));
+		if (!*list)
+			return ;
+		(*list)[0] = ft_strdup(current->next->value);
 		return ;
-	new_value = ft_strdup(current->next->value);
-	if (!new_value)
+	}
+	i = 0;
+	while ((*list)[i])
+		i++;
+	new_list = ft_calloc(i + 2, sizeof(char *));
+	if (!new_list)
 		return ;
-	free(*field);
-	*field = new_value;
+	i = -1;
+	while ((*list)[++i])
+		new_list[i] = (*list)[i];
+	new_list[i] = ft_strdup(current->next->value);
+	new_list[i + 1] = NULL;
+	free(*list);
+	*list = new_list;
 }
 
 static void	process_redirection(t_command *cmd, t_token *current)
@@ -31,7 +46,8 @@ static void	process_redirection(t_command *cmd, t_token *current)
 	{
 		if (current->type == TOKEN_REDIR_IN)
 		{
-			update_redirection(&cmd->infile, current);
+			if (current->next)
+				cmd->infile = ft_strdup(current->next->value);
 		}
 		else if (current->type == TOKEN_REDIR_OUT
 			|| current->type == TOKEN_REDIR_APPEND)
@@ -39,11 +55,11 @@ static void	process_redirection(t_command *cmd, t_token *current)
 			update_redirection(&cmd->outfile, current);
 			if (current->type == TOKEN_REDIR_APPEND)
 				cmd->append = 1;
+			if (current->type == TOKEN_REDIR_OUT)
+				cmd->append = 0;
 		}
 		else if (current->type == TOKEN_HEREDOC)
-		{
 			update_redirection(&cmd->heredoc, current);
-		}
 	}
 }
 

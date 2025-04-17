@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 13:02:32 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/16 09:36:00 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/17 14:54:23 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,12 +86,19 @@ static int	exec_bltin(t_command *current, t_env **env, t_fd *fd)
 
 int	cmd_handler(t_command *current, t_env **env, int *prv_pipe, t_fd *fd)
 {
+	int	i;
+
+	i = 0;
 	if (current->pipe)
 		*prv_pipe = 1;
-	if (current->heredoc)
+	if (current->heredoc && current->heredoc[i])
 	{
-		if (ft_heredoc(current->heredoc, *env) == FAILURE)
-			return (g_exit_code = FAILURE, FAILURE);
+		while (current->heredoc[i])
+		{
+			if (ft_heredoc(current->heredoc[i], *env) == FAILURE)
+				return (g_exit_code = FAILURE, FAILURE);
+			i++;
+		}
 	}
 	g_exit_code = open_redir(current, fd);
 	if (!current->args)

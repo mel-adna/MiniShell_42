@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 00:45:07 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/09 18:56:02 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/17 14:54:14 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,8 @@ void	free_command_fields(t_command *cmd)
 	}
 	if (cmd->infile)
 		free(cmd->infile);
-	if (cmd->outfile)
-		free(cmd->outfile);
-	if (cmd->heredoc)
-		free(cmd->heredoc);
+	free_array(cmd->outfile);
+	free_array(cmd->heredoc);
 	if (cmd->cmd_path)
 		free(cmd->cmd_path);
 }

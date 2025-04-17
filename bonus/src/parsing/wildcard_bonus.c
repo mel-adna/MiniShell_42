@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard_bonus.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 11:04:36 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/12 19:03:00 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/17 14:54:37 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ static void	int_function(struct dirent *entry, t_token **t, char *dir_path)
 	free(tmp);
 }
 
-static int	process_matches(DIR *dir, char *pattern_only, char *dir_path, 
-			t_token **t)
+static int	process_matches(DIR *dir, char *pattern_only, char *dir_path,
+		t_token **t)
 {
 	struct dirent	*entry;
 	int				matched;

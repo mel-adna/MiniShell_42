@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:13:21 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/17 09:25:19 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/17 19:08:25 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@
 # include <errno.h>
 # include <fcntl.h>
 # include <limits.h>
-# include <readline/history.h>
-# include <readline/readline.h>
 # include <stdio.h>
 # include <termios.h>
+# include <readline/history.h>
+# include <readline/readline.h>
 
 # define SUCCESS 0
 # define FAILURE 1
@@ -58,9 +58,9 @@ typedef struct s_token
 typedef struct s_command
 {
 	char				**args;
-	char				*outfile;
+	char				**outfile;
+	char				**heredoc;
 	char				*infile;
-	char				*heredoc;
 	char				*cmd_path;
 	pid_t				pid;
 	int					pipe;
@@ -124,7 +124,6 @@ void					init_fds(t_fd *fd);
 
 // ====================== Excution Utils ======================
 void					wait_children(t_command *cmds);
-int						open_file(t_fd *fd, t_command *cmd, int n);
 int						open_redir(t_command *current, t_fd *fd);
 void					close_fds(t_fd *fd);
 int						dup_stdout(t_fd *fd, int newfd);

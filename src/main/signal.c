@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 19:08:26 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/15 17:48:42 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/17 13:38:32 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	handle_signals(int sig)
 {
 	if (sig == SIGINT)
 	{
+		g_exit_code = FAILURE;
 		write(STDOUT_FILENO, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);

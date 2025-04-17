@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 15:08:53 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/15 17:56:21 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/17 19:10:26 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,28 @@ void	signal_herdoc(int sig)
 	}
 	else if (sig == SIGQUIT)
 		return ;
+}
+
+void	close_fds(t_fd *fd)
+{
+	if (fd->fdin >= 0)
+	{
+		close(fd->fdin);
+		fd->fdin = -1;
+	}
+	if (fd->fdout >= 0)
+	{
+		close(fd->fdout);
+		fd->fdout = -1;
+	}
+	if (fd->pipefd[0] >= 0)
+	{
+		close(fd->pipefd[0]);
+		fd->pipefd[0] = -1;
+	}
+	if (fd->pipefd[1] >= 0)
+	{
+		close(fd->pipefd[1]);
+		fd->pipefd[1] = -1;
+	}
 }

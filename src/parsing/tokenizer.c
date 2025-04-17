@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 09:49:24 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/15 18:28:40 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/17 19:01:53 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ void	expand_env(char *line, int *i, t_env **env, char **result)
 	{
 		(*i)++;
 		*result = add_result(*result, ft_itoa(g_exit_code));
-		g_exit_code = 0;
+		if (line[*i + 1] == '|')
+			g_exit_code = 0;
 		return ;
 	}
 	if (ft_isdigit(line[*i]))
@@ -69,7 +70,7 @@ static void	handle_char(char c, char **value)
 	free(tmp);
 }
 
-static void	process_word(char *line, int *i, t_env **env, char **value)
+void	process_word(char *line, int *i, t_env **env, char **value)
 {
 	char	*quoit;
 	char	*tmp;

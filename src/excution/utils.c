@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 15:08:53 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/16 09:33:44 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/17 14:45:58 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,28 @@ void	signal_herdoc(int sig)
 	}
 	else if (sig == SIGQUIT)
 		return ;
+}
+
+void	close_fds(t_fd *fd)
+{
+	if (fd->fdin >= 0)
+	{
+		close(fd->fdin);
+		fd->fdin = -1;
+	}
+	if (fd->fdout >= 0)
+	{
+		close(fd->fdout);
+		fd->fdout = -1;
+	}
+	if (fd->pipefd[0] >= 0)
+	{
+		close(fd->pipefd[0]);
+		fd->pipefd[0] = -1;
+	}
+	if (fd->pipefd[1] >= 0)
+	{
+		close(fd->pipefd[1]);
+		fd->pipefd[1] = -1;
+	}
 }
