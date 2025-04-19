@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 12:13:21 by mel-adna          #+#    #+#             */
-/*   Updated: 2025/04/17 19:08:25 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/19 16:25:35 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@
 # include <limits.h>
 # include <stdio.h>
 # include <termios.h>
-# include <readline/history.h>
 # include <readline/readline.h>
+# include <readline/history.h>
 
 # define SUCCESS 0
 # define FAILURE 1

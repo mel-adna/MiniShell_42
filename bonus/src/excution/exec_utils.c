@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 16:23:52 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/17 19:09:40 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/19 15:51:20 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ int	open_outfile(t_fd *fd, t_command *cmd)
 {
 	int	i;
 
+	if (fd->fdout >= 0)
+		close(fd->fdout);
 	i = 0;
 	while (cmd->outfile[i])
 	{

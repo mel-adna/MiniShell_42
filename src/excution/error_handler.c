@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_handler.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mel-adna <mel-adna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 13:20:26 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/16 09:33:44 by mel-adna         ###   ########.fr       */
+/*   Updated: 2025/04/19 16:01:07 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,11 @@ void	cmd_files_handler(t_command *cmd, t_fd *fd)
 	if ((cmd->heredoc || cmd->infile) && fd->fdin == -1)
 		exit_func(fd, FAILURE);
 	if (cmd->outfile)
+	{
 		if (dup_stdout(fd, fd->fdout) == FAILURE)
 			exit_func(fd, FAILURE);
-	if (cmd->pipe)
+	}
+	else if (cmd->pipe)
 		if (dup_stdout(fd, fd->pipefd[1]) == FAILURE)
 			exit_func(fd, FAILURE);
 }
