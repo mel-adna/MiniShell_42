@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 16:38:13 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/15 17:56:21 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/19 16:31:40 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	var_in_line(char *limiter, char *line)
 	while (line[i])
 	{
 		if (line[i] == '$' && line[i + 1] && line[i + 1] != ' ' && line[i
-				+ 1] != '\n')
+			+ 1] != '\n')
 			return (1);
 		i++;
 	}
@@ -65,46 +65,22 @@ static void	expand_variables(t_env *env, char *line, int fd)
 	}
 }
 
-static char	*unquoted_limiter(char *limiter)
-{
-	char	*unqouted_lm;
-	char	*tmp;
-	int		len;
-
-	unqouted_lm = NULL;
-	if ((limiter[0] == '\'' || limiter[0] == '\"') && ft_strlen(limiter) > 1)
-	{
-		len = ft_strlen(limiter);
-		if (limiter[0] == limiter[len - 1])
-		{
-			unqouted_lm = ft_substr(limiter, 1, len - 2);
-			if (!unqouted_lm)
-				return (ft_strjoin(limiter, "\n"));
-		}
-		tmp = ft_strjoin(unqouted_lm, "\n");
-		free(unqouted_lm);
-		tmp = unqouted_lm;
-		if (!unqouted_lm)
-			return (ft_strjoin(limiter, "\n"));
-		return (unqouted_lm);
-	}
-	return (ft_strjoin(limiter, "\n"));
-}
-
 void	heredoc_handeler(char *limiter, t_env *env, int fd)
 {
 	char	*line;
-	char	*unqouted_lm;
+	char	*new_line;
 
 	signal(SIGINT, signal_herdoc);
-	unqouted_lm = unquoted_limiter(limiter);
+	new_line = ft_strjoin(limiter, "\n");
+	if (!new_line)
+		return ;
 	while (1)
 	{
 		ft_putstr_fd("> ", 1);
 		line = get_next_line(0);
-		if (!line || ft_strcmp(line, unqouted_lm) == 0)
+		if (!line || ft_strcmp(line, new_line) == 0)
 			break ;
-		if (var_in_line(unqouted_lm, line))
+		if (var_in_line(new_line, line))
 			expand_variables(env, line, fd);
 		else
 			ft_putstr_fd(line, fd);
@@ -113,7 +89,7 @@ void	heredoc_handeler(char *limiter, t_env *env, int fd)
 	if (line)
 		free(line);
 	get_next_line(-1);
-	free(unqouted_lm);
+	free(new_line);
 	close(fd);
 	exit(0);
 }
