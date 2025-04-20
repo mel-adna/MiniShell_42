@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 15:47:22 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/15 18:09:37 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/19 18:02:22 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	print_value(char *var_name, char *var_value)
 {
 	ft_putstr_fd("declare -x ", STDOUT_FILENO);
 	ft_putstr_fd(var_name, STDOUT_FILENO);
-	if (ft_strcmp(var_name, "OLDPWD") != 0)
+	if (var_value && ft_strcmp(var_name, "OLDPWD") != 0)
 	{
 		ft_putstr_fd("=\"", STDOUT_FILENO);
 		ft_putstr_fd(var_value, STDOUT_FILENO);

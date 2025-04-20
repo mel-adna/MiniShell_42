@@ -6,7 +6,7 @@
 /*   By: szemmour <szemmour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 13:02:32 by szemmour          #+#    #+#             */
-/*   Updated: 2025/04/19 15:59:44 by szemmour         ###   ########.fr       */
+/*   Updated: 2025/04/20 12:06:18 by szemmour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,9 +96,10 @@ int	cmd_handler(t_command *current, t_env **env, int *prv_pipe, t_fd *fd)
 		while (current->heredoc[i])
 		{
 			if (ft_heredoc(current->heredoc[i], *env) == FAILURE)
-				return (g_exit_code = FAILURE, FAILURE);
+				return (setup_signals(), g_exit_code = FAILURE, FAILURE);
 			i++;
 		}
+		setup_signals();
 	}
 	g_exit_code = open_redir(current, fd);
 	if (!current->args)
@@ -132,5 +133,5 @@ void	exec(t_command **cmds, t_env **env, char **envp, t_fd *fd)
 		current = current->next;
 	}
 	wait_children(*cmds);
-	close_fds(fd);
+	setup_signals();
 }
