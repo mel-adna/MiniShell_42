@@ -1,4 +1,3 @@
-```markdown
 # 🐚 Minishell
 
 Minishell is a simplified Unix shell implemented in C as part of the 42 curriculum. It aims to mimic basic behavior of Bash, including command execution, redirections, pipes, built-in commands, signal handling, and more.
@@ -52,20 +51,3 @@ We learned a lot from the following resources and would like to give credit to a
 
 ```bash
 make
-```
-
-## 🧪 Usage
-
-```bash
-./minishell
-```
-
-## 📄 License
-
-This project is part of the 42 School curriculum and is shared for educational purposes only.
-
----
-
-Feel free to fork, learn from it, and give it a ⭐ if it helped you!
-
-```
