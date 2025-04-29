@@ -51,3 +51,24 @@ We learned a lot from the following resources and would like to give credit to a
 
 ```bash
 make
+```
+
+## 🧪 Usage
+
+```bash
+./minishell
+```
+
+# You can then run commands just like in a regular shell:
+
+```bash
+$ echo Hello, world!
+Hello, world!
+$ ls -la | grep .c > files.txt
+```
+
+## 📄 License
+
+This project was developed as part of the 42 School curriculum and is shared for educational purposes only.
+
+```Feel free to fork, learn from it, and give it a ⭐ if it helped you!```
