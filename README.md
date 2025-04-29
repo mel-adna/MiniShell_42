@@ -71,4 +71,4 @@ $ ls -la | grep .c > files.txt
 
 This project was developed as part of the 42 School curriculum and is shared for educational purposes only.
 
-```Feel free to fork, learn from it, and give it a ⭐ if it helped you!```
+```Feel free to fork, learn from it, and give it a ⭐ if it helped you! ```
