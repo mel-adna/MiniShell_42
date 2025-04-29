@@ -1,7 +1,3 @@
-Congrats on finishing your Minishell project! Here's a professional and clear `README.md` you can use for your GitHub collaboration repo with credits and references to all the resources you used:
-
----
-
 ```markdown
 # 🐚 Minishell
 
@@ -73,7 +69,3 @@ This project is part of the 42 School curriculum and is shared for educational p
 Feel free to fork, learn from it, and give it a ⭐ if it helped you!
 
 ```
-
----
-
-Do you want me to include a project demo (like a GIF or terminal screenshot section) in the README too?
